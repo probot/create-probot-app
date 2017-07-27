@@ -1,0 +1,31 @@
+{
+  "name": "create-probot-plugin",
+  "version": "1.0.0",
+  "description": "Create a probot plugin",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/probot/create-probot-plugin.git"
+  },
+  "keywords": [
+    "probot"
+  ],
+  "author": "Brandon Keepers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/probot/create-probot-plugin/issues"
+  },
+  "homepage": "https://github.com/probot/create-probot-plugin#readme",
+  "dependencies": {
+    "chalk": "^2.0.1",
+    "commander": "^2.11.0",
+    "conjecture": "^0.1.2",
+    "egad": "^0.2.0",
+    "inquirer": "^3.2.1",
+    "lodash.kebabcase": "^4.1.1",
+    "stringify-author": "^0.1.3"
+  }
+}
