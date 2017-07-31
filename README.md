@@ -9,7 +9,6 @@ npm install -g create-probot-plugin
 
 create-probot-plugin my-plugin
 cd my-plugin
-npm install
 ```
 
 See the [probot docs](https://github.com/probot/probot/blob/master/docs/plugins.md) for more information.
