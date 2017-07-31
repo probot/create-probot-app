@@ -8,6 +8,7 @@ const program = require('commander');
 const {scaffold} = require('egad');
 const kebabCase = require('lodash.kebabcase');
 const chalk = require('chalk');
+const spawn = require('cross-spawn');
 const stringifyAuthor = require('stringify-author');
 const {guessEmail, guessAuthor, guessGitHubUsername} = require('conjecture');
 
@@ -114,5 +115,16 @@ inquirer.prompt(prompts)
       console.log(`${fileinfo.skipped ? chalk.yellow('skipped existing file') :
         chalk.green('created file')}: ${fileinfo.path}`);
     });
-    console.log(chalk.blue('Done!'));
+    return console.log(chalk.blue('Finished scaffolding files!'));
+  })
+  .then(() => {
+    console.log(chalk.blue('\nInstalling Node dependencies!'));
+    const child = spawn('npm', ['install', '--prefix', destination], {stdio: 'inherit'});
+    child.on('close', code => {
+      if (code !== 0) {
+        console.log(chalk.red(`Could not install npm dependencies. Try running ${chalk.bold('npm install')} yourself.`));
+        return;
+      }
+      console.log(chalk.blue('\nDone! Enjoy building your Probot plugin!'));
+    });
   });
