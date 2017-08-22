@@ -1,14 +1,14 @@
-# Create Probot Plugin
+# Create Probot App
 
-Create a new [probot](https://github.com/probot/probot) plugin.
+Create a new [Probot](https://github.com/probot/probot) app.
 
 ## Get Started
 
 ```
-npm install -g create-probot-plugin
+npm install -g create-probot-app
 
-create-probot-plugin my-plugin
-cd my-plugin
+create-probot-app my-app
+cd my-app
 ```
 
-See the [probot docs](https://github.com/probot/probot/blob/master/docs/plugins.md) for more information.
+See the [Probot docs](https://probot.github.io/docs/) for more information.
