@@ -12,7 +12,7 @@ const spawn = require('cross-spawn');
 const stringifyAuthor = require('stringify-author');
 const {guessEmail, guessAuthor, guessGitHubUsername} = require('conjecture');
 
-const TEMPLATE_REPO_URL = 'https://github.com/probot/plugin-template.git';
+const TEMPLATE_REPO_URL = 'https://github.com/probot/template.git';
 
 program
   .usage('[options] [destination]')
