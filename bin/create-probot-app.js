@@ -74,7 +74,7 @@ const prompts = [
   {
     type: 'input',
     name: 'homepage',
-    message: 'App homepage:',
+    message: 'Homepage:',
     when: !program.homepage
   },
   {
