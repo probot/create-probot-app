@@ -12,22 +12,22 @@ const spawn = require('cross-spawn');
 const stringifyAuthor = require('stringify-author');
 const {guessEmail, guessAuthor, guessGitHubUsername} = require('conjecture');
 
-const PLUGIN_REPO_URL = 'https://github.com/probot/plugin-template.git';
+const TEMPLATE_REPO_URL = 'https://github.com/probot/template.git';
 
 program
   .usage('[options] [destination]')
-  .option('-p, --pkgname <package-name>', 'Plugin package name')
+  .option('-p, --pkgname <package-name>', 'Package name')
   .option('-d, --desc "<description>"',
-    'Plugin description (contain in quotes)')
+    'Description (contain in quotes)')
   .option('-a, --author "<full-name>"',
-    'Plugin author name (contain in quotes)')
-  .option('-e, --email <email>', 'Plugin author email address')
-  .option('-h, --homepage <homepage>', 'Plugin author\'s homepage')
+    'Author name (contain in quotes)')
+  .option('-e, --email <email>', 'Author email address')
+  .option('-h, --homepage <homepage>', 'Author\'s homepage')
   .option('-u, --user <username>', 'GitHub username or org (repo owner)')
-  .option('-r, --repo <repo-name>', 'Plugin repo name')
+  .option('-r, --repo <repo-name>', 'Repository name')
   .option('--overwrite', 'Overwrite existing files', false)
-  .option('--template <template-url>', 'URL of custom plugin template',
-    PLUGIN_REPO_URL)
+  .option('--template <template-url>', 'URL of custom template',
+    TEMPLATE_REPO_URL)
   .parse(process.argv);
 
 const destination = program.args.length ?
@@ -41,16 +41,16 @@ const prompts = [
     default(answers) {
       return answers.repo || kebabCase(path.basename(destination));
     },
-    message: 'Plugin\'s package name:',
+    message: 'Package name:',
     when: !program.pkgname
   },
   {
     type: 'input',
     name: 'desc',
     default() {
-      return 'A Probot plugin';
+      return 'A Probot app';
     },
-    message: 'Description of plugin:',
+    message: 'Description of app:',
     when: !program.desc
   },
   {
@@ -59,7 +59,7 @@ const prompts = [
     default() {
       return guessAuthor();
     },
-    message: 'Plugin author\'s full name:',
+    message: 'Author\'s full name:',
     when: !program.author
   },
   {
@@ -68,13 +68,13 @@ const prompts = [
     default() {
       return guessEmail();
     },
-    message: 'Plugin author\'s email address:',
+    message: 'Author\'s email address:',
     when: !program.email
   },
   {
     type: 'input',
     name: 'homepage',
-    message: 'Plugin author\'s homepage:',
+    message: 'Homepage:',
     when: !program.homepage
   },
   {
@@ -83,7 +83,7 @@ const prompts = [
     default(answers) {
       return guessGitHubUsername(answers.email);
     },
-    message: 'Plugin\'s GitHub user or org name:',
+    message: 'GitHub user or org name:',
     when: !program.user
   },
   {
@@ -92,12 +92,12 @@ const prompts = [
     default(answers) {
       return answers.pkgname || kebabCase(path.basename(destination));
     },
-    message: 'Plugin\'s repo name:',
+    message: 'Repository name:',
     when: !program.repo
   }
 ];
 
-console.log(chalk.blue('Let\'s create a Probot plugin!'));
+console.log(chalk.blue('Let\'s create a Probot app!'));
 
 inquirer.prompt(prompts)
   .then(answers => {
@@ -125,6 +125,6 @@ inquirer.prompt(prompts)
         console.log(chalk.red(`Could not install npm dependencies. Try running ${chalk.bold('npm install')} yourself.`));
         return;
       }
-      console.log(chalk.blue('\nDone! Enjoy building your Probot plugin!'));
+      console.log(chalk.blue('\nDone! Enjoy building your Probot app!'));
     });
   });
