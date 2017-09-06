@@ -6,7 +6,7 @@
     "create-probot-app": "./bin/create-probot-app.js"
   },
   "scripts": {
-    "test": "xo --extend probot"
+    "test": "standard"
   },
   "repository": {
     "type": "git",
@@ -31,7 +31,6 @@
     "stringify-author": "^0.1.3"
   },
   "devDependencies": {
-    "eslint-config-probot": "^0.1.0",
-    "xo": "^0.18.2"
+    "standard": "^10.0.3"
   }
 }
