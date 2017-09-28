@@ -16,7 +16,7 @@ const TEMPLATE_REPO_URL = 'https://github.com/probot/template.git'
 
 program
   .usage('[options] [destination]')
-  .option('-p, --pkgname <package-name>', 'Package name')
+  .option('-n, --appName <app-name>', 'What is the name of your app?')
   .option('-d, --desc "<description>"',
     'Description (contain in quotes)')
   .option('-a, --author "<full-name>"',
@@ -41,8 +41,8 @@ const prompts = [
     default (answers) {
       return answers.repo || kebabCase(path.basename(destination))
     },
-    message: 'Package name:',
-    when: !program.pkgname
+    message: 'App name:',
+    when: !program.appName
   },
   {
     type: 'input',
@@ -90,7 +90,7 @@ const prompts = [
     type: 'input',
     name: 'repo',
     default (answers) {
-      return answers.pkgname || kebabCase(path.basename(destination))
+      return answers.appName || kebabCase(path.basename(destination))
     },
     message: 'Repository name:',
     when: !program.repo
