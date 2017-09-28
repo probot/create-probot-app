@@ -16,7 +16,7 @@ const TEMPLATE_REPO_URL = 'https://github.com/probot/template.git'
 
 program
   .usage('[options] [destination]')
-  .option('-n, --appName <app-name>', 'What is the name of your app?')
+  .option('-n, --appName <app-name>', 'App name')
   .option('-d, --desc "<description>"',
     'Description (contain in quotes)')
   .option('-a, --author "<full-name>"',
