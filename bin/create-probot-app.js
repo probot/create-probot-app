@@ -16,17 +16,17 @@ const TEMPLATE_REPO_URL = 'https://github.com/probot/template.git'
 
 program
   .usage('[options] [destination]')
-  .option('-p, --pkgname <package-name>', 'Package name')
+  .option('-p, --pkgname <package-name>', 'What is the name of your App?')
   .option('-d, --desc "<description>"',
-    'Description (contain in quotes)')
+    'Description (contain in quotes)?')
   .option('-a, --author "<full-name>"',
-    'Author name (contain in quotes)')
-  .option('-e, --email <email>', 'Author email address')
-  .option('-h, --homepage <homepage>', 'Author\'s homepage')
-  .option('-u, --user <username>', 'GitHub username or org (repo owner)')
-  .option('-r, --repo <repo-name>', 'Repository name')
-  .option('--overwrite', 'Overwrite existing files', false)
-  .option('--template <template-url>', 'URL of custom template',
+    'Author\'s name (contain in quotes)?')
+  .option('-e, --email <email>', 'Author\'s email address?')
+  .option('-h, --homepage <homepage>', 'Author\'s homepage?')
+  .option('-u, --user <username>', 'GitHub username or organization (repo owner)?')
+  .option('-r, --repo <repo-name>', 'Repository name?')
+  .option('--overwrite', 'Overwrite existing files?', false)
+  .option('--template <template-url>', 'URL of custom template?',
     TEMPLATE_REPO_URL)
   .parse(process.argv)
 
