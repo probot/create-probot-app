@@ -106,6 +106,7 @@ inquirer.prompt(prompts)
       email: answers.email,
       url: answers.homepage
     })
+    answers.year = new Date().getFullYear()
     return scaffold(program.template, destination, answers, {
       overwrite: Boolean(program.overwrite)
     })
