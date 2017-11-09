@@ -11,6 +11,13 @@ npm install -g create-probot-app
 create-probot-app my-app
 cd my-app
 ```
+With `yarn`:
+```
+yarn global add create-probot-app
+
+create-probot-app my-app
+cd my-app
+```
 Or with `npx`:
 ```
 npx create-probot-app my-app
