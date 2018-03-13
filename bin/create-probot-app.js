@@ -11,6 +11,7 @@ const chalk = require('chalk')
 const spawn = require('cross-spawn')
 const stringifyAuthor = require('stringify-author')
 const {guessEmail, guessAuthor, guessGitHubUsername} = require('conjecture')
+const validatePackageName = require('validate-npm-package-name')
 
 const TEMPLATE_REPO_URL = 'https://github.com/probot/template.git'
 
@@ -42,7 +43,15 @@ const prompts = [
       return answers.repo || kebabCase(path.basename(destination))
     },
     message: 'App name:',
-    when: !program.appName
+    when: !program.appName,
+    validate (appName) {
+      const result = validatePackageName(appName);
+      if(result.errors && result.errors.length > 0) {
+        return result.errors.join(",");
+      }
+
+      return true;
+    }
   },
   {
     type: 'input',
