@@ -18,7 +18,7 @@ const TEMPLATE_REPO_URL = 'https://github.com/probot/template.git'
 program
   .usage('[options] [destination]')
   .option('-n, --appName <app-name>', 'App name')
-  .option('-d, --description "<description>"',
+  .option('-d, --desc "<description>"',
     'Description (contain in quotes)')
   .option('-a, --author "<full-name>"',
     'Author name (contain in quotes)')
@@ -60,7 +60,7 @@ const prompts = [
       return 'A Probot app'
     },
     message: 'Description of app:',
-    when: !program.description
+    when: !program.desc
   },
   {
     type: 'input',
