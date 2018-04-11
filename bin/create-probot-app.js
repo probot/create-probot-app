@@ -55,7 +55,7 @@ const prompts = [
   },
   {
     type: 'input',
-    name: 'desc',
+    name: 'description',
     default () {
       return 'A Probot app'
     },
