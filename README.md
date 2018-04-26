@@ -3,11 +3,18 @@
 This project will generate a new [Probot](https://github.com/probot/probot) app 
 with everything you need to get started and run your app in production.
 
-If you're using npm: 
+If you're using npm < 6: 
 
 ```sh
-npx create-probot-app my-first-app
+npm create-probot-app my-first-app
 ```
+
+If you're using npm > 6: 
+
+```sh
+npm init probot-app my-first-app
+```
+
 
 If you're using Yarn: 
 
