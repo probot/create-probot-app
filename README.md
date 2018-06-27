@@ -15,4 +15,17 @@ If you're using Yarn:
 yarn create probot-app my-first-app
 ```
 
+Or add `--typescript` to generate a new TypeScript project:
+
+NPM:
+```sh
+npx create-probot-app --typescript my-first-app
+```
+Yarn:
+
+```sh
+yarn create probot-app --typescript my-first-app
+```
+
+
 See the [Probot docs](https://probot.github.io/docs/development/) to get started.
