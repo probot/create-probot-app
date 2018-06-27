@@ -29,6 +29,7 @@ program
   .option('--overwrite', 'Overwrite existing files', false)
   .option('--template <template-url>', 'URL of custom template',
     TEMPLATE_REPO_URL)
+  .option('--typescript', 'Use the TypeScript template', 'https://github.com/probot/ts-template.git')
   .parse(process.argv)
 
 const destination = program.args.length
@@ -116,6 +117,13 @@ inquirer.prompt(prompts)
       url: answers.homepage
     })
     answers.year = new Date().getFullYear()
+    
+    if (program.typescript) {
+      return scaffold(program.typescript, destination, answers, {
+        overwrite: Boolean(program.overwrite)
+      })  
+    }
+    
     return scaffold(program.template, destination, answers, {
       overwrite: Boolean(program.overwrite)
     })
