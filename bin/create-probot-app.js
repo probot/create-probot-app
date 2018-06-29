@@ -13,7 +13,7 @@ const stringifyAuthor = require('stringify-author')
 const {guessEmail, guessAuthor, guessGitHubUsername} = require('conjecture')
 const validatePackageName = require('validate-npm-package-name')
 
-const TEMPLATE_REPO_URL = 'https://github.com/probot/template.git'
+const DEFAULT_TEMPLATE = 'https://github.com/probot/template.git'
 
 program
   .usage('[options] [destination]')
@@ -27,9 +27,17 @@ program
   .option('-u, --user <username>', 'GitHub username or org (repo owner)')
   .option('-r, --repo <repo-name>', 'Repository name')
   .option('--overwrite', 'Overwrite existing files', false)
-  .option('--template <template-url>', 'URL of custom template',
-    TEMPLATE_REPO_URL)
+  .option('--template <template-url>', 'URL or name of custom template', getTemplateRepository, DEFAULT_TEMPLATE)
+  .option('--typescript', 'Use the TypeScript template', () => program.emit('option:template', 'typescript'))
   .parse(process.argv)
+
+function getTemplateRepository (value) {
+  if (/^[\w-]+$/.test(value)) {
+    return `https://github.com/probot/template-${value}.git`
+  } else {
+    return value
+  }
+}
 
 const destination = program.args.length
   ? path.resolve(process.cwd(), program.args.shift())
@@ -116,6 +124,7 @@ inquirer.prompt(prompts)
       url: answers.homepage
     })
     answers.year = new Date().getFullYear()
+
     return scaffold(program.template, destination, answers, {
       overwrite: Boolean(program.overwrite)
     })
