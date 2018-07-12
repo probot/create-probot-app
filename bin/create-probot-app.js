@@ -125,7 +125,7 @@ inquirer.prompt(prompts)
       url: answers.homepage
     })
     answers.year = new Date().getFullYear()
-    answers.variable = camelCase(answers.appName)
+    answers.camelCaseAppName = camelCase(answers.appName)
 
     return scaffold(program.template, destination, answers, {
       overwrite: Boolean(program.overwrite)
