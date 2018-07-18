@@ -27,6 +27,7 @@ program
   .option('-h, --homepage <homepage>', 'Author\'s homepage')
   .option('-u, --user <username>', 'GitHub username or org (repo owner)')
   .option('-r, --repo <repo-name>', 'Repository name')
+  .option('-b, --branch <branch-name>', 'Specify a branch', 'master')
   .option('--overwrite', 'Overwrite existing files', false)
   .option('--template <template-url>', 'URL or name of custom template', getTemplateRepository, DEFAULT_TEMPLATE)
   .option('--typescript', 'Use the TypeScript template', () => program.emit('option:template', 'typescript'))
@@ -54,12 +55,12 @@ const prompts = [
     message: 'App name:',
     when: !program.appName,
     validate (appName) {
-      const result = validatePackageName(appName);
-      if(result.errors && result.errors.length > 0) {
-        return result.errors.join(",");
+      const result = validatePackageName(appName)
+      if (result.errors && result.errors.length > 0) {
+        return result.errors.join(',')
       }
 
-      return true;
+      return true
     }
   },
   {
@@ -128,7 +129,8 @@ inquirer.prompt(prompts)
     answers.camelCaseAppName = camelCase(answers.appName)
 
     return scaffold(program.template, destination, answers, {
-      overwrite: Boolean(program.overwrite)
+      overwrite: Boolean(program.overwrite),
+      branch: program.branch
     })
   })
   .then(results => {

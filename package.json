@@ -1,6 +1,6 @@
 {
   "name": "create-probot-app",
-  "version": "2.1.1",
+  "version": "2.3.0",
   "description": "Create a Probot app",
   "bin": {
     "create-probot-app": "./bin/create-probot-app.js"
