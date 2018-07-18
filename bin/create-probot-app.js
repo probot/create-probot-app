@@ -26,7 +26,7 @@ program
   .option('-h, --homepage <homepage>', 'Author\'s homepage')
   .option('-u, --user <username>', 'GitHub username or org (repo owner)')
   .option('-r, --repo <repo-name>', 'Repository name')
-  .option('-b, --branch <branch-name>', 'Specify a branch (defaults to `master`)', 'master')
+  .option('-b, --branch <branch-name>', 'Specify a branch', 'master')
   .option('--overwrite', 'Overwrite existing files', false)
   .option('--template <template-url>', 'URL or name of custom template', getTemplateRepository, DEFAULT_TEMPLATE)
   .option('--typescript', 'Use the TypeScript template', () => program.emit('option:template', 'typescript'))
