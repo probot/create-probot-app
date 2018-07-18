@@ -7,6 +7,7 @@ const inquirer = require('inquirer')
 const program = require('commander')
 const {scaffold} = require('egad')
 const kebabCase = require('lodash.kebabcase')
+const camelCase = require('lodash.camelcase')
 const chalk = require('chalk')
 const spawn = require('cross-spawn')
 const stringifyAuthor = require('stringify-author')
@@ -124,6 +125,7 @@ inquirer.prompt(prompts)
       url: answers.homepage
     })
     answers.year = new Date().getFullYear()
+    answers.camelCaseAppName = camelCase(answers.appName)
 
     return scaffold(program.template, destination, answers, {
       overwrite: Boolean(program.overwrite)
