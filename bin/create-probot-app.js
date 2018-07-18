@@ -54,12 +54,12 @@ const prompts = [
     message: 'App name:',
     when: !program.appName,
     validate (appName) {
-      const result = validatePackageName(appName);
-      if(result.errors && result.errors.length > 0) {
-        return result.errors.join(",");
+      const result = validatePackageName(appName)
+      if (result.errors && result.errors.length > 0) {
+        return result.errors.join(',')
       }
 
-      return true;
+      return true
     }
   },
   {
