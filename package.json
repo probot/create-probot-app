@@ -22,13 +22,17 @@
   },
   "homepage": "https://github.com/probot/create-probot-app#readme",
   "dependencies": {
+    "@octokit/rest": "^15.10.0",
     "chalk": "^2.0.1",
     "commander": "^2.11.0",
     "conjecture": "^0.1.2",
     "egad": "^0.2.0",
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
     "inquirer": "^3.2.1",
     "lodash.camelcase": "^4.3.0",
     "lodash.kebabcase": "^4.1.1",
+    "path": "^0.12.7",
     "stringify-author": "^0.1.3",
     "validate-npm-package-name": "^3.0.0"
   },

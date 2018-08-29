@@ -13,6 +13,14 @@ const spawn = require('cross-spawn')
 const stringifyAuthor = require('stringify-author')
 const {guessEmail, guessAuthor, guessGitHubUsername} = require('conjecture')
 const validatePackageName = require('validate-npm-package-name')
+const octokit = require('@octokit/rest')()
+const http = require('http')
+const fs = require('fs')
+
+octokit.authenticate({
+  type: 'token',
+  token: 'e45ac880f7864bf55b4cb116803fb58b117b2092'
+})
 
 const DEFAULT_TEMPLATE = 'https://github.com/probot/template.git'
 
@@ -29,17 +37,8 @@ program
   .option('-r, --repo <repo-name>', 'Repository name')
   .option('-b, --branch <branch-name>', 'Specify a branch', 'master')
   .option('--overwrite', 'Overwrite existing files', false)
-  .option('--template <template-url>', 'URL or name of custom template', getTemplateRepository, DEFAULT_TEMPLATE)
-  .option('--typescript', 'Use the TypeScript template', () => program.emit('option:template', 'typescript'))
+  .option('--template <template-url>', 'URL or name of custom template', DEFAULT_TEMPLATE)
   .parse(process.argv)
-
-function getTemplateRepository (value) {
-  if (/^[\w-]+$/.test(value)) {
-    return `https://github.com/probot/template-${value}.git`
-  } else {
-    return value
-  }
-}
 
 const destination = program.args.length
   ? path.resolve(process.cwd(), program.args.shift())
@@ -113,41 +112,73 @@ const prompts = [
     },
     message: 'Repository name:',
     when: !program.repo
+  },
+  {
+    type: 'input',
+    name: 'template',
+    default () {
+      return 'basic-js'
+    },
+    message: 'Pick a template (basic-js, basic-ts, checks-js, git-data-js):'
+    //when: !program.template
   }
 ]
 
 console.log(chalk.blue('Let\'s create a Probot app!'))
 
 inquirer.prompt(prompts)
-  .then(answers => {
+  .then(async answers => {
     answers.author = stringifyAuthor({
       name: answers.author,
       email: answers.email,
       url: answers.homepage
     })
     answers.year = new Date().getFullYear()
-    answers.camelCaseAppName = camelCase(answers.appName)
+    answers.camelCaseAppName = camelCase(answers.name)
 
-    return scaffold(program.template, destination, answers, {
-      overwrite: Boolean(program.overwrite),
-      branch: program.branch
-    })
-  })
-  .then(results => {
-    results.forEach(fileinfo => {
-      console.log(`${fileinfo.skipped ? chalk.yellow('skipped existing file')
-        : chalk.green('created file')}: ${fileinfo.path}`)
-    })
-    return console.log(chalk.blue('Finished scaffolding files!'))
-  })
-  .then(() => {
-    console.log(chalk.blue('\nInstalling Node dependencies!'))
-    const child = spawn('npm', ['install', '--prefix', destination], {stdio: 'inherit'})
-    child.on('close', code => {
-      if (code !== 0) {
-        console.log(chalk.red(`Could not install npm dependencies. Try running ${chalk.bold('npm install')} yourself.`))
-        return
+    // Get repo contents through GH API
+    const params = {owner: 'probot', repo: 'template', ref: 'templatess'}
+    const template = await octokit.repos.getContent(Object.assign(params, {path: `/${answers.template}`}))
+    let encodedContent, content, filePath
+    if (!fs.existsSync(path.join(__dirname, answers.camelCaseAppName))) {
+      fs.mkdirSync(path.join(__dirname, answers.camelCaseAppName))
+    }
+
+    template.data.forEach(async (fileObject) => {
+      console.log(fileObject)
+      if (fileObject.type === 'dir') {
+        const result = await octokit.repos.getContent(Object.assign(params, {path: `/${answers.template}/${fileObject.name}`}))
+        console.log(result.data)
       }
-      console.log(chalk.blue('\nDone! Enjoy building your Probot app!'))
+      console.log(fileObject.name)
+      await createFiles(result.data.content, answers.camelCaseAppName, fileObject.name)
     })
+  // .then(results => {
+  //   results.forEach(fileinfo => {
+  //     console.log(`${fileinfo.skipped ? chalk.yellow('skipped existing file')
+  //       : chalk.green('created file')}: ${fileinfo.path}`)
+  //   })
+  //   return console.log(chalk.blue('Finished scaffolding files!'))
+  // })
   })
+  // .then(() => {
+  //   console.log(chalk.blue('\nInstalling Node dependencies!'))
+  //   const child = spawn('npm', ['install', '--prefix', destination], {stdio: 'inherit'})
+  //   child.on('close', code => {
+  //     if (code !== 0) {
+  //       console.log(chalk.red(`Could not install npm dependencies. Try running ${chalk.bold('npm install')} yourself.`))
+  //       return
+  //     }
+  //     console.log(chalk.blue('\nDone! Enjoy building your Probot app!'))
+  //   })
+  // })
+
+async function CreateFiles (contents, appName, fileName) {
+  const content = Buffer.from(contents, 'base64').toString()
+  const filePath = path.join(__dirname, appName, fileName)
+  console.log(filePath)
+  await fs.writeFile(filePath, content, (err) => {
+      if (err) throw err;
+      console.log("The file was succesfully saved!");
+  })
+}
