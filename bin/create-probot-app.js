@@ -29,17 +29,8 @@ program
   .option('-r, --repo <repo-name>', 'Repository name')
   .option('-b, --branch <branch-name>', 'Specify a branch', 'master')
   .option('--overwrite', 'Overwrite existing files', false)
-  .option('--template <template-url>', 'URL or name of custom template', getTemplateRepository, DEFAULT_TEMPLATE)
-  .option('--typescript', 'Use the TypeScript template', () => program.emit('option:template', 'typescript'))
+  .option('--template <template>', 'Name of use case template', 'basic-js')
   .parse(process.argv)
-
-function getTemplateRepository (value) {
-  if (/^[\w-]+$/.test(value)) {
-    return `https://github.com/probot/template-${value}.git`
-  } else {
-    return value
-  }
-}
 
 const destination = program.args.length
   ? path.resolve(process.cwd(), program.args.shift())
@@ -113,6 +104,15 @@ const prompts = [
     },
     message: 'Repository name:',
     when: !program.repo
+  },
+  {
+    type: 'input',
+    name: 'template',
+    default (answers) {
+      return 'basic-js'
+    },
+    message: 'Use Case Templates (basic-js, basic-ts, checks-js, git-data-js):'
+    // when: !program.template
   }
 ]
 
@@ -128,10 +128,11 @@ inquirer.prompt(prompts)
     answers.year = new Date().getFullYear()
     answers.camelCaseAppName = camelCase(answers.appName)
 
-    return scaffold(program.template, destination, answers, {
-      overwrite: Boolean(program.overwrite),
-      branch: program.branch
-    })
+    console.log(answers.template)
+    // return scaffold(program.template, destination, answers, {
+    //   overwrite: Boolean(program.overwrite),
+    //   branch: program.branch
+    // })
   })
   .then(results => {
     results.forEach(fileinfo => {

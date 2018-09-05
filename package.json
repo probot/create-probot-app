@@ -25,7 +25,7 @@
     "chalk": "^2.0.1",
     "commander": "^2.11.0",
     "conjecture": "^0.1.2",
-    "egad": "^0.2.0",
+    "egad": "file:../egad",
     "inquirer": "^3.2.1",
     "lodash.camelcase": "^4.3.0",
     "lodash.kebabcase": "^4.1.1",
