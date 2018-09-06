@@ -5,7 +5,7 @@
 const path = require('path')
 const inquirer = require('inquirer')
 const program = require('commander')
-const {scaffold} = require('egad')
+const {generate} = require('egad')
 const kebabCase = require('lodash.kebabcase')
 const camelCase = require('lodash.camelcase')
 const chalk = require('chalk')
@@ -111,8 +111,14 @@ const prompts = [
     default (answers) {
       return 'basic-js'
     },
-    message: 'Use Case Templates (basic-js, basic-ts, checks-js, git-data-js):'
-    // when: !program.template
+    message: 'Use Case Templates (basic-js, basic-ts, checks-js, git-data-js):',
+    validate (template) {
+      const acceptedTemplates = ['basic-js', 'checks-js', 'git-data-js', 'basic-ts']
+      if (!acceptedTemplates.includes(template)) {
+        return 'Please use an existing use case template.'
+      }
+      return true
+    }
   }
 ]
 
@@ -128,11 +134,10 @@ inquirer.prompt(prompts)
     answers.year = new Date().getFullYear()
     answers.camelCaseAppName = camelCase(answers.appName)
 
-    console.log(answers.template)
-    // return scaffold(program.template, destination, answers, {
-    //   overwrite: Boolean(program.overwrite),
-    //   branch: program.branch
-    // })
+    const relativePath = path.join(__dirname, '/../templates/', answers.template)
+    return generate(relativePath, destination, answers, {
+      overwrite: Boolean(program.overwrite)
+    })
   })
   .then(results => {
     results.forEach(fileinfo => {
