@@ -1,8 +1,3 @@
-/**
- * This is the entry point for your Probot App.
- * @param {import('probot').Application} app - Probot's Application class.
-*/
-
 // Checks API example
 // See: https://developer.github.com/v3/checks/ to learn more
 module.exports = app => {
@@ -13,8 +8,8 @@ module.exports = app => {
     // Probot API note: context.repo() => {username: 'hiimbex', repo: 'testing-things'}
     return context.github.checks.create(context.repo({
       name: 'My app!',
-      head_branch: pr.head.ref,
-      head_sha: pr.head.sha,
+      head_branch: context.pull_request.head.ref,
+      head_sha: context.pull_request.head.sha,
       status: 'completed',
       conclusion: 'success',
       completed_at: new Date(),
@@ -24,7 +19,6 @@ module.exports = app => {
       }
     }))
   }
-}
 
   // For more information on building apps:
   // https://probot.github.io/docs/

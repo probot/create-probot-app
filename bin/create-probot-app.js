@@ -135,11 +135,16 @@ inquirer.prompt(prompts)
     answers.camelCaseAppName = camelCase(answers.appName)
 
     const relativePath = path.join(__dirname, '/../templates/', answers.template)
+    console.log('ok')
     return generate(relativePath, destination, answers, {
       overwrite: Boolean(program.overwrite)
     })
   })
+  .catch(error => {
+    console.log('bad',error)
+  })
   .then(results => {
+    console.log('results')
     results.forEach(fileinfo => {
       console.log(`${fileinfo.skipped ? chalk.yellow('skipped existing file')
         : chalk.green('created file')}: ${fileinfo.path}`)
