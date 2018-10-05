@@ -5,16 +5,17 @@ module.exports = app => {
 
   async function check (context) {
     // Do stuff
+    const { head_branch, head_sha } = context.payload.check_suite
     // Probot API note: context.repo() => {username: 'hiimbex', repo: 'testing-things'}
     return context.github.checks.create(context.repo({
       name: 'My app!',
-      head_branch: context.pull_request.head.ref,
-      head_sha: context.pull_request.head.sha,
+      head_branch,
+      head_sha,
       status: 'completed',
       conclusion: 'success',
       completed_at: new Date(),
       output: {
-        title: 'My Check',
+        title: 'Probot check!',
         summary: 'The check has passed!'
       }
     }))

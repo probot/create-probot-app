@@ -29,7 +29,7 @@ describe('My Probot app', () => {
   test('creates a comment when an issue is opened', async () => {
     // Simulates delivery of an issues.opened webhook
     await app.receive({
-      event: 'issues.opened',
+      name: 'issues.opened',
       payload: issuesOpenedPayload
     })
 
