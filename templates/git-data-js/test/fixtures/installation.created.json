@@ -1,0 +1,13 @@
+{
+  "action": "created",
+  "installation": {
+    "account": {
+      "login": "hiimbex"
+    }
+  },
+  "repositories": [
+    {
+      "name": "testing-things"
+    }
+  ]
+}
