@@ -1,9 +1,10 @@
 import { Application } from 'probot'
 
 export = (app: Application) => {
-  // Your code here
-  app.log('Yay, the app was loaded!')
-
+  app.on('issues.opened', async (context) => {
+    const issueComment = context.issue({ body: 'Thanks for opening this issue!' })
+    await context.github.issues.createComment(issueComment)
+  })
   // For more information on building apps:
   // https://probot.github.io/docs/
 
