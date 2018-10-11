@@ -14,8 +14,6 @@ const stringifyAuthor = require('stringify-author')
 const {guessEmail, guessAuthor, guessGitHubUsername} = require('conjecture')
 const validatePackageName = require('validate-npm-package-name')
 
-const DEFAULT_TEMPLATE = 'https://github.com/probot/template.git'
-
 program
   .usage('[options] [destination]')
   .option('-n, --appName <app-name>', 'App name')
@@ -128,7 +126,6 @@ inquirer.prompt(prompts)
     })
     answers.year = new Date().getFullYear()
     answers.camelCaseAppName = camelCase(answers.appName)
-    console.log(answers)
 
     const relativePath = path.join(__dirname, '/../templates/', answers.template)
     return generate(relativePath, destination, answers, {
