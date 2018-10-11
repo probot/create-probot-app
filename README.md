@@ -1,26 +1,40 @@
 # Create Probot App
 
-This project will generate a new [Probot](https://github.com/probot/probot) app 
-with everything you need to get started and run your app in production.
+This project will generate a new [Probot](https://github.com/probot/probot) app
+with everything you need to get started building. 👷🏽‍
 
-> use the --typescript flag to generate a new TypeScript project
+In particular, this command line interface allows you to select from our pre-defined blue prints to choose a basic working example to start from.
 
-If you're using npm < 6: 
-
-```sh
-npx create-probot-app [--typescript] my-first-app
-```
-
-If you're using npm > 6: 
+## Getting started with Blue Prints 🛠
 
 ```sh
-npm init probot-app [--typescript] my-first-app
+npx create-probot-app my-first-app -t basic-js
 ```
 
-If you're using Yarn: 
+This template is a JavaScript app that will post a comment every time an issue is opened.
 
 ```sh
-yarn create probot-app [--typescript] my-first-app
+npx create-probot-app my-first-app -t basic-ts
 ```
 
-See the [Probot docs](https://probot.github.io/docs/development/) to get started.
+This template is a TypeScript app that will post a comment every time an issue is opened.
+
+```sh
+npx create-probot-app my-first-app -t checks-js
+```
+
+This template is a JavaScript app that will create a new [check](https://developer.github.com/v3/checks/) every time a check a push happens.
+
+```sh
+npx create-probot-app my-first-app -t git-data-js
+```
+
+This template is a JavaScript app that will create a new [pull request](https://developer.github.com/v3/pulls/#create-a-pull-request) using the [Git Data API](https://developer.github.com/v3/git/) every time someone installs your app.
+
+If you're using Yarn:
+
+```sh
+yarn create probot-app my-first-app
+```
+
+See the [Probot docs](https://probot.github.io/docs/development/#running-the-app-locally) to get started running your app locally.
