@@ -62,7 +62,7 @@ default_permissions:
 
   # Repository contents, commits, branches, downloads, releases, and merges.
   # https://developer.github.com/v3/apps/permissions/#permission-on-contents
-  contents: read
+  contents: write
 
   # Deployments and deployment statuses.
   # https://developer.github.com/v3/apps/permissions/#permission-on-deployments
@@ -102,7 +102,7 @@ default_permissions:
 
   # Organization members and teams.
   # https://developer.github.com/v3/apps/permissions/#permission-on-members
-  members: read
+  # members: read
 
   # View and manage users blocked by the organization.
   # https://developer.github.com/v3/apps/permissions/#permission-on-organization-user-blocking
