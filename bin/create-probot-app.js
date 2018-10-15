@@ -120,6 +120,7 @@ console.log(chalk.blue('Let\'s create a Probot app!'))
 
 inquirer.prompt(prompts)
   .then(answers => {
+    answers.description = JSON.stringify(answers.description).slice(1,-1)
     answers.author = stringifyAuthor({
       name: answers.author,
       email: answers.email,
