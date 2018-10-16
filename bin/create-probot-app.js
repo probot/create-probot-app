@@ -104,9 +104,9 @@ const prompts = [
     default (answers) {
       return program.template || answers.template || 'basic-js'
     },
-    message: 'Use Case Templates (basic-js, basic-ts, checks-js, git-data-js):',
+    message: 'Use Case Templates (basic-js, basic-ts, checks-js, git-data-js, deploy-js):',
     validate (template) {
-      const acceptedTemplates = ['basic-js', 'checks-js', 'git-data-js', 'basic-ts']
+      const acceptedTemplates = ['basic-js', 'checks-js', 'git-data-js', 'deploy-js', 'basic-ts']
       if (!acceptedTemplates.includes(template)) {
         return 'Please use an existing use case template.'
       }
