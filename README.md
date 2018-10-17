@@ -31,6 +31,12 @@ npx create-probot-app my-first-app -t git-data-js
 
 This template is a JavaScript app that will create a new [pull request](https://developer.github.com/v3/pulls/#create-a-pull-request) using the [Git Data API](https://developer.github.com/v3/git/) every time someone installs your app.
 
+```sh
+npx create-probot-app my-first-app -t deploy-js
+```
+
+This template is a JavaScript app that will create a new [deployment](https://developer.github.com/v3/repos/deployments/) every time someone opens or pushes to a pull request.
+
 If you're using Yarn:
 
 ```sh
