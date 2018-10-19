@@ -1,0 +1,25 @@
+#!/bin/sh
+
+
+echo | bin/create-probot-app.js \
+  --appName "travis-template-test" \
+  --desc "A Probot App for building on Travis" \
+  --author "Pro Bawt" \
+  --email "probot@example.com" \
+  --homepage "https://probot.github.io" \
+  --user "probot" \
+  --template "basic-js" \
+  --repo "probot/create-probot-app-basic-js" \
+  travis-template-test
+
+
+  # -n, --appName <app-name>    App name
+  # -d, --desc "<description>"  Description (contain in quotes)
+  # -a, --author "<full-name>"  Author name (contain in quotes)
+  # -e, --email <email>         Author email address
+  # -h, --homepage <homepage>   Author's homepage
+  # -u, --user <username>       GitHub username or org (repo owner)
+  # -r, --repo <repo-name>      Repository name
+  # --overwrite                 Overwrite existing files
+  # -t, --template <template>   Name of use case template
+  # -h, --help                  output usage information
