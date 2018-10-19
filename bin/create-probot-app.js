@@ -38,9 +38,10 @@ const prompts = [
     type: 'input',
     name: 'name',
     default (answers) {
-      return program.appName || answers.repo || kebabCase(path.basename(destination))
+      return answers.repo || kebabCase(path.basename(destination))
     },
     message: 'App name:',
+    when: !program.appName,
     validate (appName) {
       const result = validatePackageName(appName)
       if (result.errors && result.errors.length > 0) {
@@ -54,55 +55,58 @@ const prompts = [
     type: 'input',
     name: 'description',
     default () {
-      return program.desc || 'A Probot app'
+      return 'A Probot app'
     },
-    message: 'Description of app:'
+    message: 'Description of app:',
+    when: !program.desc
   },
   {
     type: 'input',
     name: 'author',
     default () {
-      return program.author || guessAuthor()
+      return guessAuthor()
     },
-    message: 'Author\'s full name:'
+    message: 'Author\'s full name:',
+    when: !program.author
   },
   {
     type: 'input',
     name: 'email',
     default () {
-      return program.email || guessEmail()
+      return guessEmail()
     },
-    message: 'Author\'s email address:'
+    message: 'Author\'s email address:',
+    when: !program.email
   },
   {
     type: 'input',
     name: 'homepage',
-    default (answers) {
-      return program.homepage
-    },
-    message: 'Homepage:'
+    message: 'Homepage:',
+    when: !program.homepage
   },
   {
     type: 'input',
-    name: 'owner',
+    name: 'user',
     default (answers) {
-      return program.user || guessGitHubUsername(answers.email)
+      return guessGitHubUsername(answers.email)
     },
-    message: 'GitHub user or org name:'
+    message: 'GitHub user or org name:',
+    when: !program.user
   },
   {
     type: 'input',
     name: 'repo',
     default (answers) {
-      return program.repo || answers.appName || kebabCase(path.basename(destination))
+      return answers.appName || kebabCase(path.basename(destination))
     },
-    message: 'Repository name:'
+    message: 'Repository name:',
+    when: !program.repo
   },
   {
     type: 'input',
     name: 'template',
     default (answers) {
-      return program.template || answers.template || 'basic-js'
+      return answers.template || 'basic-js'
     },
     message: 'Use Case Templates (basic-js, basic-ts, checks-js, git-data-js, deploy-js):',
     validate (template) {
@@ -111,7 +115,8 @@ const prompts = [
         return 'Please use an existing use case template.'
       }
       return true
-    }
+    },
+    when: !program.template
   }
 ]
 
@@ -120,12 +125,22 @@ console.log(chalk.blue('\nLet\'s create a Probot app!\nHit enter to accept the s
 inquirer.prompt(prompts)
   .then(answers => {
     answers.author = stringifyAuthor({
-      name: answers.author,
-      email: answers.email,
-      url: answers.homepage
+      name: program.author || answers.author,
+      email: program.email || answers.email,
+      url: program.homepage || answers.homepage
     })
     answers.year = new Date().getFullYear()
-    answers.camelCaseAppName = camelCase(answers.appName)
+    answers.camelCaseAppName = camelCase(program.appName || answers.appName)
+    answers.template = program.template || answers.template
+    answers.appName = program.appName || answers.appName
+    answers.desc = program.desc || answers.desc
+    answers.user = program.user || answers.user
+    answers.repo = program.repo || answers.repo
+    answers.template = program.template || answers.template
+
+    // TODO: clean that up into nicer object combinging
+
+    console.log(answers, destination)
 
     const relativePath = path.join(__dirname, '/../templates/', answers.template)
     return generate(relativePath, destination, answers, {

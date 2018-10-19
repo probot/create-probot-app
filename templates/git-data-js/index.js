@@ -13,7 +13,9 @@ module.exports = app => {
 
       // Generates a random number to ensure the git reference isn't already taken
       // NOTE: this is not recommended and just shows an example so it can work :)
-      const branch = `new-branch-${Math.floor(Math.random() * Math.floor(9999))}`
+
+      // test
+      const branch = `new-branch-${Math.floor(Math.random() * 9999)}`
 
       // Get current reference in Git
       const reference = await context.github.gitdata.getReference({
