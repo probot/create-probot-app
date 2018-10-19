@@ -17,4 +17,5 @@ do
 
   cd ${i:10}
   npm test
+  cd ..
 done
