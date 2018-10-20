@@ -16,7 +16,7 @@ do
     ${i:10}
 
   cd ${i:10}
-  npm build
+  npm run-script build
   npm test || {
     echo 'npm test failed'
     exit 1
