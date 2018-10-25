@@ -33,6 +33,8 @@ const destination = program.args.length
   ? path.resolve(process.cwd(), program.args.shift())
   : process.cwd()
 
+const templates = ['basic-js', 'checks-js', 'git-data-js', 'deploy-js', 'basic-ts']
+
 const prompts = [
   {
     type: 'input',
@@ -103,19 +105,10 @@ const prompts = [
     when: !program.repo
   },
   {
-    type: 'input',
+    type: 'list',
     name: 'template',
-    default (answers) {
-      return answers.template || 'basic-js'
-    },
-    message: 'Use Case Templates (basic-js, basic-ts, checks-js, git-data-js, deploy-js):',
-    validate (template) {
-      const acceptedTemplates = ['basic-js', 'checks-js', 'git-data-js', 'deploy-js', 'basic-ts']
-      if (!acceptedTemplates.includes(template)) {
-        return 'Please use an existing use case template.'
-      }
-      return true
-    },
+    choices: templates,
+    message: 'Which template would you like to use?',
     when: !program.template
   }
 ]
@@ -141,6 +134,11 @@ inquirer.prompt(prompts)
     // TODO: clean that up into nicer object combinging
 
     console.log(answers, destination)
+
+    if (!templates.includes(answers.template)) {
+      console.log(chalk.red(`Please use an existing use case template: ${templates.join(', ')}`))
+      process.exit(1)
+    }
 
     const relativePath = path.join(__dirname, '/../templates/', answers.template)
     return generate(relativePath, destination, answers, {
