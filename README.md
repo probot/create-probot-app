@@ -23,7 +23,7 @@ This template is a TypeScript app that will post a comment every time an issue i
 npx create-probot-app my-first-app -t checks-js
 ```
 
-This template is a JavaScript app that will create a new [check](https://developer.github.com/v3/checks/) every time a check a push happens.
+This template is a JavaScript app that will create a new [check](https://developer.github.com/v3/checks/) every time a push happens.
 
 ```sh
 npx create-probot-app my-first-app -t git-data-js
