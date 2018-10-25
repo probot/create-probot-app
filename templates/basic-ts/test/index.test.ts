@@ -29,7 +29,7 @@ describe('My Probot app', () => {
       .post('/app/installations/2/access_tokens')
       .reply(200, { token: 'test' })
 
-    // Test that a commented is posted
+    // Test that a comment is posted
     nock('https://api.github.com')
       .post('/repos/hiimbex/testing-things/issues/1/comments', (body: any) => {
         expect(body).toMatchObject(issueCreatedBody)
