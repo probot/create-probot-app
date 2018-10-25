@@ -23,7 +23,7 @@ describe('My Probot app', () => {
     app.app = () => 'test'
   })
 
-  test('creates a passing check', async () => {
+  test('creates a comment when an issue is opened', async () => {
     // Test that we correctly return a test token
     nock('https://api.github.com')
       .post('/app/installations/2/access_tokens')
