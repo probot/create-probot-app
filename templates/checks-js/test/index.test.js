@@ -33,7 +33,7 @@ describe('My Probot app', () => {
       })
       .reply(200)
 
-    // Recieve a webhook event
+    // Receive a webhook event
     await probot.receive({ name: 'check_suite', payload: checkSuitePayload })
   })
 })
