@@ -12,7 +12,7 @@ module.exports = app => {
       head_branch,
       head_sha,
       status: 'completed',
-      conclusion: 'failure',
+      conclusion: 'success',
       completed_at: new Date(),
       output: {
         title: 'Probot check!',
