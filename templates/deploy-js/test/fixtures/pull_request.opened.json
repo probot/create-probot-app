@@ -1,0 +1,14 @@
+{
+  "action": "opened",
+  "pull_request": {
+    "head": {
+      "ref": "hiimbex-patch-1"
+    }
+  },
+  "repository": {
+    "name": "testing-things",
+    "owner": {
+      "login": "hiimbex"
+    }
+  }
+}

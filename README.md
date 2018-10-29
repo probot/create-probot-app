@@ -1,26 +1,18 @@
 # Create Probot App
 
-This project will generate a new [Probot](https://github.com/probot/probot) app 
-with everything you need to get started and run your app in production.
+This project will generate a new [Probot](https://github.com/probot/probot) app
+with everything you need to get started building. 👷🏽‍
 
-> use the --typescript flag to generate a new TypeScript project
-
-If you're using npm < 6: 
+In particular, this command line interface allows you to select from our pre-defined blue prints to choose a basic working example to start from.
 
 ```sh
-npx create-probot-app [--typescript] my-first-app
+npx create-probot-app my-first-app
 ```
 
-If you're using npm > 6: 
+If you're using Yarn:
 
 ```sh
-npm init probot-app [--typescript] my-first-app
+yarn create probot-app my-first-app
 ```
 
-If you're using Yarn: 
-
-```sh
-yarn create probot-app [--typescript] my-first-app
-```
-
-See the [Probot docs](https://probot.github.io/docs/development/) to get started.
+See the [Probot docs](https://probot.github.io/docs/development/#running-the-app-locally) to get started running your app locally.

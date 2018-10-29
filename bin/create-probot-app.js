@@ -5,7 +5,7 @@
 const path = require('path')
 const inquirer = require('inquirer')
 const program = require('commander')
-const {scaffold} = require('egad')
+const {generate} = require('egad')
 const kebabCase = require('lodash.kebabcase')
 const camelCase = require('lodash.camelcase')
 const chalk = require('chalk')
@@ -13,8 +13,6 @@ const spawn = require('cross-spawn')
 const stringifyAuthor = require('stringify-author')
 const {guessEmail, guessAuthor, guessGitHubUsername} = require('conjecture')
 const validatePackageName = require('validate-npm-package-name')
-
-const DEFAULT_TEMPLATE = 'https://github.com/probot/template.git'
 
 program
   .usage('[options] [destination]')
@@ -27,23 +25,15 @@ program
   .option('-h, --homepage <homepage>', 'Author\'s homepage')
   .option('-u, --user <username>', 'GitHub username or org (repo owner)')
   .option('-r, --repo <repo-name>', 'Repository name')
-  .option('-b, --branch <branch-name>', 'Specify a branch', 'master')
   .option('--overwrite', 'Overwrite existing files', false)
-  .option('--template <template-url>', 'URL or name of custom template', getTemplateRepository, DEFAULT_TEMPLATE)
-  .option('--typescript', 'Use the TypeScript template', () => program.emit('option:template', 'typescript'))
+  .option('-t, --template <template>', 'Name of use case template')
   .parse(process.argv)
-
-function getTemplateRepository (value) {
-  if (/^[\w-]+$/.test(value)) {
-    return `https://github.com/probot/template-${value}.git`
-  } else {
-    return value
-  }
-}
 
 const destination = program.args.length
   ? path.resolve(process.cwd(), program.args.shift())
   : process.cwd()
+
+const templates = ['basic-js', 'checks-js', 'git-data-js', 'deploy-js', 'basic-ts']
 
 const prompts = [
   {
@@ -98,7 +88,7 @@ const prompts = [
   },
   {
     type: 'input',
-    name: 'owner',
+    name: 'user',
     default (answers) {
       return guessGitHubUsername(answers.email)
     },
@@ -113,24 +103,46 @@ const prompts = [
     },
     message: 'Repository name:',
     when: !program.repo
+  },
+  {
+    type: 'list',
+    name: 'template',
+    choices: templates,
+    message: 'Which template would you like to use?',
+    when: !program.template
   }
 ]
 
-console.log(chalk.blue('Let\'s create a Probot app!'))
+console.log(chalk.blue('\nLet\'s create a Probot app!\nHit enter to accept the suggestion.\n'))
 
 inquirer.prompt(prompts)
   .then(answers => {
     answers.author = stringifyAuthor({
-      name: answers.author,
-      email: answers.email,
-      url: answers.homepage
+      name: program.author || answers.author,
+      email: program.email || answers.email,
+      url: program.homepage || answers.homepage
     })
     answers.year = new Date().getFullYear()
-    answers.camelCaseAppName = camelCase(answers.appName)
+    answers.camelCaseAppName = camelCase(program.appName || answers.appName)
+    answers.template = program.template || answers.template
+    answers.appName = program.appName || answers.appName
+    answers.desc = program.desc || answers.desc
+    answers.user = program.user || answers.user
+    answers.repo = program.repo || answers.repo
+    answers.template = program.template || answers.template
 
-    return scaffold(program.template, destination, answers, {
-      overwrite: Boolean(program.overwrite),
-      branch: program.branch
+    // TODO: clean that up into nicer object combinging
+
+    console.log(answers, destination)
+
+    if (!templates.includes(answers.template)) {
+      console.log(chalk.red(`Please use an existing use case template: ${templates.join(', ')}`))
+      process.exit(1)
+    }
+
+    const relativePath = path.join(__dirname, '/../templates/', answers.template)
+    return generate(relativePath, destination, answers, {
+      overwrite: Boolean(program.overwrite)
     })
   })
   .then(results => {
