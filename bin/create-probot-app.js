@@ -133,8 +133,6 @@ inquirer.prompt(prompts)
 
     // TODO: clean that up into nicer object combinging
 
-    console.log(answers, destination)
-
     if (!templates.includes(answers.template)) {
       console.log(chalk.red(`Please use an existing use case template: ${templates.join(', ')}`))
       process.exit(1)
