@@ -72,9 +72,9 @@ default_permissions:
   # https://developer.github.com/v3/apps/permissions/#permission-on-issues
   # issues: write
 
-  # Search repositories, list collaborators, and access repository metadata.
+  # Search repositories, list collaborators, and access repository '.
   # https://developer.github.com/v3/apps/permissions/#metadata-permissions
-  # metadata: read
+  metadata: read
 
   # Retrieve Pages statuses, configuration, and builds, as well as create new builds.
   # https://developer.github.com/v3/apps/permissions/#permission-on-pages
