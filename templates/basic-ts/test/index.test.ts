@@ -23,7 +23,7 @@ describe('My Probot app', () => {
     app.app = () => 'test'
   })
 
-  test('creates a comment when an issue is opened', async () => {
+  test('creates a comment when an issue is opened', async (done) => {
     // Test that we correctly return a test token
     nock('https://api.github.com')
       .post('/app/installations/2/access_tokens')
@@ -32,7 +32,7 @@ describe('My Probot app', () => {
     // Test that a comment is posted
     nock('https://api.github.com')
       .post('/repos/hiimbex/testing-things/issues/1/comments', (body: any) => {
-        expect(body).toMatchObject(issueCreatedBody)
+        done(expect(body).toMatchObject(issueCreatedBody))
         return true
       })
       .reply(200)
