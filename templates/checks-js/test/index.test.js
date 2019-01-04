@@ -27,6 +27,7 @@ describe('My Probot app', () => {
 
     nock('https://api.github.com')
       .post('/repos/hiimbex/testing-things/check-runs', (body) => {
+        body.started_at = '2018-10-05T17:35:21.594Z'
         body.completed_at = '2018-10-05T17:35:53.683Z'
         expect(body).toMatchObject(checkRunSuccess)
         return true
