@@ -4,6 +4,7 @@ module.exports = app => {
   app.on(['check_suite.requested', 'check_run.rerequested'], check)
 
   async function check (context) {
+    const startTime = new Date()
     // Do stuff
     const { head_branch, head_sha } = context.payload.check_suite
     // Probot API note: context.repo() => {username: 'hiimbex', repo: 'testing-things'}
@@ -12,6 +13,7 @@ module.exports = app => {
       head_branch,
       head_sha,
       status: 'completed',
+      started_at: startTime,
       conclusion: 'success',
       completed_at: new Date(),
       output: {
