@@ -11,8 +11,8 @@ module.exports = app => {
     // Probot API note: context.repo() => {username: 'hiimbex', repo: 'testing-things'}
     return context.github.checks.create(context.repo({
       name: 'My app!',
-      headBranch,
-      headSha,
+      head_branch: headBranch,
+      head_sha: headSha,
       status: 'completed',
       started_at: startTime,
       conclusion: 'success',
