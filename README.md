@@ -1,5 +1,7 @@
 # Create Probot App
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/probot/create-probot-app.svg)](https://greenkeeper.io/)
+
 This project will generate a new [Probot](https://github.com/probot/probot) app
 with everything you need to get started building. 👷🏽‍
 
