@@ -1,6 +1,6 @@
 # Create Probot Plugin
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/probot/create-probot-plugin.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/probot/create-probot-app.svg)](https://greenkeeper.io/)
 
 Create a new [probot](https://github.com/probot/probot) plugin.
 
