@@ -1,17 +1,20 @@
-# Create Probot Plugin
+# Create Probot App
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/probot/create-probot-app.svg)](https://greenkeeper.io/)
 
-Create a new [probot](https://github.com/probot/probot) plugin.
+This project will generate a new [Probot](https://github.com/probot/probot) app
+with everything you need to get started building. 👷🏽‍
 
-## Get Started
+In particular, this command line interface allows you to select from our pre-defined blue prints to choose a basic working example to start from.
 
-```
-npm install -g create-probot-plugin
-
-create-probot-plugin my-plugin
-cd my-plugin
-npm start
+```sh
+npx create-probot-app my-first-app
 ```
 
-See the [probot docs](https://github.com/probot/probot/blob/master/docs/plugins.md) for more information.
+If you're using Yarn:
+
+```sh
+yarn create probot-app my-first-app
+```
+
+See the [Probot docs](https://probot.github.io/docs/development/#running-the-app-locally) to get started running your app locally.

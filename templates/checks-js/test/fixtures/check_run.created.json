@@ -1,0 +1,13 @@
+{
+  "name": "My app!",
+  "head_branch": "hiimbex-patch-46",
+  "head_sha": "50e5628cda538bcbb6f3fec3edebe4bb5afb3891",
+  "status": "completed",
+  "started_at": "2018-10-05T17:35:21.594Z",
+  "conclusion": "success",
+  "completed_at": "2018-10-05T17:35:53.683Z",
+  "output": {
+    "title": "Probot check!",
+    "summary": "The check has passed!"
+  }
+}
