@@ -1,0 +1,14 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "package.json",
+        "templates/basic-js/package.json",
+        "templates/basic-ts/package.json",
+        "templates/checks-js/package.json",
+        "templates/deploy-js/package.json",
+        "templates/git-data-js/package.json"
+      ]
+    }
+  }
+}
