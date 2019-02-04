@@ -53,7 +53,7 @@ describe('My Probot app', () => {
         expect(body).toMatchObject(deployment)
         return true
       })
-      .reply(200, {id: 123})
+      .reply(200, { id: 123 })
 
     // Test that a deployment status is created
     nock('https://api.github.com')
