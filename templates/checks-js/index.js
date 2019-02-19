@@ -1,5 +1,10 @@
 // Checks API example
 // See: https://developer.github.com/v3/checks/ to learn more
+
+/**
+ * This is the main entrypoint to your Probot app
+ * @param {import('probot').Application} app
+ */
 module.exports = app => {
   app.on(['check_suite.requested', 'check_run.rerequested'], check)
 

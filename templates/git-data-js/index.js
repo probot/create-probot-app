@@ -1,5 +1,10 @@
 // Git Data API use case example
 // See: https://developer.github.com/v3/git/ to learn more
+
+/**
+ * This is the main entrypoint to your Probot app
+ * @param {import('probot').Application} app
+ */
 module.exports = app => {
   // Opens a PR every time someone installs your app for the first time
   app.on('installation.created', check)
