@@ -8,19 +8,30 @@ import { Probot } from 'probot'
 // Requiring our fixtures
 import payload from './fixtures/issues.opened.json'
 const issueCreatedBody = { body: 'Thanks for opening this issue!' }
+const fs = require('fs')
+const path = require('path')
 
 nock.disableNetConnect()
 
 describe('My Probot app', () => {
   let probot: any
+  let mockCert: string
+
+  beforeAll((done: Function) => {
+    fs.readFile(path.join(__dirname, 'fixtures/mock-cert.pem'), (err: Error, cert: string) => {
+      if (err) return done(err)
+      mockCert = cert
+      done()
+    })
+  })
 
   beforeEach(() => {
-    probot = new Probot({ id: 123, cert: 'test' })
+    probot = new Probot({ id: 123, cert: mockCert })
     // Load our app into probot
     const app = probot.load(myProbotApp)
 
     // just return a test token
-    app.app = () => 'test'
+    app.app.getSignedJsonWebToken = () => 'test'
   })
 
   test('creates a comment when an issue is opened', async (done) => {

@@ -4,6 +4,8 @@ const myProbotApp = require('..')
 const { Probot } = require('probot')
 // Requiring our fixtures
 const installationCreatedPayload = require('./fixtures/installation.created')
+const fs = require('fs')
+const path = require('path')
 
 // Mocking out our use of random numbers
 const mockMath = Object.create(global.Math)
@@ -14,14 +16,23 @@ nock.disableNetConnect()
 
 describe('My Probot app', () => {
   let probot
+  let mockCert
+
+  beforeAll((done) => {
+    fs.readFile(path.join(__dirname, 'fixtures/mock-cert.pem'), (err, cert) => {
+      if (err) return done(err)
+      mockCert = cert
+      done()
+    })
+  })
 
   beforeEach(() => {
-    probot = new Probot({})
+    probot = new Probot({ id: 123, cert: mockCert })
     // Load our app into probot
     const app = probot.load(myProbotApp)
 
     // just return a test token
-    app.app = () => 'test'
+    app.app.getSignedJsonWebToken = () => 'test'
   })
 
   test('creates a pull request on installation', async () => {
