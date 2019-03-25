@@ -25,10 +25,7 @@ describe('My Probot app', () => {
   beforeEach(() => {
     probot = new Probot({ id: 123, cert: mockCert })
     // Load our app into probot
-    const app = probot.load(myProbotApp)
-
-    // just return a test token
-    app.app.getSignedJsonWebToken = () => 'test'
+    probot.load(myProbotApp)
   })
 
   test('creates a comment when an issue is opened', async () => {
