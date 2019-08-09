@@ -23,7 +23,7 @@
   "homepage": "https://github.com/probot/create-probot-app#readme",
   "dependencies": {
     "chalk": "^2.0.1",
-    "commander": "^2.11.0",
+    "commander": "^3.0.0",
     "conjecture": "^0.1.2",
     "egad": "^0.2.0",
     "inquirer": "^6.2.2",
