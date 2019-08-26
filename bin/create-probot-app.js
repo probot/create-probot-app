@@ -2,6 +2,7 @@
 
 'use strict'
 
+const fs = require('fs')
 const path = require('path')
 const inquirer = require('inquirer')
 const program = require('commander')
@@ -145,6 +146,26 @@ inquirer.prompt(prompts)
   })
   .then(results => {
     results.forEach(fileinfo => {
+      if (fileinfo.skipped === false 
+        && path.basename(fileinfo.path) === 'gitignore'
+      ) {
+        try {
+          const gitignorePath = path.join(path.dirname(fileinfo.path), '.gitignore')
+
+          if (fs.existsSync(gitignorePath)) {
+            const data = fs.readFileSync(fileinfo.path, { encoding: 'utf8' })
+            fs.appendFileSync(gitignorePath, data)
+            fs.unlinkSync(fileinfo.path)
+          } else {
+            fs.renameSync(fileinfo.path, gitignorePath)
+          }
+
+          fileinfo.path = gitignorePath
+        } catch (err) {
+          throw err
+        }
+      }
+
       console.log(`${fileinfo.skipped ? chalk.yellow('skipped existing file')
         : chalk.green('created file')}: ${fileinfo.path}`)
     })
