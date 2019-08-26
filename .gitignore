@@ -7,5 +7,8 @@ yarn-debug.log*
 yarn-error.log*
 debug.log
 
+# Lockfiles
 package-lock.json
+yarn.lock
+
 tmp
