@@ -6,13 +6,13 @@ const fs = require('fs')
 const path = require('path')
 const inquirer = require('inquirer')
 const program = require('commander')
-const {generate} = require('egad')
+const { generate } = require('egad')
 const kebabCase = require('lodash.kebabcase')
 const camelCase = require('lodash.camelcase')
 const chalk = require('chalk')
 const spawn = require('cross-spawn')
 const stringifyAuthor = require('stringify-author')
-const {guessEmail, guessAuthor, guessGitHubUsername} = require('conjecture')
+const { guessEmail, guessAuthor, guessGitHubUsername } = require('conjecture')
 const validatePackageName = require('validate-npm-package-name')
 
 program
@@ -146,8 +146,8 @@ inquirer.prompt(prompts)
   })
   .then(results => {
     results.forEach(fileinfo => {
-      if (fileinfo.skipped === false 
-        && path.basename(fileinfo.path) === 'gitignore'
+      if (fileinfo.skipped === false &&
+        path.basename(fileinfo.path) === 'gitignore'
       ) {
         try {
           const gitignorePath = path.join(path.dirname(fileinfo.path), '.gitignore')
@@ -173,7 +173,7 @@ inquirer.prompt(prompts)
   })
   .then(() => {
     console.log(chalk.blue('\nInstalling Node dependencies!'))
-    const child = spawn('npm', ['install', '--prefix', destination], {stdio: 'inherit'})
+    const child = spawn('npm', ['install', '--prefix', destination], { stdio: 'inherit' })
     child.on('close', code => {
       if (code !== 0) {
         console.log(chalk.red(`Could not install npm dependencies. Try running ${chalk.bold('npm install')} yourself.`))
