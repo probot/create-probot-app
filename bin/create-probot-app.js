@@ -10,6 +10,7 @@ const { generate } = require('egad')
 const kebabCase = require('lodash.kebabcase')
 const camelCase = require('lodash.camelcase')
 const chalk = require('chalk')
+const jsesc = require('jsesc')
 const spawn = require('cross-spawn')
 const stringifyAuthor = require('stringify-author')
 const { guessEmail, guessAuthor, guessGitHubUsername } = require('conjecture')
@@ -35,6 +36,22 @@ const destination = program.args.length
   : process.cwd()
 
 const templates = ['basic-js', 'checks-js', 'git-data-js', 'deploy-js', 'basic-ts']
+
+/**
+ * Partially sanitizes keys by escaping double-quotes.
+ * 
+ * @param {Object} object The object to mutate.
+ * @param {String[]} keys The keys on `object` to sanitize.
+ */
+function sanitizeBy(object, keys) {
+  keys.forEach(key => {
+    if (key in object) {
+      object[key] = jsesc(object[key], {
+        quotes: 'double'
+      })
+    }
+  })
+}
 
 const prompts = [
   {
@@ -132,13 +149,14 @@ inquirer.prompt(prompts)
     answers.repo = program.repo || answers.repo
     answers.template = program.template || answers.template
 
-    // TODO: clean that up into nicer object combinging
+    // TODO: clean that up into nicer object combining
 
+    sanitizeBy(answers, ['author', 'description'])
+    
     if (!templates.includes(answers.template)) {
       console.log(chalk.red(`Please use an existing use case template: ${templates.join(', ')}`))
       process.exit(1)
     }
-
     const relativePath = path.join(__dirname, '/../templates/', answers.template)
     return generate(relativePath, destination, answers, {
       overwrite: Boolean(program.overwrite)
