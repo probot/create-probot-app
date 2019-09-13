@@ -9,10 +9,27 @@ const {generate} = require('egad')
 const kebabCase = require('lodash.kebabcase')
 const camelCase = require('lodash.camelcase')
 const chalk = require('chalk')
+const jsesc = require('jsesc')
 const spawn = require('cross-spawn')
 const stringifyAuthor = require('stringify-author')
 const {guessEmail, guessAuthor, guessGitHubUsername} = require('conjecture')
 const validatePackageName = require('validate-npm-package-name')
+
+/**
+ * Partially sanitizes keys by escaping double-quotes.
+ * 
+ * @param {Object} object The object to mutate.
+ * @param {String[]} keys The keys on `object` to sanitize.
+ */
+function sanitizeBy(object, keys) {
+  keys.forEach(key => {
+    if (key in object) {
+      object[key] = jsesc(object[key], {
+        quotes: 'double'
+      })
+    }
+  })
+}
 
 program
   .usage('[options] [destination]')
@@ -132,6 +149,8 @@ inquirer.prompt(prompts)
     answers.template = program.template || answers.template
 
     // TODO: clean that up into nicer object combinging
+    
+    sanitizeBy(answers, ['author', 'description'])
 
     if (!templates.includes(answers.template)) {
       console.log(chalk.red(`Please use an existing use case template: ${templates.join(', ')}`))
