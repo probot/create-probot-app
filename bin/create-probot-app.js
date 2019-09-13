@@ -152,7 +152,10 @@ inquirer.prompt(prompts)
   })
   .then(() => {
     console.log(chalk.blue('\nInstalling Node dependencies!'))
-    const child = spawn('npm', ['install', '--prefix', destination], {stdio: 'inherit'})
+    const child = spawn('npm', ['install'], { 
+      stdio: 'inherit',
+      cwd: destination
+    })
     child.on('close', code => {
       if (code !== 0) {
         console.log(chalk.red(`Could not install npm dependencies. Try running ${chalk.bold('npm install')} yourself.`))
