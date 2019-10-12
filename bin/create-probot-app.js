@@ -2,6 +2,7 @@
 
 'use strict'
 
+const fs = require('fs-extra')
 const path = require('path')
 const inquirer = require('inquirer')
 const program = require('commander')
@@ -158,6 +159,20 @@ inquirer.prompt(prompts)
         console.log(chalk.red(`Could not install npm dependencies. Try running ${chalk.bold('npm install')} yourself.`))
         return
       }
-      console.log(chalk.blue('\nDone! Enjoy building your Probot app!'))
     })
+  }).then(() => {
+    console.log(chalk.blue('\nInitializing a Git repository!'))
+
+    try {
+      require('simple-git')(destination)
+        .init()
+        .add('./*')
+        .commit("Initial commit from Create Probot App")
+    } catch (e) {
+      console.log(chalk.red('\nUnable to initialize a Git repository.'))
+      fs.removeSync(path.join(destination, '.git'))
+    }
+  }).then(() => {
+    console.log(chalk.blue('\nDone! Enjoy building your Probot app!'))
   })
+  
