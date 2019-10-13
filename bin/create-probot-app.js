@@ -14,6 +14,7 @@ const spawn = require('cross-spawn')
 const stringifyAuthor = require('stringify-author')
 const {guessEmail, guessAuthor, guessGitHubUsername} = require('conjecture')
 const validatePackageName = require('validate-npm-package-name')
+const which = require('which')
 
 program
   .usage('[options] [destination]')
@@ -161,8 +162,11 @@ inquirer.prompt(prompts)
       }
     })
   }).then(() => {
-    console.log(chalk.blue('\nInitializing a Git repository!'))
+    if (which.sync('git', { nothrow: true }) === null) {
+      return
+    }
 
+    console.log(chalk.blue('\nInitializing a Git repository!'))
     try {
       require('simple-git')(destination)
         .init()
