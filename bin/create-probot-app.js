@@ -179,4 +179,3 @@ inquirer.prompt(prompts)
   }).then(() => {
     console.log(chalk.blue('\nDone! Enjoy building your Probot app!'))
   })
-  
