@@ -6,7 +6,8 @@
     "create-probot-app": "./bin/create-probot-app.js"
   },
   "files": [
-    "bin"
+    "bin",
+    "templates"
   ],
   "scripts": {
     "test": "./script/test",
