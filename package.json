@@ -5,8 +5,17 @@
   "bin": {
     "create-probot-app": "./bin/create-probot-app.js"
   },
+  "files": [
+    "bin"
+  ],
   "scripts": {
-    "test": "standard"
+    "test": "./script/test",
+    "lint": "eslint --ext js,ts src",
+    "dev": "tsc-watch --onFirstSuccess \"npm run dev:make-exec\"",
+    "dev:make-exec": "ts-node script/make-executable.ts",
+    "build": "npm run build:clean && npm run build:source",
+    "build:clean": "rimraf bin",
+    "build:source": "tsc && npm run dev:make-exec"
   },
   "repository": {
     "type": "git",
@@ -22,17 +31,32 @@
   },
   "homepage": "https://github.com/probot/create-probot-app#readme",
   "dependencies": {
-    "chalk": "^2.0.1",
-    "commander": "^2.11.0",
+    "chalk": "^2.4.2",
+    "commander": "^3.0.2",
     "conjecture": "^0.1.2",
     "egad": "^0.2.0",
-    "inquirer": "^6.2.2",
+    "inquirer": "^7.0.0",
     "lodash.camelcase": "^4.3.0",
     "lodash.kebabcase": "^4.1.1",
     "stringify-author": "^0.1.3",
     "validate-npm-package-name": "^3.0.0"
   },
   "devDependencies": {
-    "standard": "^12.0.1"
+    "@types/cross-spawn": "^6.0.1",
+    "@types/inquirer": "^6.5.0",
+    "@types/lodash.camelcase": "^4.3.6",
+    "@types/lodash.kebabcase": "^4.1.6",
+    "@types/rimraf": "^2.0.2",
+    "@types/shelljs": "^0.8.5",
+    "@types/validate-npm-package-name": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.4.0",
+    "@typescript-eslint/parser": "^2.4.0",
+    "eslint": "^6.5.1",
+    "rimraf": "^3.0.0",
+    "shelljs": "^0.8.3",
+    "ts-node": "^8.4.1",
+    "tsc-watch": "^4.0.0",
+    "tslint-config-standard": "^8.0.1",
+    "typescript": "^3.6.4"
   }
 }
