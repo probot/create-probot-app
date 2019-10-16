@@ -13,7 +13,7 @@ const deployment = {
   auto_merge: true,
   required_contexts: [],
   payload: {
-    'schema': 'rocks!'
+    schema: 'rocks!'
   },
   environment: 'production',
   description: 'My Probot App\'s first deploy!',
