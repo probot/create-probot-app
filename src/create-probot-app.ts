@@ -19,6 +19,11 @@ import stringifyAuthor from 'stringify-author'
 import { initGit } from './helpers/init-git'
 import writeHelp from './helpers/write-help'
 
+// TSC mangles output directory when using normal import methods for
+// package.json. See
+// https://github.com/Microsoft/TypeScript/issues/24715#issuecomment-542490675
+const pkg = require(require.resolve('../package.json'))
+
 /**
  * Partially sanitizes keys by escaping double-quotes.
  *
@@ -65,6 +70,7 @@ async function main() {
     .option('-r, --repo <repo-name>', 'Repository name')
     .option('--overwrite', 'Overwrite existing files', false)
     .option('-t, --template <template>', 'Name of use case template')
+    .version(`Create Probot App v${pkg.version}`)
 
   program.parse(process.argv)
 
