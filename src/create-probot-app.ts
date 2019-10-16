@@ -74,7 +74,7 @@ async function main() {
   }
 
   // TODO: Dynamically set this by getting folders names from templates directory.
-  const templates = ['basic-js', 'checks-js', 'git-data-js', 'deploy-js', 'basic-ts']
+  const templates = ['basic-js', 'basic-ts', 'checks-js', 'git-data-js', 'deploy-js']
 
   type QuestionI = ({
     default? (answers: Answers ): any;
