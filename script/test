@@ -1,10 +1,14 @@
 #!/bin/bash
 
-# Detects common CI environments and warn against running in cloud environments.
-if [ -n "$CI" ] || [ -n "$SYSTEM_JOBNAME" ] || [ -n "$GITHUB_ACTIONS" ] || [ -n "${TRAVIS-}" ]; then
-  echo "Do not run this script in a cloud or CI environment."
-  echo "This script - or the create-probot-app.js program - may get stuck at Inquirer prompts and run forever."
-  exit 1
+if [ "$IGNORE_CI_CHECK" != "1" ]; then
+  # Detects common CI environments and warn against running in cloud environments.
+  if [ -n "$CI" ] || [ -n "$SYSTEM_JOBNAME" ] || [ -n "$GITHUB_ACTIONS" ] || [ -n "${TRAVIS-}" ]; then
+    echo "Do not run this script in a cloud or CI environment."
+    echo "This script - or the create-probot-app.js program - may get stuck at Inquirer prompts and run forever."
+    exit 1
+  fi
+else
+  echo "IGNORE_CI_CHECK set to $IGNORE_CI_CHECK. Ignoring CI check."
 fi
 
 # Exit immediately if a command returns a non-zero status
