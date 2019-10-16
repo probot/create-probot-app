@@ -42,15 +42,8 @@ function sanitizeBy(object: {
   })
 }
 
-// TODO: Remove `homepage` option. Since this doesn't have a generated default,
-// I can't imagine anyone is supplying it through create-probot-app tool.
-
-// TODO:BUG: appName handlebar not being set in template/package.json when
-// supplied with --appName via CLI.
-
 async function main() {
   let destination: string = ''
-  // TODO: Update check with update-notifier or update-check
   const program = new commander.Command('create-probot-app')
     .arguments('<destination>')
     .action((dest) => {
@@ -243,7 +236,6 @@ async function main() {
   }
 
   console.log(chalk.blue('\nDone! Enjoy building your Probot app!'))
-  // TODO: Include links to Probot documentation
 }
 
 main()
