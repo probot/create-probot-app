@@ -8,3 +8,6 @@ notifications:
   disabled: true
 
 script: script/test
+env:
+  global:
+    - IGNORE_CI_CHECK=1
