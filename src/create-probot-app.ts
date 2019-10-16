@@ -12,8 +12,27 @@ import { guessEmail, guessAuthor, guessGitHubUsername } from 'conjecture'
 import { generate } from 'egad'
 import { sync as spawnSync } from 'cross-spawn'
 
+import jsesc from 'jsesc'
 import camelCase from 'lodash.camelcase'
 import stringifyAuthor from 'stringify-author'
+
+/**
+ * Partially sanitizes keys by escaping double-quotes.
+ *
+ * @param {Object} object The object to mutate.
+ * @param {String[]} keys The keys on `object` to sanitize.
+ */
+function sanitizeBy(object: {
+  [key: string]: string
+}, keys: string[]) {
+  keys.forEach(key => {
+    if (key in object) {
+      object[key] = jsesc(object[key], {
+        quotes: 'double'
+      })
+    }
+  })
+}
 
 // TODO: Remove `homepage` option. Since this doesn't have a generated default,
 // I can't imagine anyone is supplying it through create-probot-app tool.
@@ -153,7 +172,8 @@ async function main() {
   answers.user = program.user || answers.user
   answers.repo = program.repo || answers.repo
   // TODO: clean that up into nicer object combining
-  // TODO: Merge #81
+
+  sanitizeBy(answers, ['author', 'description'])
 
   const relativePath = path.join(__dirname, '/../templates/', answers.template)
   const generateResult = await generate(relativePath, destination, answers, {
