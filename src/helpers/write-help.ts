@@ -10,7 +10,7 @@ const helpLines = [
   `Run ${chalk.green('create-probot-app')} --help to see all options.`,
 ]
 
-function writeHelp() {
+function writeHelp(): void {
   helpLines.forEach((line) => {
     console.log(`  ${line}`)
   })

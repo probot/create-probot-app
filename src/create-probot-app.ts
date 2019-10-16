@@ -33,7 +33,7 @@ const pkg = require(require.resolve('../package.json'))
  */
 function sanitizeBy(object: {
   [key: string]: string;
-}, keys: string[]) {
+}, keys: string[]): void {
   keys.forEach(key => {
     if (key in object) {
       object[key] = jsesc(object[key], {
@@ -43,7 +43,7 @@ function sanitizeBy(object: {
   })
 }
 
-async function main() {
+async function main(): Promise<void> {
   let destination = ''
   const program = new commander.Command('create-probot-app')
     .arguments('<destination>')
@@ -77,19 +77,19 @@ async function main() {
   const templates = ['basic-js', 'basic-ts', 'checks-js', 'git-data-js', 'deploy-js']
 
   type QuestionI = ({
-    default? (answers: Answers ): any;
+    default? (answers: Answers ): string | boolean;
   } | Question ) | QuestionCollection
 
   const questions: QuestionI[] = [
     {
       type: 'input',
       name: 'appName',
-      default (answers) {
+      default (answers): string {
         return answers.repo || kebabCase(path.basename(destination))
       },
       message: 'App name:',
       when: !program.appName,
-      validate (appName) {
+      validate (appName): true | string {
         const result = validatePackageName(appName)
         if (result.errors && result.errors.length > 0) {
           return result.errors.join(',')
@@ -101,7 +101,7 @@ async function main() {
     {
       type: 'input',
       name: 'description',
-      default () {
+      default (): string {
         return 'A Probot app'
       },
       message: 'Description of app:',
@@ -110,7 +110,7 @@ async function main() {
     {
       type: 'input',
       name: 'author',
-      default () {
+      default (): string {
         return guessAuthor()
       },
       message: 'Author\'s full name:',
@@ -119,7 +119,7 @@ async function main() {
     {
       type: 'input',
       name: 'email',
-      default () {
+      default (): Promise<string | void> {
         return guessEmail()
       },
       message: 'Author\'s email address:',
@@ -128,7 +128,7 @@ async function main() {
     {
       type: 'input',
       name: 'user',
-      default (answers) {
+      default (answers): Promise<string | void> {
         return guessGitHubUsername(answers.email)
       },
       message: 'GitHub user or org name:',
@@ -137,7 +137,7 @@ async function main() {
     {
       type: 'input',
       name: 'repo',
-      default (answers) {
+      default (answers): string {
         return answers.appName || kebabCase(path.basename(destination))
       },
       message: 'Repository name:',
@@ -148,7 +148,7 @@ async function main() {
       name: 'template',
       choices: templates,
       message: 'Which template would you like to use?',
-      when () {
+      when (): boolean {
         if (templates.includes(program.template)) {
           return false
         }
