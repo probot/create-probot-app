@@ -38,7 +38,7 @@ do
     --homepage "https://probot.github.io" \
     --user "probot" \
     --template "$template" \
-    --repo "probot/create-probot-app-$template" \
+    --repo "create-probot-app-$template" \
     "$template"
 
   cd "$template"
