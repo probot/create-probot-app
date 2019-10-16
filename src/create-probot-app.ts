@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 // TODO: Sort imports
+import fs from 'fs'
 import path from 'path'
 import chalk from 'chalk'
 import commander from 'commander'
@@ -159,8 +160,29 @@ async function main() {
     overwrite: Boolean(program.overwrite)
   })
 
-  // TODO: Merge #73
   generateResult.forEach(fileInfo => {
+    // Edge case: Because create-probot-app is idempotent, if a file is named
+    // gitignore in the initializing directory, no .gitignore file will be
+    // created.
+    if (fileInfo.skipped === false &&
+      path.basename(fileInfo.path) === 'gitignore'
+    ) {
+      try {
+        const gitignorePath = path.join(path.dirname(fileInfo.path), '.gitignore')
+
+        if (fs.existsSync(gitignorePath)) {
+          const data = fs.readFileSync(fileInfo.path, { encoding: 'utf8' })
+          fs.appendFileSync(gitignorePath, data)
+          fs.unlinkSync(fileInfo.path)
+        } else {
+          fs.renameSync(fileInfo.path, gitignorePath)
+        }
+        fileInfo.path = gitignorePath
+      } catch (err) {
+        throw err
+      }
+    }
+
     console.log(`${fileInfo.skipped ? chalk.yellow('skipped existing file')
       : chalk.green('created file')}: ${fileInfo.path}`)
   })
