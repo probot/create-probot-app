@@ -59,7 +59,6 @@ async function main() {
     .option('-a, --author "<full-name>"',
       'Author name (contain in quotes)')
     .option('-e, --email <email>', 'Author email address')
-    .option('-h, --homepage <homepage>', 'Author\'s homepage')
     .option('-u, --user <username>', 'GitHub username or org (repo owner)')
     .option('-r, --repo <repo-name>', 'Repository name')
     .option('--overwrite', 'Overwrite existing files', false)
@@ -128,12 +127,6 @@ async function main() {
     },
     {
       type: 'input',
-      name: 'homepage',
-      message: 'Homepage:',
-      when: !program.homepage
-    },
-    {
-      type: 'input',
       name: 'user',
       default (answers) {
         return guessGitHubUsername(answers.email)
@@ -172,10 +165,8 @@ async function main() {
   const answers = await inquirer.prompt(questions)
   answers.author = stringifyAuthor({
     name: program.author || answers.author,
-    email: program.email || answers.email,
-    url: program.homepage || answers.homepage
+    email: program.email || answers.email
   })
-
   answers.template = answers.template || program.template
   answers.year = new Date().getFullYear()
   answers.camelCaseAppName = camelCase(program.appName || answers.appName)
