@@ -6,8 +6,11 @@ node_js:
 
 notifications:
   disabled: true
-
-script: script/test
+os:
+  - linux
+  - osx
+  - windows
 env:
   global:
     - IGNORE_CI_CHECK=1
+script: script/test
