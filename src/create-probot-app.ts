@@ -16,6 +16,8 @@ import jsesc from 'jsesc'
 import camelCase from 'lodash.camelcase'
 import stringifyAuthor from 'stringify-author'
 
+import { initGit } from './helpers/init-git'
+
 /**
  * Partially sanitizes keys by escaping double-quotes.
  *
@@ -207,9 +209,12 @@ async function main() {
       : chalk.green('created file')}: ${fileInfo.path}`)
   })
 
-  // TODO: Merge #84
+  console.log(chalk.blue('\nFinished scaffolding files!'))
 
-  console.log(chalk.blue('Finished scaffolding files!'))
+  if (await initGit(destination)) {
+    console.log(chalk.blue('\nInitialized a Git repository.'))
+    console.log()
+  }
 
   const install = spawnSync('npm', ['install'], {
     cwd: destination,
