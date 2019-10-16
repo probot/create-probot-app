@@ -1,6 +1,7 @@
 {
   "name": "{{ appName }}",
   "version": "1.0.0",
+  "private": true,
   "description": "{{{ description }}}",
   "author": "{{{ author }}}",
   "license": "ISC",
