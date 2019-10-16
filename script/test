@@ -23,6 +23,9 @@ set -x
 # Ensure we're always running from the project root
 cd "$(dirname "$0")/.."
 
+npm install
+npm run build
+
 PROJECT_DIR=$(pwd)
 TEMP_DIR="$PROJECT_DIR"/tmp
 mkdir -p "$TEMP_DIR"
