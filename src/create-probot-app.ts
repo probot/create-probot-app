@@ -181,7 +181,7 @@ async function main() {
   answers.camelCaseAppName = camelCase(program.appName || answers.appName)
   answers.appName = program.appName || answers.appName
   answers.description = program.desc || answers.description
-  answers.user = program.user || answers.user
+  answers.user = answers.owner = program.user || answers.user
   answers.repo = program.repo || answers.repo
   // TODO: clean that up into nicer object combining
 
