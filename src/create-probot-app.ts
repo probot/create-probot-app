@@ -22,6 +22,7 @@ import writeHelp from './helpers/write-help'
 // TSC mangles output directory when using normal import methods for
 // package.json. See
 // https://github.com/Microsoft/TypeScript/issues/24715#issuecomment-542490675
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const pkg = require(require.resolve('../package.json'))
 
 /**
@@ -31,7 +32,7 @@ const pkg = require(require.resolve('../package.json'))
  * @param {String[]} keys The keys on `object` to sanitize.
  */
 function sanitizeBy(object: {
-  [key: string]: string
+  [key: string]: string;
 }, keys: string[]) {
   keys.forEach(key => {
     if (key in object) {
@@ -43,7 +44,7 @@ function sanitizeBy(object: {
 }
 
 async function main() {
-  let destination: string = ''
+  let destination = ''
   const program = new commander.Command('create-probot-app')
     .arguments('<destination>')
     .action((dest) => {
@@ -166,7 +167,7 @@ async function main() {
     }
   ]
 
-  console.log(chalk.blue('\nLet\'s create a Probot app!\nHit enter to accept the suggestion.\n'))
+  console.log('\nLet\'s create a Probot app!\nHit enter to accept the suggestion.\n')
 
   const answers = await inquirer.prompt(questions)
   answers.author = stringifyAuthor({
@@ -218,13 +219,13 @@ async function main() {
       : chalk.green('created file')}: ${fileInfo.path}`)
   })
 
-  console.log(chalk.blue('\nFinished scaffolding files!'))
+  console.log('\nFinished scaffolding files!')
 
   if (await initGit(destination)) {
-    console.log(chalk.blue('\nInitialized a Git repository.'))
-    console.log()
+    console.log('\nInitialized a Git repository.')
   }
 
+  console.log('\nInstalling dependencies. This may take a few minutes...\n')
   const install = spawnSync('npm', ['install'], {
     cwd: destination,
     stdio: 'inherit'
@@ -235,7 +236,18 @@ async function main() {
     process.exit(install.status || 1)
   }
 
-  console.log(chalk.blue('\nDone! Enjoy building your Probot app!'))
+  console.log(`\nSuccessfully created ${chalk.blue(answers.appName)}.`)
+  console.log('\nBegin using your app with:\n')
+  console.log(`  ${chalk.green('cd')} ${(path.relative(process.cwd(), destination))}`)
+  console.log(`  npm start`)
+  console.log('\nView your app\'s README for more usage instructions.')
+
+  console.log('\nVisit the Probot docs:')
+  console.log(`  https://probot.github.io/docs/`)
+  console.log('\nGet help from the community:')
+  console.log(`  https://probot.github.io/community/`)
+  console.log('')
+  console.log(chalk('Enjoy building your Probot app!'))
 }
 
 main()
