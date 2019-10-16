@@ -17,6 +17,7 @@ import camelCase from 'lodash.camelcase'
 import stringifyAuthor from 'stringify-author'
 
 import { initGit } from './helpers/init-git'
+import writeHelp from './helpers/write-help'
 
 /**
  * Partially sanitizes keys by escaping double-quotes.
@@ -43,9 +44,16 @@ function sanitizeBy(object: {
 // supplied with --appName via CLI.
 
 async function main() {
+  let destination: string = ''
   // TODO: Update check with update-notifier or update-check
   const program = new commander.Command('create-probot-app')
-    .usage('[options] [destination]')
+    .arguments('<destination>')
+    .action((dest) => {
+      destination = path.isAbsolute(dest)
+       ? dest
+       : path.resolve(process.cwd(), dest)
+    })
+    .usage('[options] <destination>')
     .option('-n, --appName <app-name>', 'App name')
     .option('-d, --desc "<description>"',
       'Description (contain in quotes)')
@@ -60,9 +68,11 @@ async function main() {
 
   program.parse(process.argv)
 
-  const destination = program.args.length
-    ? path.resolve(process.cwd(), program.args.shift()!)
-    : process.cwd()
+  if (!destination) {
+    console.log(`${chalk.green('create-probot-app')} [options] ${chalk.blue('<destination>')} `)
+    writeHelp()
+    process.exit(1)
+  }
 
   // TODO: Dynamically set this by getting folders names from templates directory.
   const templates = ['basic-js', 'checks-js', 'git-data-js', 'deploy-js', 'basic-ts']
