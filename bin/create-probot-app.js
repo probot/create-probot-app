@@ -2,16 +2,17 @@
 
 'use strict'
 
+const fs = require('fs')
 const path = require('path')
 const inquirer = require('inquirer')
 const program = require('commander')
-const {generate} = require('egad')
+const { generate } = require('egad')
 const kebabCase = require('lodash.kebabcase')
 const camelCase = require('lodash.camelcase')
 const chalk = require('chalk')
 const spawn = require('cross-spawn')
 const stringifyAuthor = require('stringify-author')
-const {guessEmail, guessAuthor, guessGitHubUsername} = require('conjecture')
+const { guessEmail, guessAuthor, guessGitHubUsername } = require('conjecture')
 const validatePackageName = require('validate-npm-package-name')
 
 program
@@ -145,6 +146,26 @@ inquirer.prompt(prompts)
   })
   .then(results => {
     results.forEach(fileinfo => {
+      if (fileinfo.skipped === false &&
+        path.basename(fileinfo.path) === 'gitignore'
+      ) {
+        try {
+          const gitignorePath = path.join(path.dirname(fileinfo.path), '.gitignore')
+
+          if (fs.existsSync(gitignorePath)) {
+            const data = fs.readFileSync(fileinfo.path, { encoding: 'utf8' })
+            fs.appendFileSync(gitignorePath, data)
+            fs.unlinkSync(fileinfo.path)
+          } else {
+            fs.renameSync(fileinfo.path, gitignorePath)
+          }
+
+          fileinfo.path = gitignorePath
+        } catch (err) {
+          throw err
+        }
+      }
+
       console.log(`${fileinfo.skipped ? chalk.yellow('skipped existing file')
         : chalk.green('created file')}: ${fileinfo.path}`)
     })

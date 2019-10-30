@@ -1,3 +1,15 @@
+# Dependencies
 node_modules
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+
+# Lockfiles
 package-lock.json
+yarn.lock
+
+# Temporary directory for testing
 tmp
