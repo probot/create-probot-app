@@ -50,4 +50,10 @@ do
 
   cd "$template"
   npm test
+
+  # Check for .gitignore file. See https://github.com/probot/create-probot-app/issues/69
+  if [ ! -f ".gitignore" ]; then
+    echo "No .gitignore file found."
+    exit 1
+  fi
 done
