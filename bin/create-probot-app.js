@@ -2,17 +2,18 @@
 
 'use strict'
 
+const fs = require('fs')
 const path = require('path')
 const inquirer = require('inquirer')
 const program = require('commander')
-const {generate} = require('egad')
+const { generate } = require('egad')
 const kebabCase = require('lodash.kebabcase')
 const camelCase = require('lodash.camelcase')
 const chalk = require('chalk')
 const jsesc = require('jsesc')
 const spawn = require('cross-spawn')
 const stringifyAuthor = require('stringify-author')
-const {guessEmail, guessAuthor, guessGitHubUsername} = require('conjecture')
+const { guessEmail, guessAuthor, guessGitHubUsername } = require('conjecture')
 const validatePackageName = require('validate-npm-package-name')
 
 /**
@@ -164,6 +165,26 @@ inquirer.prompt(prompts)
   })
   .then(results => {
     results.forEach(fileinfo => {
+      if (fileinfo.skipped === false &&
+        path.basename(fileinfo.path) === 'gitignore'
+      ) {
+        try {
+          const gitignorePath = path.join(path.dirname(fileinfo.path), '.gitignore')
+
+          if (fs.existsSync(gitignorePath)) {
+            const data = fs.readFileSync(fileinfo.path, { encoding: 'utf8' })
+            fs.appendFileSync(gitignorePath, data)
+            fs.unlinkSync(fileinfo.path)
+          } else {
+            fs.renameSync(fileinfo.path, gitignorePath)
+          }
+
+          fileinfo.path = gitignorePath
+        } catch (err) {
+          throw err
+        }
+      }
+
       console.log(`${fileinfo.skipped ? chalk.yellow('skipped existing file')
         : chalk.green('created file')}: ${fileinfo.path}`)
     })
@@ -171,7 +192,10 @@ inquirer.prompt(prompts)
   })
   .then(() => {
     console.log(chalk.blue('\nInstalling Node dependencies!'))
-    const child = spawn('npm', ['install', '--prefix', destination], {stdio: 'inherit'})
+    const child = spawn('npm', ['install'], { 
+      stdio: 'inherit',
+      cwd: destination
+    })
     child.on('close', code => {
       if (code !== 0) {
         console.log(chalk.red(`Could not install npm dependencies. Try running ${chalk.bold('npm install')} yourself.`))
