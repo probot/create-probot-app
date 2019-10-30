@@ -1,6 +1,6 @@
 {
   "name": "create-probot-app",
-  "version": "3.1.0",
+  "version": "0.0.0-development",
   "description": "Create a Probot app",
   "bin": {
     "create-probot-app": "./bin/create-probot-app.js"
@@ -33,6 +33,7 @@
     "validate-npm-package-name": "^3.0.0"
   },
   "devDependencies": {
+    "semantic-release": "^15.13.28",
     "standard": "^12.0.1"
   }
 }
