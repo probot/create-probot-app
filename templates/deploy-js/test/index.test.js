@@ -29,8 +29,6 @@ const deploymentStatus = {
   auto_inactive: true
 }
 
-nock.disableNetConnect()
-
 describe('My Probot app', () => {
   let probot
   let mockCert
@@ -44,6 +42,7 @@ describe('My Probot app', () => {
   })
 
   beforeEach(() => {
+    nock.disableNetConnect()
     probot = new Probot({ id: 123, cert: mockCert })
     // Load our app into probot
     probot.load(myProbotApp)
@@ -73,6 +72,11 @@ describe('My Probot app', () => {
 
     // Receive a webhook event
     await probot.receive({ name: 'pull_request', payload })
+  })
+
+  afterEach(() => {
+    nock.cleanAll()
+    nock.enableNetConnect()
   })
 })
 

@@ -11,8 +11,6 @@ const issueCreatedBody = { body: 'Thanks for opening this issue!' }
 const fs = require('fs')
 const path = require('path')
 
-nock.disableNetConnect()
-
 describe('My Probot app', () => {
   let probot: any
   let mockCert: string
@@ -26,6 +24,7 @@ describe('My Probot app', () => {
   })
 
   beforeEach(() => {
+    nock.disableNetConnect()
     probot = new Probot({ id: 123, cert: mockCert })
     // Load our app into probot
     probot.load(myProbotApp)
@@ -47,6 +46,11 @@ describe('My Probot app', () => {
 
     // Receive a webhook event
     await probot.receive({ name: 'issues', payload })
+  })
+
+  afterEach(() => {
+    nock.cleanAll()
+    nock.enableNetConnect()
   })
 })
 
