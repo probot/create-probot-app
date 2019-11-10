@@ -1,6 +1,6 @@
 {
   "name": "create-probot-app",
-  "version": "3.1.1",
+  "version": "0.0.0-development",
   "description": "Create a Probot app",
   "bin": {
     "create-probot-app": "./bin/create-probot-app.js"
@@ -61,6 +61,7 @@
     "@typescript-eslint/parser": "^2.4.0",
     "eslint": "^6.5.1",
     "rimraf": "^3.0.0",
+    "semantic-release": "^15.13.28",
     "shelljs": "^0.8.3",
     "ts-node": "^8.4.1",
     "tsc-watch": "^4.0.0",
