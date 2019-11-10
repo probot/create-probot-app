@@ -1,15 +1,22 @@
 # Dependencies
 node_modules
 
-# Log files
+# Output folder
+bin
+
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 debug.log
 
-# Lockfiles
-package-lock.json
+# Yarn lockfile. Use package-lock.json instead.
 yarn.lock
 
-# Temporary directory for testing
+# Test-related generated folders
 tmp
+coverage
+
+# Miscellaneous
+.DS_Store
+Thumbs.db

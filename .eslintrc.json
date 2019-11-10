@@ -1,0 +1,14 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.all.json",
+    // Memory leak when lots of files exist, or lots of files are being added.
+    // This can occur when running the linter while `./script/test` is adding a
+    // bunch of new files.
+    //
+    // See: https://github.com/typescript-eslint/typescript-eslint/issues/1080
+    "noWatch": true
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": ["plugin:@typescript-eslint/recommended"]
+}
