@@ -12,8 +12,6 @@ const mockMath = Object.create(global.Math)
 mockMath.random = () => 1
 global.Math = mockMath
 
-nock.disableNetConnect()
-
 describe('My Probot app', () => {
   let probot
   let mockCert
@@ -27,6 +25,7 @@ describe('My Probot app', () => {
   })
 
   beforeEach(() => {
+    nock.disableNetConnect()
     probot = new Probot({ id: 123, cert: mockCert })
     // Load our app into probot
     probot.load(myProbotApp)
@@ -68,6 +67,11 @@ describe('My Probot app', () => {
 
     // Recieve a webhook event
     await probot.receive({ name: 'installation', payload: installationCreatedPayload })
+  })
+
+  afterEach(() => {
+    nock.cleanAll()
+    nock.enableNetConnect()
   })
 })
 
