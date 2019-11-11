@@ -29,8 +29,8 @@ npm ci
 npm run build
 
 PROJECT_DIR=$(pwd)
-TEMP_DIR="$PROJECT_DIR"/tmp
-mkdir -p "$TEMP_DIR"
+
+TEMP_DIR=$(mktemp -d 2>/dev/null || mktemp -d -t 'cpa_tmp')
 
 for i in "$PROJECT_DIR"/templates/*
 do
@@ -58,3 +58,6 @@ do
     exit 1
   fi
 done
+
+# Cleanup temp directory
+rm -rf "$TEMP_DIR"
