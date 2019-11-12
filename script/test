@@ -20,6 +20,8 @@ set -u
 # Print the executed command
 set -x
 
+PATH=$(echo "$PATH" | sed 's/.\/node_modules\/.bin://')
+
 # Ensure we're always running from the project root
 cd "$(dirname "$0")/.."
 
