@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ "$IGNORE_CI_CHECK" != "1" ]; then
   # Detects common CI environments and warn against running in cloud environments.
