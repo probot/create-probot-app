@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ "$IGNORE_CI_CHECK" != "1" ]; then
   # Detects common CI environments and warn against running in cloud environments.
@@ -20,10 +20,12 @@ set -u
 # Print the executed command
 set -x
 
+PATH=$(echo "$PATH" | sed 's/.\/node_modules\/.bin://')
+
 # Ensure we're always running from the project root
 cd "$(dirname "$0")/.."
 
-npm install
+npm ci
 npm run build
 
 PROJECT_DIR=$(pwd)
