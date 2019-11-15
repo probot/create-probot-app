@@ -1,32 +1,61 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
+if [ "$IGNORE_CI_CHECK" != "1" ]; then
+  # Detects common CI environments and warn against running in cloud environments.
+  if [ -n "$CI" ] || [ -n "$SYSTEM_JOBNAME" ] || [ -n "$GITHUB_ACTIONS" ] || [ -n "${TRAVIS-}" ]; then
+    echo "Do not run this script in a cloud or CI environment."
+    echo "This script - or the create-probot-app.js program - may get stuck at Inquirer prompts and run forever."
+    exit 1
+  fi
+else
+  echo "IGNORE_CI_CHECK set to $IGNORE_CI_CHECK. Ignoring CI check."
+fi
+
+# Exit immediately if a command returns a non-zero status
 set -e
+
+# Exit when references variables are undefined
+set -u
+
+# Print the executed command
+set -x
+
+PATH=$(echo "$PATH" | sed 's/.\/node_modules\/.bin://')
 
 # Ensure we're always running from the project root
 cd "$(dirname "$0")/.."
 
+npm ci
+npm run build
+
 PROJECT_DIR=$(pwd)
 TEMP_DIR="$PROJECT_DIR"/tmp
-mkdir -p $TEMP_DIR
+mkdir -p "$TEMP_DIR"
 
-for i in $PROJECT_DIR/templates/*
+for i in "$PROJECT_DIR"/templates/*
 do
-  template=$(basename $i)
-  echo $template
-  cd $TEMP_DIR
-  rm -rf $template
+  template=$(basename "$i")
+  echo "$template"
+  cd "$TEMP_DIR"
+  rm -rf "$template"
 
-  $PROJECT_DIR/bin/create-probot-app.js \
+  "$PROJECT_DIR"/bin/create-probot-app.js \
     --appName "travis-template-test" \
     --desc "A Probot App for building on Travis" \
     --author "Pro Bawt" \
     --email "probot@example.com" \
     --homepage "https://probot.github.io" \
     --user "probot" \
-    --template $template \
-    --repo "probot/create-probot-app-$template" \
-    $template
+    --template "$template" \
+    --repo "create-probot-app-$template" \
+    "$template"
 
-  cd $template
+  cd "$template"
   npm test
+
+  # Check for .gitignore file. See https://github.com/probot/create-probot-app/issues/69
+  if [ ! -f ".gitignore" ]; then
+    echo "No .gitignore file found."
+    exit 1
+  fi
 done
