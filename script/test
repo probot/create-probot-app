@@ -42,7 +42,7 @@ do
   "$PROJECT_DIR"/bin/create-probot-app.js \
     --appName "travis-template-test" \
     --desc "A Probot App for building on Travis" \
-    --author "Pro Bawt" \
+    --author "Pro Báwt" \
     --email "probot@example.com" \
     --user "probot" \
     --template "$template" \
