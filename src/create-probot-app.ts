@@ -37,6 +37,7 @@ function sanitizeBy(object: {
   keys.forEach(key => {
     if (key in object) {
       object[key] = jsesc(object[key], {
+        minimal: true,
         quotes: 'double'
       })
     }
