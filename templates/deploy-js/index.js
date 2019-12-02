@@ -22,7 +22,7 @@ module.exports = app => {
       auto_merge: true, // Attempts to automatically merge the default branch into the requested ref, if it is behind the default branch.
       required_contexts: [], // The status contexts to verify against commit status checks. If this parameter is omitted, then all unique contexts will be verified before a deployment is created. To bypass checking entirely pass an empty array. Defaults to all unique contexts.
       payload: {
-        'schema': 'rocks!'
+        schema: 'rocks!'
       }, // JSON payload with extra information about the deployment. Default: ""
       environment: 'production', // Name for the target deployment environment (e.g., production, staging, qa)
       description: 'My Probot App\'s first deploy!', // Short description of the deployment
