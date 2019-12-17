@@ -50,7 +50,7 @@
     "@types/cross-spawn": "^6.0.1",
     "@types/fs-extra": "^8.0.0",
     "@types/inquirer": "^6.5.0",
-    "@types/jsesc": "^0.4.29",
+    "@types/jsesc": "^2.5.0",
     "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.kebabcase": "^4.1.6",
     "@types/node": "^12.11.1",
