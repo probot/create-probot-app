@@ -10,7 +10,7 @@
     "templates"
   ],
   "scripts": {
-    "test": "./script/test",
+    "test": "sh ./script/test",
     "lint": "eslint --ext js,ts src",
     "dev": "tsc-watch --onFirstSuccess \"npm run dev:make-exec\"",
     "dev:make-exec": "ts-node script/make-executable.ts",
