@@ -1,35 +1,15 @@
-name: CI
+name: Release
 
 on:
   push:
     branches:
       - master
-  pull_request:
-    types: [opened, synchronize]
 
 jobs:
-  test:
-    strategy:
-      matrix:
-        node-version: [10.x, 12.x]
-        os: [ubuntu-latest, macOS, windows-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@master
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm test
-
   release:
     name: release
     runs-on: ubuntu-latest
-    needs: test
-    if: |
-      github.event_name == 'push'
-      && github.ref == 'refs/heads/master'
-      && github.repository == 'probot/create-probot-app'
+    if: github.repository == 'probot/create-probot-app'
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@v1
