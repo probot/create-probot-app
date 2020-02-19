@@ -14,8 +14,9 @@
     "probot-app"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "dev": "nodemon --exec \"npm start\"",
+    "build": "tsc",
+    "build:watch": "tsc && (tsc -w --preserveWatchOutput & nodemon)",
+    "dev": "npm run build:watch",
     "start": "probot run ./lib/index.js",
     "lint": "standard **/*.ts --fix",
     "test": "jest && standard **/*.ts",

@@ -8,11 +8,12 @@
 # Install dependencies
 npm install
 
-# Run typescript
-npm run build
+# Run with hot reload
+npm run build:watch
 
-# Run the bot
-npm start
+# Compile and run
+npm run build
+npm run start
 ```
 
 ## Contributing
