@@ -38,7 +38,7 @@
     "cross-spawn": "^7.0.1",
     "egad": "^0.2.0",
     "fs-extra": "^8.1.0",
-    "inquirer": "^7.0.0",
+    "inquirer": "^7.1.0",
     "jsesc": "^2.5.2",
     "lodash.camelcase": "^4.3.0",
     "lodash.kebabcase": "^4.1.1",
