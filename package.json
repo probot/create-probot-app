@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/probot/create-probot-app#readme",
   "dependencies": {
-    "chalk": "^3.0.0",
+    "chalk": "^4.0.0",
     "commander": "^5.0.0",
     "conjecture": "^0.1.2",
     "cross-spawn": "^7.0.1",
