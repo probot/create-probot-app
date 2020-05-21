@@ -57,7 +57,7 @@
     "@types/rimraf": "^2.0.2",
     "@types/shelljs": "^0.8.5",
     "@types/validate-npm-package-name": "^3.0.0",
-    "@typescript-eslint/eslint-plugin": "^2.4.0",
+    "@typescript-eslint/eslint-plugin": "^3.0.0",
     "@typescript-eslint/parser": "^2.4.0",
     "eslint": "^6.5.1",
     "rimraf": "^3.0.0",
