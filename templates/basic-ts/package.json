@@ -40,7 +40,7 @@
     "typescript": "^3.9.7"
   },
   "engines": {
-    "node": ">= 8.3.0"
+    "node": ">= 10.13.0"
   },
   "standard": {
     "parser": "@typescript-eslint/parser",
