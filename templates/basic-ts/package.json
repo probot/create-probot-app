@@ -15,12 +15,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "build:watch": "tsc && (tsc -w --preserveWatchOutput & nodemon)",
-    "dev": "npm run build:watch",
     "start": "probot run ./lib/index.js",
-    "lint": "standard **/*.ts --fix",
-    "test": "jest && standard **/*.ts",
-    "test:watch": "jest --watch --notify --notifyMode=change --coverage"
+    "test": "jest"
   },
   "dependencies": {
     "probot": "^9.13.0"
@@ -33,23 +29,12 @@
     "eslint-plugin-typescript": "^0.14.0",
     "jest": "^26.4.0",
     "nock": "^13.0.4",
-    "nodemon": "^2.0.4",
     "smee-client": "^1.1.0",
-    "standard": "^14.3.4",
     "ts-jest": "^26.2.0",
     "typescript": "^3.9.7"
   },
   "engines": {
     "node": ">= 10.13.0"
-  },
-  "standard": {
-    "parser": "@typescript-eslint/parser",
-    "env": [
-      "jest"
-    ],
-    "plugins": [
-      "typescript"
-    ]
   },
   "jest": {
     "testEnvironment": "node"

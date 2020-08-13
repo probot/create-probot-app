@@ -8,11 +8,10 @@
 # Install dependencies
 npm install
 
-# Run with hot reload
-npm run build:watch
-
-# Compile and run
+# Compile
 npm run build
+
+# Run
 npm run start
 ```
 
