@@ -4,11 +4,11 @@ node_modules
 # Output folder
 bin
 
+# Temoporary folder for testing
+tmp
+
 # Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-debug.log
+*.log
 
 # Yarn lockfile. Use package-lock.json instead.
 yarn.lock
