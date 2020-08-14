@@ -17,29 +17,29 @@ describe('My Probot app', () => {
   beforeEach(() => {
     nock.disableNetConnect()
     probot = new Probot({
-      id: 123, 
+      id: 123,
       privateKey,
       // disable request throttling and retries for testing
       Octokit: ProbotOctokit.defaults({
         retry: { enabled: false },
-        throttle: { enabled: false },
+        throttle: { enabled: false }
       })
-     })
+    })
     // Load our app into probot
     probot.load(myProbotApp)
   })
 
   test('creates a passing check', async () => {
-    nock('https://api.github.com')
+    const mock = nock('https://api.github.com')
+
       .post('/app/installations/2/access_tokens')
-      .reply(200, { 
+      .reply(200, {
         token: 'test',
         permissions: {
           checks: 'write'
         }
       })
 
-    nock('https://api.github.com')
       .post('/repos/hiimbex/testing-things/check-runs', (body) => {
         body.started_at = '2018-10-05T17:35:21.594Z'
         body.completed_at = '2018-10-05T17:35:53.683Z'
@@ -50,6 +50,8 @@ describe('My Probot app', () => {
 
     // Receive a webhook event
     await probot.receive({ name: 'check_suite', payload: checkSuitePayload })
+
+    expect(mock.pendingMocks()).toStrictEqual([])
   })
 
   afterEach(() => {

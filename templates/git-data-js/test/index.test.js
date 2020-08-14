@@ -25,7 +25,7 @@ describe('My Probot app', () => {
       // disable request throttling and retries for testing
       Octokit: ProbotOctokit.defaults({
         retry: { enabled: false },
-        throttle: { enabled: false },
+        throttle: { enabled: false }
       })
     })
     // Load our app into probot
@@ -33,7 +33,8 @@ describe('My Probot app', () => {
   })
 
   test('creates a pull request on installation', async () => {
-    nock('https://api.github.com')
+    const mock = nock('https://api.github.com')
+
       .post('/app/installations/2/access_tokens')
       .reply(200, {
         token: 'test',
@@ -43,26 +44,22 @@ describe('My Probot app', () => {
         }
       })
 
-    nock('https://api.github.com')
-      .get('/repos/hiimbex/testing-things/git/refs/heads/master')
+      .get('/repos/hiimbex/testing-things/git/refs/heads%2Fmaster')
       .reply(200, { object: { sha: 'abc123' } })
 
-    nock('https://api.github.com')
       .post('/repos/hiimbex/testing-things/git/refs', {
         ref: 'refs/heads/new-branch-9999',
         sha: 'abc123'
       })
       .reply(200)
 
-    nock('https://api.github.com')
-      .put('/repos/hiimbex/testing-things/contents/path/to/your/file.md', {
+      .put('/repos/hiimbex/testing-things/contents/path%2Fto%2Fyour%2Ffile.md', {
         branch: 'new-branch-9999',
         message: 'adds config file',
         content: 'TXkgbmV3IGZpbGUgaXMgYXdlc29tZSE='
       })
       .reply(200)
 
-    nock('https://api.github.com')
       .post('/repos/hiimbex/testing-things/pulls', {
         title: 'Adding my file!',
         head: 'new-branch-9999',
@@ -74,6 +71,8 @@ describe('My Probot app', () => {
 
     // Recieve a webhook event
     await probot.receive({ name: 'installation', payload: installationCreatedPayload })
+
+    expect(mock.pendingMocks()).toStrictEqual([])
   })
 
   afterEach(() => {

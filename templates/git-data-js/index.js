@@ -7,13 +7,13 @@
  */
 module.exports = app => {
   // Opens a PR every time someone installs your app for the first time
-  app.on('installation.created', check)
-  async function check (context) {
+  app.on('installation.created', async (context) => {
     // shows all repos you've installed the app on
     context.log.info(context.payload.repositories)
 
     const owner = context.payload.installation.account.login
-    context.payload.repositories.forEach(async (repository) => {
+
+    for (const repository of context.payload.repositories) {
       const repo = repository.name
 
       // Generates a random number to ensure the git reference isn't already taken
@@ -36,7 +36,7 @@ module.exports = app => {
         sha: reference.data.object.sha // accesses the sha from the heads/master reference we got
       })
       // create a new file
-      await context.github.repos.createFile({
+      await context.github.repos.createOrUpdateFile({
         repo,
         owner,
         path: 'path/to/your/file.md', // the path to your config file
@@ -55,8 +55,8 @@ module.exports = app => {
         body: 'Adds my new file!', // the body of your PR,
         maintainer_can_modify: true // allows maintainers to edit your app's PR
       })
-    })
-  }
+    }
+  })
   // For more information on building apps:
   // https://probot.github.io/docs/
 

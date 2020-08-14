@@ -37,40 +37,39 @@ describe('My Probot app', () => {
   beforeEach(() => {
     nock.disableNetConnect()
     probot = new Probot({
-      id: 123, 
+      id: 123,
       privateKey,
       // disable request throttling and retries for testing
       Octokit: ProbotOctokit.defaults({
         retry: { enabled: false },
-        throttle: { enabled: false },
+        throttle: { enabled: false }
       })
-     })
+    })
     // Load our app into probot
     probot.load(myProbotApp)
   })
 
   test('creates a deployment and a deployment status', async () => {
-    // Test that we correctly return a test token
-    nock('https://api.github.com')
+    const mock = nock('https://api.github.com')
+
+      // Test that we correctly return a test token
       .post('/app/installations/2/access_tokens')
       .reply(200, {
         token: 'test',
-        permissions:{
+        permissions: {
           deployments: 'write',
           pull_requests: 'read'
         }
       })
 
-    // Test that a deployment is created
-    nock('https://api.github.com')
+      // Test that a deployment is created
       .post('/repos/hiimbex/testing-things/deployments', (body) => {
         expect(body).toMatchObject(deployment)
         return true
       })
       .reply(200, { id: 123 })
 
-    // Test that a deployment status is created
-    nock('https://api.github.com')
+      // Test that a deployment status is created
       .post('/repos/hiimbex/testing-things/deployments/123/statuses', (body) => {
         expect(body).toMatchObject(deploymentStatus)
         return true
@@ -79,6 +78,8 @@ describe('My Probot app', () => {
 
     // Receive a webhook event
     await probot.receive({ name: 'pull_request', payload })
+
+    expect(mock.pendingMocks()).toStrictEqual([])
   })
 
   afterEach(() => {
