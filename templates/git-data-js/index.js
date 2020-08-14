@@ -10,7 +10,7 @@ module.exports = app => {
   app.on('installation.created', check)
   async function check (context) {
     // shows all repos you've installed the app on
-    console.log(context.payload.repositories)
+    context.log.info(context.payload.repositories)
 
     const owner = context.payload.installation.account.login
     context.payload.repositories.forEach(async (repository) => {
@@ -23,13 +23,13 @@ module.exports = app => {
       const branch = `new-branch-${Math.floor(Math.random() * 9999)}`
 
       // Get current reference in Git
-      const reference = await context.github.gitdata.getReference({
+      const reference = await context.github.git.getRef({
         repo, // the repo
         owner, // the owner of the repo
         ref: 'heads/master'
       })
       // Create a branch
-      await context.github.gitdata.createReference({
+      await context.github.git.createRef({
         repo,
         owner,
         ref: `refs/heads/${branch}`,
@@ -46,7 +46,7 @@ module.exports = app => {
         branch // the branch name we used when creating a Git reference
       })
       // create a PR from that branch with the commit of our added file
-      await context.github.pullRequests.create({
+      await context.github.pulls.create({
         repo,
         owner,
         title: 'Adding my file!', // the title of the PR

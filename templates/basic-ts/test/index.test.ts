@@ -4,28 +4,29 @@
 import nock from 'nock'
 // Requiring our app implementation
 import myProbotApp from '../src'
-import { Probot } from 'probot'
+import { Probot, ProbotOctokit } from 'probot'
 // Requiring our fixtures
 import payload from './fixtures/issues.opened.json'
 const issueCreatedBody = { body: 'Thanks for opening this issue!' }
 const fs = require('fs')
 const path = require('path')
 
+const privateKey = fs.readFileSync(path.join(__dirname, 'fixtures/mock-cert.pem'), 'utf-8')
+
 describe('My Probot app', () => {
   let probot: any
-  let mockCert: string
-
-  beforeAll((done: Function) => {
-    fs.readFile(path.join(__dirname, 'fixtures/mock-cert.pem'), (err: Error, cert: string) => {
-      if (err) return done(err)
-      mockCert = cert
-      done()
-    })
-  })
 
   beforeEach(() => {
     nock.disableNetConnect()
-    probot = new Probot({ id: 123, cert: mockCert })
+    probot = new Probot({
+      id: 123,
+      privateKey,
+      // disable request throttling and retries for testing
+      Octokit: ProbotOctokit.defaults({
+        retry: { enabled: false },
+        throttle: { enabled: false },
+      })
+    })
     // Load our app into probot
     probot.load(myProbotApp)
   })
@@ -34,7 +35,12 @@ describe('My Probot app', () => {
     // Test that we correctly return a test token
     nock('https://api.github.com')
       .post('/app/installations/2/access_tokens')
-      .reply(200, { token: 'test' })
+      .reply(200, { 
+        token: 'test',
+        permissions: {
+          issues: "write"
+        }
+      })
 
     // Test that a comment is posted
     nock('https://api.github.com')

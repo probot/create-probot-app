@@ -1,7 +1,7 @@
 const nock = require('nock')
 // Requiring our app implementation
 const myProbotApp = require('..')
-const { Probot } = require('probot')
+const { Probot, ProbotOctokit } = require('probot')
 // Requiring our fixtures
 const payload = require('./fixtures/pull_request.opened')
 const fs = require('fs')
@@ -29,21 +29,22 @@ const deploymentStatus = {
   auto_inactive: true
 }
 
+const privateKey = fs.readFileSync(path.join(__dirname, 'fixtures/mock-cert.pem'), 'utf-8')
+
 describe('My Probot app', () => {
   let probot
-  let mockCert
-
-  beforeAll((done) => {
-    fs.readFile(path.join(__dirname, 'fixtures/mock-cert.pem'), (err, cert) => {
-      if (err) return done(err)
-      mockCert = cert
-      done()
-    })
-  })
 
   beforeEach(() => {
     nock.disableNetConnect()
-    probot = new Probot({ id: 123, cert: mockCert })
+    probot = new Probot({
+      id: 123, 
+      privateKey,
+      // disable request throttling and retries for testing
+      Octokit: ProbotOctokit.defaults({
+        retry: { enabled: false },
+        throttle: { enabled: false },
+      })
+     })
     // Load our app into probot
     probot.load(myProbotApp)
   })
@@ -52,7 +53,13 @@ describe('My Probot app', () => {
     // Test that we correctly return a test token
     nock('https://api.github.com')
       .post('/app/installations/2/access_tokens')
-      .reply(200, { token: 'test' })
+      .reply(200, {
+        token: 'test',
+        permissions:{
+          deployments: 'write',
+          pull_requests: 'read'
+        }
+      })
 
     // Test that a deployment is created
     nock('https://api.github.com')

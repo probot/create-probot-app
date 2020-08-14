@@ -1,7 +1,7 @@
 const nock = require('nock')
 // Requiring our app implementation
 const myProbotApp = require('..')
-const { Probot } = require('probot')
+const { Probot, ProbotOctokit } = require('probot')
 // Requiring our fixtures
 const installationCreatedPayload = require('./fixtures/installation.created')
 const fs = require('fs')
@@ -12,21 +12,22 @@ const mockMath = Object.create(global.Math)
 mockMath.random = () => 1
 global.Math = mockMath
 
+const privateKey = fs.readFileSync(path.join(__dirname, 'fixtures/mock-cert.pem'), 'utf-8')
+
 describe('My Probot app', () => {
   let probot
-  let mockCert
-
-  beforeAll((done) => {
-    fs.readFile(path.join(__dirname, 'fixtures/mock-cert.pem'), (err, cert) => {
-      if (err) return done(err)
-      mockCert = cert
-      done()
-    })
-  })
 
   beforeEach(() => {
     nock.disableNetConnect()
-    probot = new Probot({ id: 123, cert: mockCert })
+    probot = new Probot({
+      id: 123,
+      privateKey,
+      // disable request throttling and retries for testing
+      Octokit: ProbotOctokit.defaults({
+        retry: { enabled: false },
+        throttle: { enabled: false },
+      })
+    })
     // Load our app into probot
     probot.load(myProbotApp)
   })
@@ -34,7 +35,13 @@ describe('My Probot app', () => {
   test('creates a pull request on installation', async () => {
     nock('https://api.github.com')
       .post('/app/installations/2/access_tokens')
-      .reply(200, { token: 'test' })
+      .reply(200, {
+        token: 'test',
+        permissions: {
+          contents: 'write',
+          pull_requests: 'write'
+        }
+      })
 
     nock('https://api.github.com')
       .get('/repos/hiimbex/testing-things/git/refs/heads/master')
