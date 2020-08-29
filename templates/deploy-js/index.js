@@ -7,13 +7,13 @@
  */
 module.exports = app => {
   // Your code here
-  app.log('Yay, the app was loaded!')
-  app.on(['pull_request.opened', 'pull_request.synchronized'], async context => {
+  app.log.info('Yay, the app was loaded!')
+  app.on(['pull_request.opened', 'pull_request.synchronize'], async context => {
     // Creates a deployment on a pull request event
     // Then sets the deployment status to success
     // NOTE: this example doesn't actually integrate with a cloud
     // provider to deploy your app, it just demos the basic API usage.
-    app.log(context.payload)
+    app.log.info(context.payload)
 
     // Probot API note: context.repo() => { username: 'hiimbex', repo: 'testing-things' }
     const res = await context.github.repos.createDeployment(context.repo({

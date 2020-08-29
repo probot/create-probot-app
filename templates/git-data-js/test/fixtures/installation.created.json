@@ -1,6 +1,7 @@
 {
   "action": "created",
   "installation": {
+    "id": 2,
     "account": {
       "login": "hiimbex"
     }
