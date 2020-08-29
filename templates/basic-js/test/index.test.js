@@ -22,7 +22,7 @@ describe('My Probot app', () => {
 
   beforeEach(() => {
     nock.disableNetConnect()
-    probot = new Probot({ id: 123, cert: mockCert })
+    probot = new Probot({ id: 123, privateKey: mockCert })
     // Load our app into probot
     probot.load(myProbotApp)
   })
