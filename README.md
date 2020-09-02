@@ -18,3 +18,9 @@ yarn create probot-app my-first-app
 ```
 
 See the [Probot docs](https://probot.github.io/docs/development/#running-the-app-locally) to get started running your app locally.
+
+
+
+....sh
+C++
+https://github.com/probot/create-probot-app/blob/3a2cc2d5d3a21878df17c172f705c920e4de2784/.github/workflows/release.yml#L23
