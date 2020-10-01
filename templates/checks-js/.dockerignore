@@ -8,4 +8,5 @@
 **/.env
 **/.editorconfig
 **/dist
+**/*.pem
 Dockerfile
