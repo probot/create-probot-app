@@ -18,7 +18,7 @@
     "start": "probot run ./lib/index.js",
     "test": "jest"
   },
- "dependencies": {
+  "dependencies": {
     "probot": "^10.9.5"
   },
   "devDependencies": {

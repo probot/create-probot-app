@@ -1,57 +1,57 @@
-import fs from 'fs-extra'
-import path from 'path'
-import spawn from 'cross-spawn'
-import simplegit from 'simple-git/promise'
+import fs from "fs-extra";
+import path from "path";
+import spawn from "cross-spawn";
+import simplegit from "simple-git/promise";
 
 function isInGitRepo(path: string): boolean {
   const gitRevParse = spawn.sync(
-    'git',
-    ['rev-parse', '--is-inside-work-tree'],
+    "git",
+    ["rev-parse", "--is-inside-work-tree"],
     {
       cwd: path,
-      stdio: 'ignore',
+      stdio: "ignore",
     }
-  )
+  );
 
   if (gitRevParse.status === 0) {
-    return true
+    return true;
   }
-  return false
+  return false;
 }
 
 function isGitInstalled(): boolean {
-  const command = spawn.sync('git', ['--version'], {
-    stdio: 'ignore',
-  })
+  const command = spawn.sync("git", ["--version"], {
+    stdio: "ignore",
+  });
 
   if (command.error) {
-    return false
+    return false;
   }
-  return true
+  return true;
 }
 
 export async function initGit(root: string): Promise<boolean> {
-  let initializedGit = false
+  let initializedGit = false;
   try {
     if (!isGitInstalled() || isInGitRepo(root)) {
-      return false
+      return false;
     }
 
-    const git = simplegit(root)
-    await git.init()
-    initializedGit = true
-    await git.add('./*')
-    await git.commit('Initial commit from Create Probot App')
-    return true
+    const git = simplegit(root);
+    await git.init();
+    initializedGit = true;
+    await git.add("./*");
+    await git.commit("Initial commit from Create Probot App");
+    return true;
   } catch (e) {
     if (initializedGit) {
       try {
-        fs.removeSync(path.join(root, '.git'))
+        fs.removeSync(path.join(root, ".git"));
       } catch (err) {
         // ignore
       }
     }
 
-    return false
+    return false;
   }
 }

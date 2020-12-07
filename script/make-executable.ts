@@ -1,9 +1,13 @@
-import fs from 'fs'
-import path from 'path'
-import shell from 'shelljs'
-import pkg from '../package.json'
+import fs from "fs";
+import path from "path";
+import shell from "shelljs";
+import pkg from "../package.json";
 
-const distributableBinary = path.join(__dirname, '..', pkg.bin['create-probot-app'])
+const distributableBinary = path.join(
+  __dirname,
+  "..",
+  pkg.bin["create-probot-app"]
+);
 
 /**
  * Converts create-probot-app.js to an executable file.
@@ -16,9 +20,9 @@ const distributableBinary = path.join(__dirname, '..', pkg.bin['create-probot-ap
  */
 try {
   if (fs.existsSync(distributableBinary)) {
-    shell.chmod('+x', distributableBinary)
-    console.log('Converted create-probot-app.js to an executable binary.')
+    shell.chmod("+x", distributableBinary);
+    console.log("Converted create-probot-app.js to an executable binary.");
   }
 } catch (err) {
-  console.error(err)
+  console.error(err);
 }

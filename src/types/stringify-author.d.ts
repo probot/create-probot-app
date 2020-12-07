@@ -4,4 +4,4 @@ interface AuthorI {
   url?: string;
 }
 
-export default function stringifyAuthor(author: AuthorI): string
+export default function stringifyAuthor(author: AuthorI): string;
