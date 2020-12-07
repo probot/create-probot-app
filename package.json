@@ -19,19 +19,12 @@
     "build:clean": "rimraf bin",
     "build:source": "tsc && npm run dev:make-exec"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/probot/create-probot-app.git"
-  },
+  "repository": "https://github.com/probot/create-probot-app",
   "keywords": [
     "probot"
   ],
   "author": "Brandon Keepers",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/probot/create-probot-app/issues"
-  },
-  "homepage": "https://github.com/probot/create-probot-app#readme",
   "dependencies": {
     "chalk": "^4.1.0",
     "commander": "^6.0.0",
