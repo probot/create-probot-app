@@ -15,8 +15,8 @@ PATH=$(echo "$PATH" | sed 's/.\/node_modules\/.bin://')
 cd "$(dirname "$0")/.."
 
 npm ci
+npm run lint:fix
 npm run build
-npm run lint
 
 PROJECT_DIR=$(pwd)
 
@@ -30,7 +30,7 @@ do
   rm -rf "$template"
 
   "$PROJECT_DIR"/bin/create-probot-app.js \
-    --appName "travis-template-test" \
+    --appName "template-test-app" \
     --desc "A Probot App for building on Travis" \
     --author "Pro Báwt" \
     --email "probot@example.com" \

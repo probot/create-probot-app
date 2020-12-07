@@ -3,9 +3,9 @@
 
 /**
  * This is the main entrypoint to your Probot app
- * @param {import('probot').Application} app
+ * @param { {app: import('probot').Application} } app
  */
-module.exports = (app) => {
+module.exports = ({ app }) => {
   // Your code here
   app.log.info("Yay, the app was loaded!");
   app.on(
@@ -18,7 +18,7 @@ module.exports = (app) => {
       app.log.info(context.payload);
 
       // Probot API note: context.repo() => { username: 'hiimbex', repo: 'testing-things' }
-      const res = await context.github.repos.createDeployment(
+      const res = await context.octokit.repos.createDeployment(
         context.repo({
           ref: context.payload.pull_request.head.ref, // The ref to deploy. This can be a branch, tag, or SHA.
           task: "deploy", // Specifies a task to execute (e.g., deploy or deploy:migrations).
@@ -35,7 +35,7 @@ module.exports = (app) => {
       );
 
       const deploymentId = res.data.id;
-      await context.github.repos.createDeploymentStatus(
+      await context.octokit.repos.createDeploymentStatus(
         context.repo({
           deployment_id: deploymentId,
           state: "success", // The state of the status. Can be one of error, failure, inactive, pending, or success

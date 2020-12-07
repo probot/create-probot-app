@@ -3,9 +3,9 @@
 
 /**
  * This is the main entrypoint to your Probot app
- * @param {import('probot').Application} app
+ * @param { {app: import('probot').Application} } app
  */
-module.exports = (app) => {
+module.exports = ({ app }) => {
   app.on(["check_suite.requested", "check_run.rerequested"], check);
 
   async function check(context) {
@@ -17,7 +17,7 @@ module.exports = (app) => {
       head_sha: headSha,
     } = context.payload.check_suite;
     // Probot API note: context.repo() => {username: 'hiimbex', repo: 'testing-things'}
-    return context.github.checks.create(
+    return context.octokit.checks.create(
       context.repo({
         name: "My app!",
         head_branch: headBranch,
