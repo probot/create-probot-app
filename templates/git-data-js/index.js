@@ -3,9 +3,9 @@
 
 /**
  * This is the main entrypoint to your Probot app
- * @param {import('probot').Application} app
+ * @param { {app: import('probot').Application} } app
  */
-module.exports = (app) => {
+module.exports = ({ app }) => {
   // Opens a PR every time someone installs your app for the first time
   app.on("installation.created", async (context) => {
     // shows all repos you've installed the app on
@@ -23,20 +23,20 @@ module.exports = (app) => {
       const branch = `new-branch-${Math.floor(Math.random() * 9999)}`;
 
       // Get current reference in Git
-      const reference = await context.github.git.getRef({
+      const reference = await context.octokit.git.getRef({
         repo, // the repo
         owner, // the owner of the repo
         ref: "heads/master",
       });
       // Create a branch
-      await context.github.git.createRef({
+      await context.octokit.git.createRef({
         repo,
         owner,
         ref: `refs/heads/${branch}`,
         sha: reference.data.object.sha, // accesses the sha from the heads/master reference we got
       });
       // create a new file
-      await context.github.repos.createOrUpdateFile({
+      await context.octokit.repos.createOrUpdateFileContents({
         repo,
         owner,
         path: "path/to/your/file.md", // the path to your config file
@@ -46,7 +46,7 @@ module.exports = (app) => {
         branch, // the branch name we used when creating a Git reference
       });
       // create a PR from that branch with the commit of our added file
-      await context.github.pulls.create({
+      await context.octokit.pulls.create({
         repo,
         owner,
         title: "Adding my file!", // the title of the PR

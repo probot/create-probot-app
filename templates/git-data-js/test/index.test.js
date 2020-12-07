@@ -46,7 +46,7 @@ describe("My Probot app", () => {
         },
       })
 
-      .get("/repos/hiimbex/testing-things/git/refs/heads%2Fmaster")
+      .get("/repos/hiimbex/testing-things/git/ref/heads%2Fmaster")
       .reply(200, { object: { sha: "abc123" } })
 
       .post("/repos/hiimbex/testing-things/git/refs", {

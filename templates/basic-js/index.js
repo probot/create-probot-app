@@ -1,8 +1,8 @@
 /**
  * This is the main entrypoint to your Probot app
- * @param {import('probot').Application} app
+ * @param { {app: import('probot').Application} } app
  */
-module.exports = (app) => {
+module.exports = ({ app }) => {
   // Your code here
   app.log.info("Yay, the app was loaded!");
 
@@ -10,7 +10,7 @@ module.exports = (app) => {
     const issueComment = context.issue({
       body: "Thanks for opening this issue!",
     });
-    return context.github.issues.createComment(issueComment);
+    return context.octokit.issues.createComment(issueComment);
   });
 
   // For more information on building apps:

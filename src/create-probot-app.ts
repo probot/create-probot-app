@@ -22,7 +22,6 @@ import writeHelp from "./helpers/write-help";
 // TSC mangles output directory when using normal import methods for
 // package.json. See
 // https://github.com/Microsoft/TypeScript/issues/24715#issuecomment-542490675
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const pkg = require(require.resolve("../package.json"));
 
 /**
