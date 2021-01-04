@@ -3,9 +3,9 @@
 
 /**
  * This is the main entrypoint to your Probot app
- * @param { {app: import('probot').Application} } app
+ * @param {import('probot').Probot} app
  */
-module.exports = ({ app }) => {
+module.exports = (app) => {
   app.on(["check_suite.requested", "check_run.rerequested"], check);
 
   async function check(context) {

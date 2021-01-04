@@ -3,9 +3,9 @@
 
 /**
  * This is the main entrypoint to your Probot app
- * @param { {app: import('probot').Application} } app
+ * @param {import('probot').Probot} app
  */
-module.exports = ({ app }) => {
+module.exports = (app) => {
   // Opens a PR every time someone installs your app for the first time
   app.on("installation.created", async (context) => {
     // shows all repos you've installed the app on
