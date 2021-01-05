@@ -48,6 +48,10 @@ function sanitizeBy(
 
 async function main(): Promise<void> {
   let destination = "";
+
+  const templatePath = path.join(__dirname, "/../templates/");
+  const templates = fs.readdirSync(templatePath);
+
   const program = new commander.Command("create-probot-app")
     .arguments("<destination>")
     .action((dest) => {
@@ -77,15 +81,6 @@ async function main(): Promise<void> {
     writeHelp();
     process.exit(1);
   }
-
-  // TODO: Dynamically set this by getting folders names from templates directory.
-  const templates = [
-    "basic-js",
-    "basic-ts",
-    "checks-js",
-    "git-data-js",
-    "deploy-js",
-  ];
 
   type QuestionI =
     | (
@@ -200,7 +195,7 @@ async function main(): Promise<void> {
 
   sanitizeBy(answers, ["author", "description"]);
 
-  const relativePath = path.join(__dirname, "/../templates/", answers.template);
+  const relativePath = path.join(templatePath, answers.template);
   const generateResult = await generate(relativePath, destination, answers, {
     overwrite: Boolean(program.overwrite),
   });
