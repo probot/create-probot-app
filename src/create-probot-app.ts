@@ -46,11 +46,22 @@ function sanitizeBy(
   });
 }
 
+/**
+ * Main program logic:
+ *
+ * - parse CLI arguments
+ * - prompt user for (missing) required data
+ * - create scaffolding for new Probot app using Handlebars files under template/ as source
+ * - initialize Git repo in new "destination" folder
+ * - install Probot dependencies, build app if TypeScript based
+ */
 async function main(): Promise<void> {
   let destination = "";
 
   const templatePath = path.join(__dirname, "/../templates/");
-  const templates = fs.readdirSync(templatePath);
+  const templates = fs
+    .readdirSync(templatePath)
+    .filter((path) => path.substr(0, 2) !== "__");
 
   const program = new commander.Command("create-probot-app")
     .arguments("<destination>")
@@ -185,6 +196,7 @@ async function main(): Promise<void> {
     email: program.email || answers.email,
   });
   answers.template = answers.template || program.template;
+  answers.toBuild = answers.template.slice(-3) === "-ts";
   answers.year = new Date().getFullYear();
   answers.camelCaseAppName = camelCase(program.appName || answers.appName);
   answers.appName = program.appName || answers.appName;
@@ -195,10 +207,19 @@ async function main(): Promise<void> {
 
   sanitizeBy(answers, ["author", "description"]);
 
-  const relativePath = path.join(templatePath, answers.template);
-  const generateResult = await generate(relativePath, destination, answers, {
+  // TODO: add logic to properly handle path conflicts between __common__ and actual
+  // template folders
+  let sourcePath = path.join(templatePath, "__common__");
+  let generateResult = await generate(sourcePath, destination, answers, {
     overwrite: Boolean(program.overwrite),
   });
+
+  sourcePath = path.join(templatePath, answers.template);
+  generateResult = generateResult.concat(
+    await generate(sourcePath, destination, answers, {
+      overwrite: Boolean(program.overwrite),
+    })
+  );
 
   generateResult.forEach((fileInfo) => {
     // Edge case: Because create-probot-app is idempotent, if a file is named
@@ -259,20 +280,31 @@ async function main(): Promise<void> {
     process.exit(install.status || 1);
   }
 
-  console.log(`\nSuccessfully created ${chalk.blue(answers.appName)}.`);
-  console.log("\nBegin using your app with:\n");
-  console.log(
-    `  ${chalk.green("cd")} ${path.relative(process.cwd(), destination)}`
-  );
-  console.log(`  npm start`);
-  console.log("\nView your app's README for more usage instructions.");
+  if (answers.toBuild) {
+    console.log("\nCompile application...\n");
+    const install = spawnSync("npm", ["run", "build"], {
+      cwd: destination,
+      stdio: "inherit",
+    });
+  }
 
-  console.log("\nVisit the Probot docs:");
-  console.log(`  https://probot.github.io/docs/`);
-  console.log("\nGet help from the community:");
-  console.log(`  https://probot.github.io/community/`);
-  console.log("");
-  console.log(chalk("Enjoy building your Probot app!"));
+  console.log(`
+Successfully created ${chalk.blue(answers.appName)}.
+
+Begin using your app with:
+
+  ${chalk.green("cd")} ${path.relative(process.cwd(), destination)}
+  npm start
+
+Refer to your app's README for more usage instructions.
+
+Visit the Probot docs
+  https://probot.github.io/docs/
+
+Get help from the community:
+  https://probot.github.io/community/
+
+${chalk.green("Enjoy building your Probot app!")}`);
 }
 
 main();

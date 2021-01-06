@@ -8,11 +8,13 @@
 # Install dependencies
 npm install
 
+{{#if toBuild}}
 # Compile
-npm run build
+npm build
 
-# Run
-npm run start
+{{/if}}
+# Run the bot
+npm start
 ```
 
 ## Docker
