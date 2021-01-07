@@ -20,7 +20,9 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm run test
 
-  lint:
+  # separate "test" job that we set as required in branch protection,
+  # as the names of the matrix jobs change each frequently
+  test:
     needs: test_matrix
     runs-on: ubuntu-latest
     steps:
