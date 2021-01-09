@@ -64,11 +64,13 @@ async function main(): Promise<void> {
     .filter((path) => path.substr(0, 2) !== "__");
 
   const program = new commander.Command("create-probot-app")
-    .arguments("<destination>")
+    .arguments("[destination]")
     .action((dest) => {
-      destination = path.isAbsolute(dest)
-        ? dest
-        : path.resolve(process.cwd(), dest);
+      if (dest) {
+        destination = path.isAbsolute(dest)
+          ? dest
+          : path.resolve(process.cwd(), dest);
+      }
     })
     .usage("[options] <destination>")
     .option("-n, --appName <app-name>", "App name")
@@ -79,9 +81,15 @@ async function main(): Promise<void> {
     .option("-r, --repo <repo-name>", "Repository name")
     .option("--overwrite", "Overwrite existing files", false)
     .option("-t, --template <template>", "Name of use case template")
+    .option("--show-templates", "Print list of available templates and exit")
     .version(`Create Probot App v${pkg.version}`);
 
   program.parse(process.argv);
+
+  if (program.showTemplates) {
+    templates.forEach((template) => console.log(template));
+    process.exit();
+  }
 
   if (!destination) {
     console.log(
