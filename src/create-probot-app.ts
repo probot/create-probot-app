@@ -1,23 +1,29 @@
 #!/usr/bin/env node
 
-// TODO: Sort imports
 import fs from "fs-extra";
 import path from "path";
-import chalk from "chalk";
 import commander from "commander";
 import kebabCase from "lodash.kebabcase";
 import inquirer, { Answers, Question, QuestionCollection } from "inquirer";
 import validatePackageName from "validate-npm-package-name";
 import { guessEmail, guessAuthor, guessGitHubUsername } from "conjecture";
 import { generate } from "egad";
-import { sync as spawnSync } from "cross-spawn";
 
 import jsesc from "jsesc";
 import camelCase from "lodash.camelcase";
+import npm from "npm";
 import stringifyAuthor from "stringify-author";
 
 import { initGit } from "./helpers/init-git";
-import writeHelp from "./helpers/write-help";
+import {
+  blue,
+  bold,
+  green,
+  printSuccess,
+  red,
+  writeHelp,
+  yellow,
+} from "./helpers/write-help";
 
 // TSC mangles output directory when using normal import methods for
 // package.json. See
@@ -43,6 +49,51 @@ function sanitizeBy(
         quotes: "double",
       });
     }
+  });
+}
+
+/**
+ * Run `npm install` in `destination` folder, then run `npm run build`
+ * if `toBuild` is true
+ *
+ * @param {String} destination Destination folder relative to current working dir
+ * @param {Boolean}    toBuild Execute `npm run build` if true
+ */
+function installAndBuild(destination: string, toBuild: boolean): Promise<void> {
+  class NpmError extends Error {
+    constructor(msg: string, command: string) {
+      const message = `
+
+Could not ${msg}.
+Try running ${bold("npm " + command)} yourself.
+
+`;
+      super(message);
+    }
+  }
+
+  return new Promise((resolve, reject) => {
+    const previousDir: string = process.cwd();
+    process.chdir(destination);
+
+    npm.load(function (err) {
+      if (err) reject(err);
+
+      console.log(
+        yellow("\nInstalling dependencies. This may take a few minutes...\n")
+      );
+
+      npm.commands.install([], function (err) {
+        if (err) reject(new NpmError("install npm dependencies", "install"));
+        else if (toBuild) {
+          console.log(yellow("\n\nCompile application...\n"));
+          npm.commands["run-script"](["build"], function (err) {
+            if (err) reject(new NpmError("build application", "run build"));
+            else resolve();
+          });
+        } else resolve();
+      });
+    });
   });
 }
 
@@ -93,9 +144,7 @@ async function main(): Promise<void> {
 
   if (!destination) {
     console.log(
-      `${chalk.green("create-probot-app")} [options] ${chalk.blue(
-        "<destination>"
-      )} `
+      `${green("create-probot-app")} [options] ${blue("<destination>")} `
     );
     writeHelp();
     process.exit(1);
@@ -184,9 +233,7 @@ async function main(): Promise<void> {
         }
         if (program.template) {
           console.log(
-            chalk.red(
-              `The template ${chalk.blue(program.template)} does not exist.`
-            )
+            red(`The template ${blue(program.template)} does not exist.`)
           );
         }
         return true;
@@ -258,60 +305,24 @@ async function main(): Promise<void> {
     console.log(
       `${
         fileInfo.skipped
-          ? chalk.yellow("skipped existing file")
-          : chalk.green("created file")
+          ? yellow("skipped existing file")
+          : green("created file")
       }: ${fileInfo.path}`
     );
   });
 
-  console.log("\nFinished scaffolding files!");
+  console.log(green("\nFinished scaffolding files!"));
 
   if (await initGit(destination)) {
-    console.log("\nInitialized a Git repository.");
+    console.log(yellow("\nInitialized a Git repository."));
   }
 
-  console.log("\nInstalling dependencies. This may take a few minutes...\n");
-  const install = spawnSync("npm", ["install"], {
-    cwd: destination,
-    stdio: "inherit",
-  });
-
-  if (install.status !== 0) {
-    console.log(
-      chalk.red(
-        `Could not install npm dependencies. Try running ${chalk.bold(
-          "npm install"
-        )} yourself.`
-      )
-    );
-    process.exit(install.status || 1);
-  }
-
-  if (answers.toBuild) {
-    console.log("\nCompile application...\n");
-    const install = spawnSync("npm", ["run", "build"], {
-      cwd: destination,
-      stdio: "inherit",
+  installAndBuild(destination, answers.toBuild)
+    .then(() => printSuccess(answers.appName, destination))
+    .catch((err) => {
+      console.log(red(err));
+      process.exit(1);
     });
-  }
-
-  console.log(`
-Successfully created ${chalk.blue(answers.appName)}.
-
-Begin using your app with:
-
-  ${chalk.green("cd")} ${path.relative(process.cwd(), destination)}
-  npm start
-
-Refer to your app's README for more usage instructions.
-
-Visit the Probot docs
-  https://probot.github.io/docs/
-
-Get help from the community:
-  https://probot.github.io/community/
-
-${chalk.green("Enjoy building your Probot app!")}`);
 }
 
 main();
