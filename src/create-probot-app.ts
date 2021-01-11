@@ -133,6 +133,7 @@ async function main(): Promise<void> {
     .option("--overwrite", "Overwrite existing files", false)
     .option("-t, --template <template>", "Name of use case template")
     .option("--show-templates", "Print list of available templates and exit")
+    .option("--no-git-init", "Skip Git repository initialization", false)
     .version(`Create Probot App v${pkg.version}`);
 
   program.parse(process.argv);
@@ -202,7 +203,7 @@ async function main(): Promise<void> {
         return guessEmail();
       },
       message: "Author's email address:",
-      when: !program.email,
+      when: program.gitInit && !program.email,
     },
     {
       type: "input",
@@ -211,7 +212,7 @@ async function main(): Promise<void> {
         return guessGitHubUsername(answers.email);
       },
       message: "GitHub user or org name:",
-      when: !program.user,
+      when: program.gitInit && !program.user,
     },
     {
       type: "input",
@@ -220,7 +221,7 @@ async function main(): Promise<void> {
         return answers.appName || kebabCase(path.basename(destination));
       },
       message: "Repository name:",
-      when: !program.repo,
+      when: program.gitInit && !program.repo,
     },
     {
       type: "list",
@@ -313,8 +314,8 @@ async function main(): Promise<void> {
 
   console.log(green("\nFinished scaffolding files!"));
 
-  if (await initGit(destination)) {
-    console.log(yellow("\nInitialized a Git repository."));
+  if (program.gitInit && (await initGit(destination))) {
+    console.log("\nInitialized a Git repository.");
   }
 
   installAndBuild(destination, answers.toBuild)
