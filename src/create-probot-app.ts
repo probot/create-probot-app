@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // TODO: Sort imports
-import fs from "fs";
+import fs from "fs-extra";
 import path from "path";
 import chalk from "chalk";
 import commander from "commander";
@@ -207,19 +207,18 @@ async function main(): Promise<void> {
 
   sanitizeBy(answers, ["author", "description"]);
 
-  // TODO: add logic to properly handle path conflicts between __common__ and actual
-  // template folders
-  let sourcePath = path.join(templatePath, "__common__");
-  let generateResult = await generate(sourcePath, destination, answers, {
+  // Prepare template folder Handlebars source content merging `templates/__common__` and `templates/<answers.template>`
+  const tempDestPath = fs.mkdtempSync("__create_probot_app__");
+  [
+    path.join(templatePath, "__common__"),
+    path.join(templatePath, answers.template),
+  ].forEach((source) => fs.copySync(source, tempDestPath));
+
+  const generateResult = await generate(tempDestPath, destination, answers, {
     overwrite: Boolean(program.overwrite),
   });
 
-  sourcePath = path.join(templatePath, answers.template);
-  generateResult = generateResult.concat(
-    await generate(sourcePath, destination, answers, {
-      overwrite: Boolean(program.overwrite),
-    })
-  );
+  fs.removeSync(tempDestPath);
 
   generateResult.forEach((fileInfo) => {
     // Edge case: Because create-probot-app is idempotent, if a file is named
