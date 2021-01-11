@@ -25,6 +25,8 @@ TEMP_DIR=$(mktemp -d 2>/dev/null || mktemp -d -t 'cpa_tmp')
 for i in "$PROJECT_DIR"/templates/*
 do
   template=$(basename "$i")
+  if [[ "$template" == __* ]]; then continue; fi
+
   echo "$template"
   cd "$TEMP_DIR"
   rm -rf "$template"
