@@ -28,6 +28,7 @@
   "author": "Brandon Keepers",
   "license": "ISC",
   "dependencies": {
+    "@types/npm": "^2.0.31",
     "chalk": "^4.1.0",
     "commander": "^6.0.0",
     "conjecture": "^0.1.2",
