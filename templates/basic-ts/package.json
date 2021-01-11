@@ -5,9 +5,6 @@
   "description": "{{{ description }}}",
   "author": "{{{ author }}}",
   "license": "ISC",
-  "repository": "https://github.com/{{ owner }}/{{ repo }}.git",
-  "homepage": "https://github.com/{{ owner }}/{{ repo }}",
-  "bugs": "https://github.com/{{ owner }}/{{ repo }}/issues",
   "keywords": [
     "probot",
     "github",
