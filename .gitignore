@@ -12,7 +12,7 @@ yarn.lock
 
 # Test-related generated folders
 coverage
-test
+/test
 
 # Miscellaneous
 .DS_Store
