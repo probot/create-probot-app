@@ -5,9 +5,9 @@ set -o pipefail  # Exit when any program execution in a pipeline breaks
 
 readonly APP="./bin/create-probot-app.js"
 readonly TEMPLATE=$1
-readonly TEST_FOLDER="./test/templates/${TEMPLATE}"
+readonly TEST_FOLDER="./tmp-test/templates/${TEMPLATE}"
 readonly LOGFILENAME="test.output"
-readonly LOGFILE="./test/templates/${TEMPLATE}/${LOGFILENAME}"
+readonly LOGFILE="${TEST_FOLDER}/${TEMPLATE}/${LOGFILENAME}"
 
 function create_app() {
   mkdir -p "$TEST_FOLDER"
