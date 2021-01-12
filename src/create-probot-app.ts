@@ -76,6 +76,11 @@ Try running ${bold("npm " + command)} yourself.
     const previousDir: string = process.cwd();
     process.chdir(destination);
 
+    const chdirAndResolve = (): void => {
+      process.chdir(previousDir);
+      resolve();
+    };
+
     npm.load(function (err) {
       if (err) reject(err);
 
@@ -89,9 +94,9 @@ Try running ${bold("npm " + command)} yourself.
           console.log(yellow("\n\nCompile application...\n"));
           npm.commands["run-script"](["build"], function (err) {
             if (err) reject(new NpmError("build application", "run build"));
-            else resolve();
+            else chdirAndResolve();
           });
-        } else resolve();
+        } else chdirAndResolve();
       });
     });
   });
