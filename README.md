@@ -1,6 +1,6 @@
 # Create Probot App
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![CI](https://github.com/probot/create-probot-app/workflows/Test/badge.svg)](https://github.com/probot/create-probot-app/actions)
@@ -41,6 +41,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://create-nom.app"><img src="https://avatars3.githubusercontent.com/u/10104630?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Maxim Devoir</b></sub></a><br /><a href="https://github.com/probot/create-probot-app/commits?author=MaximDevoir" title="Code">💻</a> <a href="https://github.com/probot/create-probot-app/pulls?q=is%3Apr+reviewed-by%3AMaximDevoir" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://a.l3x.in/"><img src="https://avatars1.githubusercontent.com/u/281389?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Alex</b></sub></a><br /><a href="https://github.com/probot/create-probot-app/commits?author=shaftoe" title="Code">💻</a></td>
   </tr>
 </table>
 
