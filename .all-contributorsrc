@@ -23,6 +23,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "hiimbex",
+      "name": "Bex Warner",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/13410355?v=4",
+      "profile": "http://hiimbex.com",
+      "contributions": [
+        "code",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
