@@ -18,7 +18,7 @@ async function main(): Promise<void> {
     .catch((err) => {
       console.log(red(err));
       process.exit(1);
-      });
+    });
 }
 
 main();
