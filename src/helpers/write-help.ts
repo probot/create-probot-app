@@ -17,7 +17,7 @@ const helpLines = [
   `Run ${green("create-probot-app")} --help to see all options.`,
 ];
 
-export function writeHelp(): void {
+function writeHelp(): void {
   helpLines.forEach((line) => {
     console.log(`  ${line}`);
   });
@@ -41,4 +41,12 @@ Get help from the community:
   https://probot.github.io/community/
 
 ${green("Enjoy building your Probot app!")}`);
+}
+
+export function printHelpAndFail(): void {
+  console.log(
+    `${green("create-probot-app")} [options] ${blue("<destination>")} `
+  );
+  writeHelp();
+  process.exit(1);
 }
