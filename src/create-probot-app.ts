@@ -5,7 +5,7 @@ import { installAndBuild } from "./helpers/run-npm";
 import { makeScaffolding } from "./helpers/filesystem";
 import { printSuccess, red } from "./helpers/write-help";
 
-function main(): void {
+async function main(): Promise<void> {
   const program = getProgram();
 
   const answers = await getAnswers(program, program.destination);
