@@ -8,7 +8,7 @@ import { printSuccess, red } from "./helpers/write-help";
 function main(): void {
   const program = getProgram();
 
-  getAnswers(program, program.destination).then((answers) => {
+  const answers = await getAnswers(program, program.destination);
   makeScaffolding(program.destination, answers, program.overwrite)
     .then(async () => {
       if (program.gitInit) await initGit(program.destination);
