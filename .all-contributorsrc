@@ -1,0 +1,25 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "MaximDevoir",
+      "name": "Maxim Devoir",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/10104630?v=4",
+      "profile": "https://create-nom.app",
+      "contributions": [
+        "code",
+        "review"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "create-probot-app",
+  "projectOwner": "probot",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
