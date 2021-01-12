@@ -4,9 +4,6 @@ node_modules
 # Output folder
 bin
 
-# Temoporary folder for testing
-tmp
-
 # Logs
 *.log
 
@@ -15,6 +12,7 @@ yarn.lock
 
 # Test-related generated folders
 coverage
+test
 
 # Miscellaneous
 .DS_Store
