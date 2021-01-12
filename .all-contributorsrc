@@ -14,6 +14,15 @@
         "code",
         "review"
       ]
+    },
+    {
+      "login": "shaftoe",
+      "name": "Alex",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/281389?v=4",
+      "profile": "https://a.l3x.in/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
