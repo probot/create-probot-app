@@ -3,6 +3,8 @@ import path from "path";
 import spawn from "cross-spawn";
 import simplegit from "simple-git/promise";
 
+import { green, yellow, red } from "./write-help";
+
 function isInGitRepo(path: string): boolean {
   const gitRevParse = spawn.sync(
     "git",
@@ -14,6 +16,7 @@ function isInGitRepo(path: string): boolean {
   );
 
   if (gitRevParse.status === 0) {
+    console.log("Found already initialized Git repository");
     return true;
   }
   return false;
@@ -25,33 +28,43 @@ function isGitInstalled(): boolean {
   });
 
   if (command.error) {
+    console.log("`git` binary not found");
     return false;
   }
   return true;
 }
 
-export async function initGit(root: string): Promise<boolean> {
+/**
+ * Initialize a Git repository in target destination folder
+ *
+ * @param {String} destination the destination folder path
+ */
+export async function initGit(destination: string): Promise<void> {
   let initializedGit = false;
-  try {
-    if (!isGitInstalled() || isInGitRepo(root)) {
-      return false;
-    }
 
-    const git = simplegit(root);
-    await git.init();
-    initializedGit = true;
-    await git.add("./*");
-    await git.commit("Initial commit from Create Probot App");
-    return true;
-  } catch (e) {
-    if (initializedGit) {
-      try {
-        fs.removeSync(path.join(root, ".git"));
-      } catch (err) {
-        // ignore
-      }
-    }
+  console.log(`\nInitializing Git repository in folder '${destination}'`);
 
-    return false;
+  if (!isGitInstalled() || isInGitRepo(destination)) {
+    console.log(yellow("Skipping Git initialization"));
+    return;
   }
+
+  const git = simplegit(destination);
+
+  await git
+    .init()
+    .then(() => (initializedGit = true))
+    .then(() => git.add("./*"))
+    .then(() => git.commit("Initial commit from Create Probot App"))
+    .catch((error) => {
+      if (initializedGit) {
+        try {
+          const gitFolder = path.join(destination, ".git");
+          console.log(red(`Cleaning up ${gitFolder} folder`));
+          fs.removeSync(gitFolder);
+        } catch (err) {} // ignore
+      }
+      throw error;
+    })
+    .then(() => console.log(green("Initialized a Git repository")));
 }
