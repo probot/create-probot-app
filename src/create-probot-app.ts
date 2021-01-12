@@ -19,7 +19,6 @@ function main(): void {
       console.log(red(err));
       process.exit(1);
       });
-  });
 }
 
 main();
