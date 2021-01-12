@@ -10,8 +10,8 @@ function main(): void {
 
   getAnswers(program, program.destination).then((answers) => {
     makeScaffolding(program.destination, answers, program.overwrite)
-      .then(() => {
-        if (program.gitInit) initGit(program.destination);
+      .then(async () => {
+        if (program.gitInit) await initGit(program.destination);
       })
       .then(() => installAndBuild(program.destination, answers.toBuild))
       .then(() => printSuccess(answers.appName, program.destination))
