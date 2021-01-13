@@ -5,10 +5,9 @@ import { installAndBuild } from "./helpers/run-npm";
 import { makeScaffolding } from "./helpers/filesystem";
 import { printSuccess, red } from "./helpers/write-help";
 
-async function main(): Promise<void> {
-  const program = getProgram();
+const program = getProgram();
 
-  const answers = await getAnswers(program, program.destination);
+getAnswers(program, program.destination).then((answers) => {
   makeScaffolding(program.destination, answers, program.overwrite)
     .then(async () => {
       if (program.gitInit) await initGit(program.destination);
@@ -19,6 +18,4 @@ async function main(): Promise<void> {
       console.log(red(err));
       process.exit(1);
     });
-}
-
-main();
+});
