@@ -1,0 +1,62 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "MaximDevoir",
+      "name": "Maxim Devoir",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/10104630?v=4",
+      "profile": "https://create-nom.app",
+      "contributions": [
+        "code",
+        "review"
+      ]
+    },
+    {
+      "login": "shaftoe",
+      "name": "Alexander Fortin",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/281389?v=4",
+      "profile": "https://a.l3x.in/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "hiimbex",
+      "name": "Bex Warner",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/13410355?v=4",
+      "profile": "http://hiimbex.com",
+      "contributions": [
+        "code",
+        "review"
+      ]
+    },
+    {
+      "login": "tcbyrd",
+      "name": "Tommy Byrd",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/13207348?v=4",
+      "profile": "https://github.com/tcbyrd",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "JasonEtco",
+      "name": "Jason Etcovitch",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/10660468?v=4",
+      "profile": "https://jasonet.co",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "create-probot-app",
+  "projectOwner": "probot",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
