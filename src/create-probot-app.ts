@@ -1,20 +1,19 @@
 #!/usr/bin/env node
-import { getAnswers, getProgram } from "./helpers/user-interaction";
+import { askUser, runCliManager } from "./helpers/user-interaction";
 import { initGit } from "./helpers/init-git";
 import { installAndBuild } from "./helpers/run-npm";
 import { makeScaffolding } from "./helpers/filesystem";
 import { printSuccess, red } from "./helpers/write-help";
 
 async function main(): Promise<void> {
-  const program = getProgram();
+  const config = await askUser(runCliManager());
 
-  const answers = await getAnswers(program, program.destination);
-  makeScaffolding(program.destination, answers, program.overwrite)
+  makeScaffolding(config)
     .then(async () => {
-      if (program.gitInit) await initGit(program.destination);
+      if (config.gitInit) await initGit(config.destination);
     })
-    .then(() => installAndBuild(program.destination, answers.toBuild))
-    .then(() => printSuccess(answers.appName, program.destination))
+    .then(() => installAndBuild(config.destination, config.toBuild))
+    .then(() => printSuccess(config.appName, config.destination))
     .catch((err) => {
       console.log(red(err));
       process.exit(1);

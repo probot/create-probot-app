@@ -10,7 +10,7 @@ import stringifyAuthor from "stringify-author";
 import validatePackageName from "validate-npm-package-name";
 
 import { blue, red, printHelpAndFail } from "./write-help";
-import { getTemplates, templatesSourcePath } from "./filesystem";
+import { getTemplates } from "./filesystem";
 
 type QuestionI =
   | (
@@ -21,18 +21,36 @@ type QuestionI =
     )
   | QuestionCollection;
 
+interface CliConfig {
+  destination: string;
+  gitInit: boolean;
+  overwrite: boolean;
+  appName?: string;
+  author?: string;
+  description?: string;
+  email?: string;
+  repo?: string;
+  template?: string;
+  user?: string;
+}
+
+export interface Config extends CliConfig, Answers {
+  appName: string;
+  camelCaseAppName: string;
+  description: string;
+  template: string;
+  toBuild: boolean;
+  year: number;
+  owner?: string;
+}
+
 /**
  * Partially sanitizes keys by escaping double-quotes.
  *
  * @param {Object} object The object to mutate.
  * @param {String[]} keys The keys on `object` to sanitize.
  */
-function sanitizeBy(
-  object: {
-    [key: string]: string;
-  },
-  keys: string[]
-): void {
+function sanitizeBy(object: Config, keys: string[]): void {
   keys.forEach((key) => {
     if (key in object) {
       object[key] = jsesc(object[key], {
@@ -43,10 +61,7 @@ function sanitizeBy(
   });
 }
 
-function getQuestions(
-  program: commander.Command,
-  destination: string
-): QuestionI[] {
+function getQuestions(config: CliConfig): QuestionI[] {
   const templates = getTemplates();
 
   const questions: QuestionI[] = [
@@ -54,10 +69,10 @@ function getQuestions(
       type: "input",
       name: "appName",
       default(answers): string {
-        return answers.repo || kebabCase(path.basename(destination));
+        return answers.repo || kebabCase(path.basename(config.destination));
       },
       message: "App name:",
-      when: !program.appName,
+      when: !config.appName,
       validate(appName): true | string {
         const result = validatePackageName(appName);
         if (result.errors && result.errors.length > 0) {
@@ -74,7 +89,7 @@ function getQuestions(
         return "A Probot app";
       },
       message: "Description of app:",
-      when: !program.desc,
+      when: !config.description,
     },
     {
       type: "input",
@@ -83,7 +98,7 @@ function getQuestions(
         return guessAuthor();
       },
       message: "Author's full name:",
-      when: !program.author,
+      when: !config.author,
     },
     {
       type: "input",
@@ -92,7 +107,7 @@ function getQuestions(
         return guessEmail();
       },
       message: "Author's email address:",
-      when: program.gitInit && !program.email,
+      when: config.gitInit && !config.email,
     },
     {
       type: "input",
@@ -101,16 +116,16 @@ function getQuestions(
         return guessGitHubUsername(answers.email);
       },
       message: "GitHub user or org name:",
-      when: program.gitInit && !program.user,
+      when: config.gitInit && !config.user,
     },
     {
       type: "input",
       name: "repo",
       default(answers): string {
-        return answers.appName || kebabCase(path.basename(destination));
+        return answers.appName || kebabCase(path.basename(config.destination));
       },
       message: "Repository name:",
-      when: program.gitInit && !program.repo,
+      when: config.gitInit && !config.repo,
     },
     {
       type: "list",
@@ -118,12 +133,12 @@ function getQuestions(
       choices: templates,
       message: "Which template would you like to use?",
       when(): boolean {
-        if (templates.includes(program.template)) {
-          return false;
-        }
-        if (program.template) {
+        if (config.template) {
+          if (templates.includes(config.template)) {
+            return false;
+          }
           console.log(
-            red(`The template ${blue(program.template)} does not exist.`)
+            red(`The template ${blue(config.template)} does not exist.`)
           );
         }
         return true;
@@ -134,36 +149,44 @@ function getQuestions(
   return questions;
 }
 
-export async function getAnswers(
-  program: commander.Command,
-  destination: string
-): Promise<Answers> {
+/**
+ * Prompt the user for mandatory options not set via CLI
+ *
+ * @param config Configuration data already set via CLI options
+ *
+ * @returns the merged configuration options from CLI and user prompt
+ */
+export async function askUser(config: CliConfig): Promise<Config> {
   console.log(
     "\nLet's create a Probot app!\nHit enter to accept the suggestion.\n"
   );
 
-  const answers = await inquirer.prompt(getQuestions(program, destination));
+  const answers = {
+    ...config,
+    ...((await inquirer.prompt(getQuestions(config))) as Config),
+  };
+
+  // enrich with (meta)data + sanitize input
   answers.author = stringifyAuthor({
-    name: program.author || answers.author,
-    email: program.email || answers.email,
+    name: answers.author,
+    email: answers.email,
   });
-  answers.template = answers.template || program.template;
   answers.toBuild = answers.template.slice(-3) === "-ts";
   answers.year = new Date().getFullYear();
-  answers.camelCaseAppName = camelCase(program.appName || answers.appName);
-  answers.appName = program.appName || answers.appName;
-  answers.description = program.desc || answers.description;
-  answers.user = answers.owner = program.user || answers.user;
-  answers.repo = program.repo || answers.repo;
-  // TODO: clean that up into nicer object combining
-
+  answers.camelCaseAppName = camelCase(config.appName || answers.appName);
+  answers.owner = answers.user;
   sanitizeBy(answers, ["author", "description"]);
 
   return answers;
 }
 
-export function getProgram(): commander.Command {
-  let destination = "";
+/**
+ * Run CLI manager to parse user provided options and arguments
+ *
+ * @returns the configuration options set via CLI
+ */
+export function runCliManager(): CliConfig {
+  let destination: string = "";
 
   // TSC mangles output directory when using normal import methods for
   // package.json. See
@@ -200,8 +223,16 @@ export function getProgram(): commander.Command {
     process.exit();
   }
 
-  // XXX: most probably there's a better way to access [destination] Commander argument
-  program.destination = destination;
-
-  return program;
+  return {
+    appName: program.appName,
+    author: program.author,
+    description: program.desc,
+    destination: destination,
+    email: program.email,
+    gitInit: program.gitInit,
+    overwrite: program.overwrite,
+    repo: program.repo,
+    template: program.template,
+    user: program.user,
+  };
 }
