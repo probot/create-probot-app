@@ -30,7 +30,7 @@
   "dependencies": {
     "@types/npm": "^2.0.31",
     "chalk": "^4.1.0",
-    "commander": "^6.0.0",
+    "commander": "^7.0.0",
     "conjecture": "^0.1.2",
     "cross-spawn": "^7.0.3",
     "egad": "^0.2.0",
