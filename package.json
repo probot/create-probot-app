@@ -28,7 +28,6 @@
   "author": "Brandon Keepers",
   "license": "ISC",
   "dependencies": {
-    "@types/npm": "^2.0.31",
     "chalk": "^4.1.0",
     "commander": "^7.0.0",
     "conjecture": "^0.1.2",
@@ -51,6 +50,7 @@
     "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.kebabcase": "^4.1.6",
     "@types/node": "^14.0.27",
+    "@types/npm": "^2.0.31",
     "@types/rimraf": "^3.0.0",
     "@types/shelljs": "^0.8.8",
     "@types/validate-npm-package-name": "^3.0.0",
