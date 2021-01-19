@@ -10,7 +10,7 @@ import stringifyAuthor from "stringify-author";
 import validatePackageName from "validate-npm-package-name";
 
 import { blue, red, printHelpAndFail } from "./write-help";
-import { getTemplates } from "./filesystem";
+import { getTemplates, ensureValidDestination } from "./filesystem";
 
 type QuestionI =
   | (
@@ -183,9 +183,9 @@ export async function askUser(config: CliConfig): Promise<Config> {
 /**
  * Run CLI manager to parse user provided options and arguments
  *
- * @returns the configuration options set via CLI
+ * @returns resolves with the configuration options set via CLI
  */
-export function runCliManager(): CliConfig {
+export async function runCliManager(): Promise<CliConfig> {
   let destination: string = "";
 
   // TSC mangles output directory when using normal import methods for
@@ -218,6 +218,8 @@ export function runCliManager(): CliConfig {
   const options = program.parse(process.argv).opts();
 
   if (!destination) printHelpAndFail();
+  ensureValidDestination(destination, options.overwrite);
+
   if (options.showTemplates) {
     getTemplates().forEach((template) => console.log(template));
     process.exit();

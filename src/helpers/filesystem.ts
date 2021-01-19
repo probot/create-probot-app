@@ -7,17 +7,67 @@ import { yellow, green } from "./write-help";
 export const templatesSourcePath = path.join(__dirname, "../../templates/");
 
 /**
+ * Validate `destination` path, throw error if not valid (e.g not an empty folder)
+ * @param {string} destination  destination path
+ * @param {boolean} overwrite   if true, don't throw error if path is a non-empty valid folder
+ */
+export function ensureValidDestination(
+  destination: string,
+  overwrite: boolean
+): void {
+  const invalidDestinationError: Error = new Error(`Invalid destination folder => ${destination}
+Please provide either an empty folder or a non existing path as <destination>
+`);
+
+  try {
+    fs.lstatSync(destination);
+
+    try {
+      fs.realpathSync(destination);
+    } catch (error) {
+      if (error.code === "ENOENT") throw invalidDestinationError; // Edge case: destination is a broken link
+    }
+  } catch (error) {
+    if (error.code === "ENOENT") return;
+    // The `destination` is neither a broken link nor an existing path
+    else throw error;
+  }
+
+  if (fs.statSync(destination).isDirectory()) {
+    if (fs.readdirSync(destination).length === 0) return; // Empty folder
+    if (overwrite) {
+      console.warn(
+        yellow(`Explicit OVERWRITE option selected:
+Some files under "${fs.realpathSync(destination)}" might be overwritten!
+`)
+      );
+      return;
+    }
+  }
+
+  // The `destination` is neither a valid folder nor an empty one
+  throw invalidDestinationError;
+}
+
+/**
  * Create files and folder structure from Handlebars templates.
  *
  * @param {Config} config configuration object
+ * @returns Promise which returns the input Config object
  */
-export async function makeScaffolding(config: Config): Promise<void> {
+export async function makeScaffolding(config: Config): Promise<Config> {
   // Prepare template folder Handlebars source content merging `templates/__common__` and `templates/<answers.template>`
   const tempDestPath = fs.mkdtempSync("__create_probot_app__");
   [
     path.join(templatesSourcePath, "__common__"),
     path.join(templatesSourcePath, config.template),
   ].forEach((source) => fs.copySync(source, tempDestPath));
+
+  if (fs.existsSync(path.join(tempDestPath, "gitignore")))
+    fs.renameSync(
+      path.join(tempDestPath, "gitignore"),
+      path.join(tempDestPath, ".gitignore")
+    );
 
   const result = await generate(tempDestPath, config.destination, config, {
     overwrite: config.overwrite,
@@ -26,32 +76,6 @@ export async function makeScaffolding(config: Config): Promise<void> {
   fs.removeSync(tempDestPath);
 
   result.forEach((fileInfo) => {
-    // Edge case: Because create-probot-app is idempotent, if a file is named
-    // gitignore in the initializing directory, no .gitignore file will be
-    // created.
-    if (
-      fileInfo.skipped === false &&
-      path.basename(fileInfo.path) === "gitignore"
-    ) {
-      try {
-        const gitignorePath = path.join(
-          path.dirname(fileInfo.path),
-          ".gitignore"
-        );
-
-        if (fs.existsSync(gitignorePath)) {
-          const data = fs.readFileSync(fileInfo.path, { encoding: "utf8" });
-          fs.appendFileSync(gitignorePath, data);
-          fs.unlinkSync(fileInfo.path);
-        } else {
-          fs.renameSync(fileInfo.path, gitignorePath);
-        }
-        fileInfo.path = gitignorePath;
-      } catch (err) {
-        throw err;
-      }
-    }
-
     console.log(
       `${
         fileInfo.skipped
@@ -62,6 +86,7 @@ export async function makeScaffolding(config: Config): Promise<void> {
   });
 
   console.log(green("\nFinished scaffolding files!"));
+  return config;
 }
 
 export function getTemplates(): string[] {

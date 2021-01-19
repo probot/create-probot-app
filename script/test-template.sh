@@ -41,16 +41,8 @@ function check_errors_in_log() {
     echo "ok"; echo
 }
 
-# Check for .gitignore file. See https://github.com/probot/create-probot-app/issues/69
-function check_gitignore() {
-    echo -n "--[test ${TEMPLATE}]-- Ensure .gitignore exists..."
-    if [ ! -f "${TEST_FOLDER}/.gitignore" ]; then echo "No .gitignore file found."; exit 1; fi
-    echo " ok"; echo
-}
-
 echo "--[test ${TEMPLATE}]-- Run tests in ${TEST_FOLDER} folder"
 create_app
 run_npm_tests
 check_errors_in_log
-check_gitignore
 echo "--[test ${TEMPLATE}]-- All tests completed successfully!"

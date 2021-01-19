@@ -18,3 +18,4 @@ tmp-test
 .DS_Store
 Thumbs.db
 .vscode
+__create_probot_app__*
