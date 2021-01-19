@@ -215,24 +215,24 @@ export function runCliManager(): CliConfig {
     .option("--no-git-init", "Skip Git repository initialization", false)
     .version(`Create Probot App v${pkg.version}`);
 
-  program.parse(process.argv);
+  const options = program.parse(process.argv).opts();
 
   if (!destination) printHelpAndFail();
-  if (program.showTemplates) {
+  if (options.showTemplates) {
     getTemplates().forEach((template) => console.log(template));
     process.exit();
   }
 
   return {
-    appName: program.appName,
-    author: program.author,
-    description: program.desc,
+    appName: options.appName,
+    author: options.author,
+    description: options.desc,
     destination: destination,
-    email: program.email,
-    gitInit: program.gitInit,
-    overwrite: program.overwrite,
-    repo: program.repo,
-    template: program.template,
-    user: program.user,
+    email: options.email,
+    gitInit: options.gitInit,
+    overwrite: options.overwrite,
+    repo: options.repo,
+    template: options.template,
+    user: options.user,
   };
 }
