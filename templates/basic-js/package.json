@@ -5,6 +5,7 @@
   "description": "{{{ description }}}",
   "author": "{{{ author }}}",
   "license": "ISC",
+  "homepage": "https://github.com/{{ owner }}/{{ repo }}",
   "keywords": [
     "probot",
     "github",
