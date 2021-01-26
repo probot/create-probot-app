@@ -1,17 +1,16 @@
 import npm from "npm";
 import { bold, yellow } from "./write-help";
+import { Config } from "./user-interaction";
 
 /**
  * Run `npm install` in `destination` folder, then run `npm run build`
  * if `toBuild` is true
  *
- * @param {String} destination Destination folder relative to current working dir
- * @param {Boolean}    toBuild Execute `npm run build` if true
+ * @param {Config} config configuration object
+ *
+ * @returns Promise which returns the input Config object
  */
-export function installAndBuild(
-  destination: string,
-  toBuild: boolean
-): Promise<void> {
+export function installAndBuild(config: Config): Promise<Config> {
   class NpmError extends Error {
     constructor(msg: string, command: string) {
       const message = `
@@ -26,11 +25,11 @@ Try running ${bold("npm " + command)} yourself.
 
   return new Promise((resolve, reject) => {
     const previousDir: string = process.cwd();
-    process.chdir(destination);
+    process.chdir(config.destination);
 
     const chdirAndResolve = (): void => {
       process.chdir(previousDir);
-      resolve();
+      resolve(config);
     };
 
     npm.load(function (err) {
@@ -42,7 +41,7 @@ Try running ${bold("npm " + command)} yourself.
 
       npm.commands.install([], function (err) {
         if (err) reject(new NpmError("install npm dependencies", "install"));
-        else if (toBuild) {
+        else if (config.toBuild) {
           console.log(yellow("\n\nCompile application...\n"));
           npm.commands["run-script"](["build"], function (err) {
             if (err) reject(new NpmError("build application", "run build"));
