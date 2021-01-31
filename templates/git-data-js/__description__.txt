@@ -1,0 +1,1 @@
+Opens a PR every time someone installs your app for the first time

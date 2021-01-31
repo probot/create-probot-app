@@ -12,6 +12,8 @@ import validatePackageName from "validate-npm-package-name";
 import { blue, red, printHelpAndFail } from "./write-help";
 import { getTemplates, ensureValidDestination } from "./filesystem";
 
+const templateDelimiter = " => ";
+
 type QuestionI =
   | (
       | {
@@ -130,11 +132,14 @@ function getQuestions(config: CliConfig): QuestionI[] {
     {
       type: "list",
       name: "template",
-      choices: templates,
+      choices: templates.map(
+        (template) =>
+          `${template.name}${templateDelimiter}${template.description}`
+      ),
       message: "Which template would you like to use?",
       when(): boolean {
         if (config.template) {
-          if (templates.includes(config.template)) {
+          if (templates.find((template) => template.name === config.template)) {
             return false;
           }
           console.log(
@@ -175,6 +180,7 @@ export async function askUser(config: CliConfig): Promise<Config> {
   answers.year = new Date().getFullYear();
   answers.camelCaseAppName = camelCase(config.appName || answers.appName);
   answers.owner = answers.user;
+  answers.template = answers.template.split(templateDelimiter)[0]; // remove eventual description
   sanitizeBy(answers, ["author", "description"]);
 
   return answers;
@@ -217,13 +223,13 @@ export async function runCliManager(): Promise<CliConfig> {
 
   const options = program.parse(process.argv).opts();
 
-  if (!destination) printHelpAndFail();
-  ensureValidDestination(destination, options.overwrite);
-
   if (options.showTemplates) {
-    getTemplates().forEach((template) => console.log(template));
+    getTemplates().forEach((template) => console.log(template.name));
     process.exit();
   }
+
+  if (!destination) printHelpAndFail();
+  ensureValidDestination(destination, options.overwrite);
 
   return {
     appName: options.appName,
