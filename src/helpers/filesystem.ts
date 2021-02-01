@@ -63,6 +63,8 @@ export async function makeScaffolding(config: Config): Promise<Config> {
     path.join(templatesSourcePath, config.template),
   ].forEach((source) => fs.copySync(source, tempDestPath));
 
+  fs.removeSync(path.join(tempDestPath, "__description__.txt"));
+
   if (fs.existsSync(path.join(tempDestPath, "gitignore")))
     fs.renameSync(
       path.join(tempDestPath, "gitignore"),
@@ -89,8 +91,24 @@ export async function makeScaffolding(config: Config): Promise<Config> {
   return config;
 }
 
-export function getTemplates(): string[] {
+interface Template {
+  name: string;
+  description: string;
+}
+
+export function getTemplates(): Template[] {
   return fs
     .readdirSync(templatesSourcePath)
-    .filter((path) => path.substr(0, 2) !== "__");
+    .filter((path) => path.substr(0, 2) !== "__")
+    .map((template) => {
+      let descFile = path.join(
+        templatesSourcePath,
+        template,
+        "__description__.txt"
+      );
+      return {
+        name: template,
+        description: fs.readFileSync(descFile).toString().trimEnd(),
+      };
+    });
 }
