@@ -17,6 +17,7 @@
     "test": "jest",
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
     "watch-node": "probot run ./lib/index.js",
+    "watch-test": "npm run test -- --watchAll",
     "watch-ts": "tsc -w"
   },
   "dependencies": {
