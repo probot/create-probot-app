@@ -12,7 +12,6 @@ yarn.lock
 
 # Test-related generated folders
 coverage
-tmp-test
 
 # Miscellaneous
 .DS_Store
