@@ -51,20 +51,21 @@ export async function initGit(destination: string): Promise<void> {
 
   const git = simplegit(destination);
 
-  await git
-    .init()
-    .then(() => (initializedGit = true))
-    .then(() => git.add("./*"))
-    .then(() => git.commit("Initial commit from Create Probot App"))
-    .catch((error) => {
-      if (initializedGit) {
-        try {
-          const gitFolder = path.join(destination, ".git");
-          console.log(red(`Cleaning up ${gitFolder} folder`));
-          fs.removeSync(gitFolder);
-        } catch (err) {} // ignore
-      }
-      throw error;
-    })
-    .then(() => console.log(green("Initialized a Git repository")));
+  try {
+    await git
+      .init()
+      .then(() => (initializedGit = true))
+      .then(() => git.add("./*"))
+      .then(() => git.commit("Initial commit from Create Probot App"))
+      .then(() => console.log(green("Initialized a Git repository")));
+  } catch (error) {
+    if (initializedGit) {
+      const gitFolder = path.join(destination, ".git");
+      console.log(red(`Cleaning up ${gitFolder} folder`));
+      try {
+        fs.removeSync(gitFolder);
+      } catch {}
+    }
+    console.log(red(`Errors while initializing Git repo: ${error}`));
+  }
 }
