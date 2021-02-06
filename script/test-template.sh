@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-set -e  # Exit immediately if a command returns a non-zero status
+set -Ee # Exit immediately if a command returns a non-zero status
 set -u  # Exit when references variables are undefined
 set -o pipefail  # Exit when any program execution in a pipeline breaks
 
 readonly APP="./bin/create-probot-app.js"
 readonly TEMPLATE=$1
-readonly TEST_FOLDER="./tmp-test/templates/${TEMPLATE}"
+readonly TEST_FOLDER="./tmp-test/${TEMPLATE}"
 readonly LOGFILENAME="test.output"
-readonly LOGFILE="${TEST_FOLDER}/${TEMPLATE}/${LOGFILENAME}"
+readonly LOGFILE="${TEST_FOLDER}/${LOGFILENAME}"
 
 function create_app() {
   mkdir -p "$TEST_FOLDER"
@@ -31,6 +31,7 @@ function run_npm_tests() {
 
 function check_errors_in_log() {
     echo; echo -n "--[test ${TEMPLATE}]-- Search for errors in logs output... "
+    if ! [ -f ${LOGFILE} ]; then echo "ERROR Log file ${LOGFILE} not found"; exit 1; fi
     local ERRORS=$(grep \
         --extended-regexp \
         --regexp='(WARN|Warn|warn)' \

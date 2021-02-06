@@ -24,30 +24,37 @@ Try running ${bold("npm " + command)} yourself.
   }
 
   return new Promise((resolve, reject) => {
-    const previousDir: string = process.cwd();
-    process.chdir(config.destination);
-
-    const chdirAndResolve = (): void => {
-      process.chdir(previousDir);
-      resolve(config);
-    };
-
     npm.load(function (err) {
       if (err) reject(err);
+
+      const defaultPrefix = npm.prefix;
+
+      const rejectWithError = (error: NpmError) => {
+        npm.prefix = defaultPrefix;
+        reject(error);
+      };
+
+      const resolveWithConfig = () => {
+        npm.prefix = defaultPrefix;
+        resolve(config);
+      };
 
       console.log(
         yellow("\nInstalling dependencies. This may take a few minutes...\n")
       );
 
+      npm.prefix = config.destination;
       npm.commands.install([], function (err) {
-        if (err) reject(new NpmError("install npm dependencies", "install"));
+        if (err)
+          rejectWithError(new NpmError("install npm dependencies", "install"));
         else if (config.toBuild) {
           console.log(yellow("\n\nCompile application...\n"));
           npm.commands["run-script"](["build"], function (err) {
-            if (err) reject(new NpmError("build application", "run build"));
-            else chdirAndResolve();
+            if (err)
+              rejectWithError(new NpmError("build application", "run build"));
+            else resolveWithConfig();
           });
-        } else chdirAndResolve();
+        } else resolveWithConfig();
       });
     });
   });
