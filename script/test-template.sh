@@ -29,21 +29,8 @@ function run_npm_tests() {
     cd - > /dev/null
 }
 
-function check_errors_in_log() {
-    echo; echo -n "--[test ${TEMPLATE}]-- Search for errors in logs output... "
-    if ! [ -f ${LOGFILE} ]; then echo "ERROR Log file ${LOGFILE} not found"; exit 1; fi
-    local ERRORS=$(grep \
-        --extended-regexp \
-        --regexp='(WARN|Warn|warn)' \
-        --regexp='(ERR|Err|error)' \
-        --count \
-        ${LOGFILE})
-    if [ "$ERRORS" -gt 0 ]; then echo "found ${ERRORS} error, aborting"; exit 1; fi
-    echo "ok"; echo
-}
-
 echo "--[test ${TEMPLATE}]-- Run tests in ${TEST_FOLDER} folder"
 create_app
 run_npm_tests
-check_errors_in_log
+./bin/run-tests.js $TEMPLATE $TEST_FOLDER
 echo "--[test ${TEMPLATE}]-- All tests completed successfully!"
