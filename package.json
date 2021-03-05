@@ -23,7 +23,7 @@
     "build:source": "tsc && npm run dev:make-cpa",
     "build:tests": "tsc && npm run dev:make-tests"
   },
-  "repository": "https://github.com/probot/create-probot-app",
+  "repository": "github:probot/create-probot-app",
   "keywords": [
     "probot"
   ],
