@@ -25,5 +25,8 @@
   },
   "engines": {
     "node": ">= 10.13.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
