@@ -1,6 +1,6 @@
 name: Release
 
-on:
+on: developer 
   push:
     branches:
       - master
