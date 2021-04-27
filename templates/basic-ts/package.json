@@ -14,7 +14,11 @@
   "scripts": {
     "build": "tsc",
     "start": "probot run ./lib/index.js",
-    "test": "jest"
+    "test": "jest",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
+    "watch-node": "probot run ./lib/index.js",
+    "watch-test": "npm run test -- --watchAll",
+    "watch-ts": "tsc -w"
   },
   "dependencies": {
     "probot": "^11.0.1"
@@ -22,6 +26,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.19",
     "@types/node": "^14.14.19",
+    "concurrently": "^5.3.0",
     "jest": "^26.6.3",
     "nock": "^13.0.5",
     "smee-client": "^1.2.2",
