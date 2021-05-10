@@ -15,7 +15,8 @@ export function ensureValidDestination(
   destination: string,
   overwrite: boolean
 ): void {
-  const invalidDestinationError: Error = new Error(`Invalid destination folder => ${destination}
+  const invalidDestinationError: Error =
+    new Error(`Invalid destination folder => ${destination}
 Please provide either an empty folder or a non existing path as <destination>
 `);
 
