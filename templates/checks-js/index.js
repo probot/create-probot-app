@@ -12,8 +12,10 @@ module.exports = (app) => {
     const startTime = new Date();
 
     // Do stuff
-    const { head_branch: headBranch, head_sha: headSha } =
-      context.payload.check_suite;
+    const {
+      head_branch: headBranch,
+      head_sha: headSha,
+    } = context.payload.check_suite;
     // Probot API note: context.repo() => {username: 'hiimbex', repo: 'testing-things'}
     return context.octokit.checks.create(
       context.repo({
