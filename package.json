@@ -31,7 +31,7 @@
   "license": "ISC",
   "dependencies": {
     "chalk": "^4.1.0",
-    "commander": "^7.0.0",
+    "commander": "^8.0.0",
     "conjecture": "^0.1.2",
     "cross-spawn": "^7.0.3",
     "egad": "^0.2.0",
