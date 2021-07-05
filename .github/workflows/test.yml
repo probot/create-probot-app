@@ -18,6 +18,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
+          cache: npm
       - run: npm ci
       - run: npm run build
       # XXX: might be possible to parallelize each template test too, .e.g. `npm run test:template ${{ matrix.template }}`
@@ -33,5 +34,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 15
+          cache: npm
       - run: npm install
       - run: npm run lint
