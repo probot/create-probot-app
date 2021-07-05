@@ -52,7 +52,7 @@
     "@types/jsesc": "^3.0.0",
     "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.kebabcase": "^4.1.6",
-    "@types/node": "^15.0.0",
+    "@types/node": "^16.0.0",
     "@types/npm": "^2.0.31",
     "@types/rimraf": "^3.0.0",
     "@types/shelljs": "^0.8.8",
