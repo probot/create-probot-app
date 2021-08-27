@@ -25,10 +25,10 @@ Please provide either an empty folder or a non existing path as <destination>
 
     try {
       fs.realpathSync(destination);
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === "ENOENT") throw invalidDestinationError; // Edge case: destination is a broken link
     }
-  } catch (error) {
+  } catch (error: any) {
     if (error.code === "ENOENT") return;
     // The `destination` is neither a broken link nor an existing path
     else throw error;
