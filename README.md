@@ -4,7 +4,7 @@
 
 `create-probot-app` is a _command line_ (CLI) Node.js application that generates a new [Probot](https://github.com/probot/probot) app with everything you need to get started building. 👷🏽‍
 
-More specifically, this command line interface allows you to select from our pre-defined blue prints to choose a basic working example to start from.
+More specifically, this command line interface allows you to select from our pre-defined blueprints to choose a basic working example to start from.
 
 ## Installation
 

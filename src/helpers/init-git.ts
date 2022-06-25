@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import path from "path";
 import spawn from "cross-spawn";
-import simplegit from "simple-git/promise";
+import simplegit from "simple-git";
 
 import { green, yellow, red } from "./write-help";
 
