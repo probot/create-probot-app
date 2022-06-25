@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-set -e
+. ./script/setup.sh
 
-for template in $(./bin/create-probot-app.js --show-templates ALL); do
+TEMPLATES=$(./bin/create-probot-app.js --show-templates ALL)
+
+for template in $TEMPLATES; do
     npm run test:template $template;
 done
