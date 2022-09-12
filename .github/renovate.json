@@ -1,5 +1,3 @@
 {
-  "extends": [
-    "github>probot/.github"
-  ]
+  "extends": ["github>probot/.github"]
 }
