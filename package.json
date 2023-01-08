@@ -30,7 +30,7 @@
   "author": "Brandon Keepers",
   "license": "ISC",
   "dependencies": {
-    "chalk": "^4.1.2",
+    "chalk": "^5.0.0",
     "commander": "^9.0.0",
     "conjecture": "^0.1.2",
     "cross-spawn": "^7.0.3",
