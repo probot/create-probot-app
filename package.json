@@ -58,7 +58,7 @@
     "@types/shelljs": "^0.8.8",
     "@types/validate-npm-package-name": "^4.0.0",
     "prettier": "^2.2.1",
-    "rimraf": "^3.0.2",
+    "rimraf": "^4.0.0",
     "semantic-release": "^19.0.2",
     "shelljs": "^0.8.4",
     "ts-node": "^10.0.0",
