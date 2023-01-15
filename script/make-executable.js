@@ -1,8 +1,10 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from 'url';
 import shell from "shelljs";
-import pkg from "../package.json";
+import pkg from "../package.json" assert { type: "json" };
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /**
  * Converts TS file under ./bin/ into an executable file.
  *
@@ -14,10 +16,10 @@ import pkg from "../package.json";
  *
  * @param {string} name the name of the built JS file, e.g. 'create-probot-app'
  */
-export function chBinMod(name: string): void {
-  const binList: Record<string, string> = pkg.bin;
-  const jsFilePath: string = binList[name];
-  const distributableBinary: string = path.join(__dirname, "..", jsFilePath);
+export function chBinMod(name) {
+  const binList = pkg.bin;
+  const jsFilePath = binList[name];
+  const distributableBinary = path.join(__dirname, "..", jsFilePath);
 
   try {
     if (fs.existsSync(distributableBinary)) {

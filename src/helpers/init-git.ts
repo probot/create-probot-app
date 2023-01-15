@@ -1,9 +1,9 @@
-import fs from "fs-extra";
-import path from "path";
-import spawn from "cross-spawn";
+import * as fs from "fs-extra";
+import * as path from "path";
+import * as spawn from "cross-spawn";
 import simplegit from "simple-git";
 
-import { green, yellow, red } from "./write-help";
+import { green, yellow, red } from "./write-help.js";
 
 function isInGitRepo(path: string): boolean {
   const gitRevParse = spawn.sync(

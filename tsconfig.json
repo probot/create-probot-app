@@ -1,13 +1,12 @@
 {
   "compilerOptions": {
     "allowJs": false,
-    "module": "commonjs",
-    "target": "es2015",
+    "module": "ESNext",
+    "target": "es2022",
     "moduleResolution": "node",
     "strict": true,
     "noImplicitAny": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": false,
     "outDir": "bin",
     "baseUrl": ".",
