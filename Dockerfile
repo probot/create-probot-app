@@ -31,4 +31,4 @@ COPY . .
 
 RUN pnpm run build
 
-CMD [ "node", "bin/" ]
+ENTRYPOINT [ "node", "./bin/create-probot-app.js" ]
