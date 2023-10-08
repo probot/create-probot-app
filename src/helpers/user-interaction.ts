@@ -1,16 +1,20 @@
-import path from "path";
+import * as fs from "fs";
+import * as path from "path";
+import { fileURLToPath } from "url";
 
 import { guessEmail, guessAuthor, guessGitHubUsername } from "conjecture";
 import camelCase from "lodash.camelcase";
-import commander from "commander";
+import * as commander from "commander";
 import inquirer, { Answers, Question, QuestionCollection } from "inquirer";
 import jsesc from "jsesc";
 import kebabCase from "lodash.kebabcase";
 import stringifyAuthor from "stringify-author";
 import validatePackageName from "validate-npm-package-name";
 
-import { blue, red, printHelpAndFail } from "./write-help";
-import { getTemplates, ensureValidDestination } from "./filesystem";
+import { blue, red, printHelpAndFail } from "./write-help.js";
+import { getTemplates, ensureValidDestination } from "./filesystem.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const templateDelimiter = " => ";
 
@@ -197,7 +201,7 @@ export async function runCliManager(): Promise<CliConfig> {
   // TSC mangles output directory when using normal import methods for
   // package.json. See
   // https://github.com/Microsoft/TypeScript/issues/24715#issuecomment-542490675
-  const pkg = require(require.resolve("../../package.json"));
+  const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "..", "package.json"), "utf-8"));
 
   const program = new commander.Command("create-probot-app")
     .arguments("[destination]")

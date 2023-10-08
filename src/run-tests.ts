@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from "fs";
 import path from "path";
-import { red } from "./helpers/write-help";
+import { red } from "./helpers/write-help.js";
 
 /**
  * Ensure `package.json` from templated app meets all requirements

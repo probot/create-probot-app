@@ -1,8 +1,11 @@
-import path from "path";
-import fs from "fs-extra";
+import * as path from "path";
+import { fileURLToPath } from 'url';
+import * as fs from "fs";
 import { generate } from "egad";
-import { Config } from "./user-interaction";
-import { yellow, green } from "./write-help";
+import { Config } from "./user-interaction.js";
+import { yellow, green } from "./write-help.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export const templatesSourcePath = path.join(__dirname, "../../templates/");
 
@@ -62,9 +65,11 @@ export async function makeScaffolding(config: Config): Promise<Config> {
   [
     path.join(templatesSourcePath, "__common__"),
     path.join(templatesSourcePath, config.template),
-  ].forEach((source) => fs.copySync(source, tempDestPath));
+  ].forEach((source) => fs.cpSync(source, tempDestPath, {
+    recursive: true
+  }));
 
-  fs.removeSync(path.join(tempDestPath, "__description__.txt"));
+  fs.rmSync(path.join(tempDestPath, "__description__.txt"));
 
   if (fs.existsSync(path.join(tempDestPath, "gitignore")))
     fs.renameSync(
@@ -76,7 +81,9 @@ export async function makeScaffolding(config: Config): Promise<Config> {
     overwrite: config.overwrite,
   });
 
-  fs.removeSync(tempDestPath);
+  fs.rmSync(tempDestPath, {
+    recursive: true
+  });
 
   result.forEach((fileInfo) => {
     console.log(
