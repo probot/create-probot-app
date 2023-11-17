@@ -34,7 +34,7 @@
     "conjecture": "^0.1.2",
     "cross-spawn": "^7.0.3",
     "egad": "^0.2.0",
-    "execa": "^6.1.0",
+    "execa": "^8.0.0",
     "fs-extra": "^11.1.0",
     "inquirer": "^9.1.4",
     "jsesc": "^3.0.2",
