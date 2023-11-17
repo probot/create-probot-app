@@ -24,7 +24,7 @@ export async function installAndBuild(config: Config): Promise<Config> {
   process.chdir(config.destination);
   const packageManager = detectPackageManager();
   console.log(
-    yellow("\nInstalling dependencies. This may take a few minutes...\n")
+    yellow("\nInstalling dependencies. This may take a few minutes...\n"),
   );
   try {
     await execa(packageManager, ["install"]);
@@ -32,8 +32,8 @@ export async function installAndBuild(config: Config): Promise<Config> {
     process.chdir(originalDir);
     throw new Error(
       `\nCould not install npm dependencies.\nTry running ${bold(
-        "npm install"
-      )} yourself.\n`
+        "npm install",
+      )} yourself.\n`,
     );
   }
   if (config.toBuild) {
@@ -44,8 +44,8 @@ export async function installAndBuild(config: Config): Promise<Config> {
       process.chdir(originalDir);
       throw new Error(
         `\nCould not build application.\nTry running ${bold(
-          "npm run build"
-        )} yourself.\n`
+          "npm run build",
+        )} yourself.\n`,
       );
     }
   }
