@@ -8,10 +8,10 @@ import * as commander from "commander";
 import inquirer, { Answers, Question, QuestionCollection } from "inquirer";
 import jsesc from "jsesc";
 import kebabCase from "lodash.kebabcase";
-import stringifyAuthor from "stringify-author";
 import validatePackageName from "validate-npm-package-name";
 
 import { blue, red, printHelpAndFail } from "./write-help.js";
+import { stringifyAuthor } from "./stringify-author.js";
 import { getTemplates, ensureValidDestination } from "./filesystem.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
