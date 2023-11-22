@@ -13,7 +13,7 @@ const path = require("path");
 
 const privateKey = fs.readFileSync(
   path.join(__dirname, "fixtures/mock-cert.pem"),
-  "utf-8"
+  "utf-8",
 );
 
 describe("My Probot app", () => {

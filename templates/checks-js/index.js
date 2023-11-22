@@ -28,7 +28,7 @@ module.exports = (app) => {
           title: "Probot check!",
           summary: "The check has passed!",
         },
-      })
+      }),
     );
   }
 

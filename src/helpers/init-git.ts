@@ -12,7 +12,7 @@ function isInGitRepo(path: string): boolean {
     {
       cwd: path,
       stdio: "ignore",
-    }
+    },
   );
 
   if (gitRevParse.status === 0) {
