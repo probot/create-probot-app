@@ -1,21 +1,16 @@
-import * as fs from "fs-extra";
-import * as path from "path";
-import * as spawn from "cross-spawn";
-import simplegit from "simple-git";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { execa } from "execa";
 
 import { green, yellow, red } from "./write-help.js";
 
 function isInGitRepo(path: string): boolean {
-  const gitRevParse = spawn.sync(
-    "git",
-    ["rev-parse", "--is-inside-work-tree"],
-    {
-      cwd: path,
-      stdio: "ignore",
-    },
-  );
+  const gitRevParse = execa("git", ["rev-parse", "--is-inside-work-tree"], {
+    cwd: path,
+    stdio: "ignore",
+  });
 
-  if (gitRevParse.status === 0) {
+  if (gitRevParse.exitCode === 0) {
     console.log("Found already initialized Git repository");
     return true;
   }
@@ -23,11 +18,11 @@ function isInGitRepo(path: string): boolean {
 }
 
 function isGitInstalled(): boolean {
-  const command = spawn.sync("git", ["--version"], {
-    stdio: "ignore",
-  });
-
-  if (command.error) {
+  try {
+    execa("git", ["--version"], {
+      stdio: "ignore",
+    });
+  } catch (error: any) {
     console.log("`git` binary not found");
     return false;
   }
@@ -49,21 +44,26 @@ export async function initGit(destination: string): Promise<void> {
     return;
   }
 
-  const git = simplegit(destination);
+  const git = execa("git", ["init"], { cwd: destination });
 
   try {
     await git
-      .init()
       .then(() => (initializedGit = true))
-      .then(() => git.add("./*"))
-      .then(() => git.commit("Initial commit from Create Probot App"))
+      .then(() => execa("git", ["add", "./*"], { cwd: destination }))
+      .then(() =>
+        execa(
+          "git",
+          ["commit", "-m", "Initial commit from Create Probot App"],
+          { cwd: destination },
+        ),
+      )
       .then(() => console.log(green("Initialized a Git repository")));
   } catch (error) {
     if (initializedGit) {
       const gitFolder = path.join(destination, ".git");
       console.log(red(`Cleaning up ${gitFolder} folder`));
       try {
-        fs.removeSync(gitFolder);
+        fs.rmdirSync(gitFolder);
       } catch {}
     }
     console.log(red(`Errors while initializing Git repo: ${error}`));

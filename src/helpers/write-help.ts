@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import path from "path";
+import path from "node:path";
 
 export const green = chalk.green;
 export const blue = chalk.blue;

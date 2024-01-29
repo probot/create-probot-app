@@ -1,8 +1,8 @@
-import * as fs from "fs";
-import * as path from "path";
-import { fileURLToPath } from "url";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 
-import { guessEmail, guessAuthor, guessGitHubUsername } from "conjecture";
+import { guessEmail, guessGitHubUsername, guessAuthor } from "conjecture";
 import camelCase from "lodash.camelcase";
 import * as commander from "commander";
 import inquirer, { Answers, Question, QuestionCollection } from "inquirer";
@@ -74,7 +74,7 @@ function getQuestions(config: CliConfig): QuestionI[] {
     {
       type: "input",
       name: "appName",
-      default(answers): string {
+      default(answers: Answers): string {
         return answers.repo || kebabCase(path.basename(config.destination));
       },
       message: "App name:",
@@ -118,7 +118,7 @@ function getQuestions(config: CliConfig): QuestionI[] {
     {
       type: "input",
       name: "user",
-      default(answers): Promise<string | void> {
+      default(answers: Answers): Promise<string | void> {
         return guessGitHubUsername(answers.email);
       },
       message: "GitHub user or org name:",
@@ -127,7 +127,7 @@ function getQuestions(config: CliConfig): QuestionI[] {
     {
       type: "input",
       name: "repo",
-      default(answers): string {
+      default(answers: Answers): string {
         return answers.appName || kebabCase(path.basename(config.destination));
       },
       message: "Repository name:",
