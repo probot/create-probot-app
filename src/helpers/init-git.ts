@@ -1,6 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { execa } from "execa";
+import simplegit from "simple-git";
 
 import { green, yellow, red } from "./write-help.js";
 
@@ -44,19 +45,14 @@ export async function initGit(destination: string): Promise<void> {
     return;
   }
 
-  const git = execa("git", ["init"], { cwd: destination });
+  const git = simplegit(destination);
 
   try {
     await git
+      .init()
       .then(() => (initializedGit = true))
-      .then(() => execa("git", ["add", "./*"], { cwd: destination }))
-      .then(() =>
-        execa(
-          "git",
-          ["commit", "-m", "Initial commit from Create Probot App"],
-          { cwd: destination },
-        ),
-      )
+      .then(() => git.add("./*"))
+      .then(() => git.commit("Initial commit from Create Probot App"))
       .then(() => console.log(green("Initialized a Git repository")));
   } catch (error) {
     if (initializedGit) {
