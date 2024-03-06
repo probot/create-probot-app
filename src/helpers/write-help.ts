@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import path from "path";
+import path from "node:path";
 
 export const green = chalk.green;
 export const blue = chalk.blue;
@@ -45,7 +45,7 @@ ${green("Enjoy building your Probot app!")}`);
 
 export function printHelpAndFail(): void {
   console.log(
-    `${green("create-probot-app")} [options] ${blue("<destination>")} `
+    `${green("create-probot-app")} [options] ${blue("<destination>")} `,
   );
   writeHelp();
   process.exit(1);

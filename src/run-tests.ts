@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { red } from "./helpers/write-help.js";
 
 /**
@@ -12,7 +12,7 @@ import { red } from "./helpers/write-help.js";
 function packageIsValid(appFolder: string): boolean {
   const packageJsonPath: string = path.join(appFolder, "package.json");
   const packageContent = JSON.parse(
-    fs.readFileSync(packageJsonPath).toString()
+    fs.readFileSync(packageJsonPath).toString(),
   );
   const mandatoryKeys: Record<string, string> = (({
     name,
@@ -25,7 +25,7 @@ function packageIsValid(appFolder: string): boolean {
   Object.keys(mandatoryKeys).forEach((key) => {
     if (mandatoryKeys[key] === undefined) {
       console.log(
-        red(`ERROR: ${packageJsonPath} is missing mandatory a key: ${key}`)
+        red(`ERROR: ${packageJsonPath} is missing mandatory a key: ${key}`),
       );
       errors = true;
     }

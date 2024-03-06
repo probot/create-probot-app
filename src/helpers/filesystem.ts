@@ -1,6 +1,6 @@
-import * as path from "path";
-import { fileURLToPath } from 'url';
-import * as fs from "fs";
+import * as path from "node:path";
+import { fileURLToPath } from "node:url";
+import * as fs from "node:fs";
 import { generate } from "egad";
 import { Config } from "./user-interaction.js";
 import { yellow, green } from "./write-help.js";
@@ -16,7 +16,7 @@ export const templatesSourcePath = path.join(__dirname, "../../templates/");
  */
 export function ensureValidDestination(
   destination: string,
-  overwrite: boolean
+  overwrite: boolean,
 ): void {
   const invalidDestinationError: Error =
     new Error(`Invalid destination folder => ${destination}
@@ -43,7 +43,7 @@ Please provide either an empty folder or a non existing path as <destination>
       console.warn(
         yellow(`Explicit OVERWRITE option selected:
 Some files under "${fs.realpathSync(destination)}" might be overwritten!
-`)
+`),
       );
       return;
     }
@@ -65,16 +65,18 @@ export async function makeScaffolding(config: Config): Promise<Config> {
   [
     path.join(templatesSourcePath, "__common__"),
     path.join(templatesSourcePath, config.template),
-  ].forEach((source) => fs.cpSync(source, tempDestPath, {
-    recursive: true
-  }));
+  ].forEach((source) =>
+    fs.cpSync(source, tempDestPath, {
+      recursive: true,
+    }),
+  );
 
   fs.rmSync(path.join(tempDestPath, "__description__.txt"));
 
   if (fs.existsSync(path.join(tempDestPath, "gitignore")))
     fs.renameSync(
       path.join(tempDestPath, "gitignore"),
-      path.join(tempDestPath, ".gitignore")
+      path.join(tempDestPath, ".gitignore"),
     );
 
   const result = await generate(tempDestPath, config.destination, config, {
@@ -82,7 +84,7 @@ export async function makeScaffolding(config: Config): Promise<Config> {
   });
 
   fs.rmSync(tempDestPath, {
-    recursive: true
+    recursive: true,
   });
 
   result.forEach((fileInfo) => {
@@ -91,7 +93,7 @@ export async function makeScaffolding(config: Config): Promise<Config> {
         fileInfo.skipped
           ? yellow("skipped existing file")
           : green("created file")
-      }: ${fileInfo.path}`
+      }: ${fileInfo.path}`,
     );
   });
 
@@ -112,7 +114,7 @@ export function getTemplates(): Template[] {
       let descFile = path.join(
         templatesSourcePath,
         template,
-        "__description__.txt"
+        "__description__.txt",
       );
       return {
         name: template,

@@ -1,10 +1,13 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from 'url';
-import shell from "shelljs";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+// TODO: This synta changes with node 21: assert { type: "json" } -> with { type: "json" }
 import pkg from "../package.json" assert { type: "json" };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const TYPE_MASK = parseInt("0770000", 8);
+
 /**
  * Converts TS file under ./bin/ into an executable file.
  *
@@ -23,7 +26,11 @@ export function chBinMod(name) {
 
   try {
     if (fs.existsSync(distributableBinary)) {
-      shell.chmod("+x", distributableBinary);
+      const currentMode = fs.statSync(distributableBinary).mode;
+      let execMode = currentMode | ((currentMode >>> 2) & TYPE_MASK);
+      // Add execute permissions for owner, group, and others.
+      execMode |= 0o111;
+      fs.chmodSync(distributableBinary, execMode);
       console.log(`Converted ${name} to an executable binary.`);
     }
   } catch (err) {

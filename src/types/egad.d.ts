@@ -14,5 +14,5 @@ export function generate(
   source: string,
   dest: string,
   data?: Record<string, unknown>,
-  opts?: Options
+  opts?: Options,
 ): Promise<FileResult[]>;
