@@ -6,7 +6,7 @@ import pkg from "../package.json" assert { type: "json" };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const TYPE_MASK = parseInt('0770000', 8);
+const TYPE_MASK = parseInt("0770000", 8);
 
 /**
  * Converts TS file under ./bin/ into an executable file.
@@ -27,7 +27,7 @@ export function chBinMod(name) {
   try {
     if (fs.existsSync(distributableBinary)) {
       const currentMode = fs.statSync(distributableBinary).mode;
-      let execMode = currentMode | (currentMode >>> 2) & TYPE_MASK;
+      let execMode = currentMode | ((currentMode >>> 2) & TYPE_MASK);
       // Add execute permissions for owner, group, and others.
       execMode |= 0o111;
       fs.chmodSync(distributableBinary, execMode);
