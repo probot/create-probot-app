@@ -8,7 +8,7 @@ More specifically, this command line interface allows you to select from our pre
 
 ## Installation
 
-Make sure you've got [Node.js installed](https://Node.js.org/en/download/) on your workstation, than open your terminal and type the following command:
+Make sure you've got [Node.js installed](https://Node.js.org/en/download/) on your workstation, then open your terminal and type the following command:
 
 - if you're using `npm` (the package manager bundled with `Node.js`):
 
