@@ -19,11 +19,9 @@ const privateKey = fs.readFileSync(
   "utf-8",
 );
 
-const payload = JSON.parse(fs.readFileSync(
-  path.join(__dirname, "fixtures/issues.opened.json"),
-  "utf-8",
-));
-
+const payload = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "fixtures/issues.opened.json"), "utf-8"),
+);
 
 describe("My Probot app", () => {
   let probot;
