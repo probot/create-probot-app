@@ -31,7 +31,7 @@ const deploymentStatus = {
 
 const privateKey = fs.readFileSync(
   path.join(__dirname, "fixtures/mock-cert.pem"),
-  "utf-8"
+  "utf-8",
 );
 
 describe("My Probot app", () => {
@@ -77,7 +77,7 @@ describe("My Probot app", () => {
         (body) => {
           expect(body).toMatchObject(deploymentStatus);
           return true;
-        }
+        },
       )
       .reply(200);
 

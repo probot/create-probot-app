@@ -1,16 +1,20 @@
-import path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 
-import { guessEmail, guessAuthor, guessGitHubUsername } from "conjecture";
+import { guessEmail, guessGitHubUsername, guessAuthor } from "conjecture";
 import camelCase from "lodash.camelcase";
-import commander from "commander";
+import * as commander from "commander";
 import inquirer, { Answers, Question, QuestionCollection } from "inquirer";
 import jsesc from "jsesc";
 import kebabCase from "lodash.kebabcase";
 import stringifyAuthor from "stringify-author";
 import validatePackageName from "validate-npm-package-name";
 
-import { blue, red, printHelpAndFail } from "./write-help";
-import { getTemplates, ensureValidDestination } from "./filesystem";
+import { blue, red, printHelpAndFail } from "./write-help.js";
+import { getTemplates, ensureValidDestination } from "./filesystem.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const templateDelimiter = " => ";
 
@@ -70,7 +74,7 @@ function getQuestions(config: CliConfig): QuestionI[] {
     {
       type: "input",
       name: "appName",
-      default(answers): string {
+      default(answers: Answers): string {
         return answers.repo || kebabCase(path.basename(config.destination));
       },
       message: "App name:",
@@ -114,7 +118,7 @@ function getQuestions(config: CliConfig): QuestionI[] {
     {
       type: "input",
       name: "user",
-      default(answers): Promise<string | void> {
+      default(answers: Answers): Promise<string | void> {
         return guessGitHubUsername(answers.email);
       },
       message: "GitHub user or org name:",
@@ -123,7 +127,7 @@ function getQuestions(config: CliConfig): QuestionI[] {
     {
       type: "input",
       name: "repo",
-      default(answers): string {
+      default(answers: Answers): string {
         return answers.appName || kebabCase(path.basename(config.destination));
       },
       message: "Repository name:",
@@ -134,7 +138,7 @@ function getQuestions(config: CliConfig): QuestionI[] {
       name: "template",
       choices: templates.map(
         (template) =>
-          `${template.name}${templateDelimiter}${template.description}`
+          `${template.name}${templateDelimiter}${template.description}`,
       ),
       message: "Which template would you like to use?",
       when(): boolean {
@@ -143,7 +147,7 @@ function getQuestions(config: CliConfig): QuestionI[] {
             return false;
           }
           console.log(
-            red(`The template ${blue(config.template)} does not exist.`)
+            red(`The template ${blue(config.template)} does not exist.`),
           );
         }
         return true;
@@ -163,7 +167,7 @@ function getQuestions(config: CliConfig): QuestionI[] {
  */
 export async function askUser(config: CliConfig): Promise<Config> {
   console.log(
-    "\nLet's create a Probot app!\nHit enter to accept the suggestion.\n"
+    "\nLet's create a Probot app!\nHit enter to accept the suggestion.\n",
   );
 
   const answers = {
@@ -197,7 +201,9 @@ export async function runCliManager(): Promise<CliConfig> {
   // TSC mangles output directory when using normal import methods for
   // package.json. See
   // https://github.com/Microsoft/TypeScript/issues/24715#issuecomment-542490675
-  const pkg = require(require.resolve("../../package.json"));
+  const pkg = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "..", "..", "package.json"), "utf-8"),
+  );
 
   const program = new commander.Command("create-probot-app")
     .arguments("[destination]")
