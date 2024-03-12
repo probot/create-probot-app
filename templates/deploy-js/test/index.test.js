@@ -1,11 +1,23 @@
-const nock = require("nock");
+import nock from "nock";
 // Requiring our app implementation
-const myProbotApp = require("..");
-const { Probot, ProbotOctokit } = require("probot");
+import myProbotApp from "../index.js";
+import { Probot, ProbotOctokit } from "probot";
 // Requiring our fixtures
-const payload = require("./fixtures/pull_request.opened");
-const fs = require("fs");
-const path = require("path");
+//import payload from "./fixtures/pull_request.opened" with { type: "json" };
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { describe, beforeEach, afterEach, test } from "node:test";
+import assert from "node:assert";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const payload = JSON.parse(
+  fs.readFileSync(
+    path.join(__dirname, "fixtures/pull_request.opened.json"),
+    "utf-8",
+  ),
+);
 
 const deployment = {
   ref: "hiimbex-patch-1",
@@ -66,7 +78,7 @@ describe("My Probot app", () => {
 
       // Test that a deployment is created
       .post("/repos/hiimbex/testing-things/deployments", (body) => {
-        expect(body).toMatchObject(deployment);
+        assert.deepStrictEqual(body, deployment);
         return true;
       })
       .reply(200, { id: 123 })
@@ -75,7 +87,7 @@ describe("My Probot app", () => {
       .post(
         "/repos/hiimbex/testing-things/deployments/123/statuses",
         (body) => {
-          expect(body).toMatchObject(deploymentStatus);
+          assert.deepStrictEqual(body, deploymentStatus);
           return true;
         },
       )
@@ -84,7 +96,7 @@ describe("My Probot app", () => {
     // Receive a webhook event
     await probot.receive({ name: "pull_request", payload });
 
-    expect(mock.pendingMocks()).toStrictEqual([]);
+    assert.deepStrictEqual(mock.pendingMocks(), []);
   });
 
   afterEach(() => {
