@@ -1,21 +1,17 @@
-import fs from "fs-extra";
-import path from "path";
-import spawn from "cross-spawn";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { execa } from "execa";
 import simplegit from "simple-git";
 
-import { green, yellow, red } from "./write-help";
+import { green, yellow, red } from "./write-help.js";
 
 function isInGitRepo(path: string): boolean {
-  const gitRevParse = spawn.sync(
-    "git",
-    ["rev-parse", "--is-inside-work-tree"],
-    {
-      cwd: path,
-      stdio: "ignore",
-    }
-  );
+  const gitRevParse = execa("git", ["rev-parse", "--is-inside-work-tree"], {
+    cwd: path,
+    stdio: "ignore",
+  });
 
-  if (gitRevParse.status === 0) {
+  if (gitRevParse.exitCode === 0) {
     console.log("Found already initialized Git repository");
     return true;
   }
@@ -23,11 +19,11 @@ function isInGitRepo(path: string): boolean {
 }
 
 function isGitInstalled(): boolean {
-  const command = spawn.sync("git", ["--version"], {
-    stdio: "ignore",
-  });
-
-  if (command.error) {
+  try {
+    execa("git", ["--version"], {
+      stdio: "ignore",
+    });
+  } catch (error: any) {
     console.log("`git` binary not found");
     return false;
   }
@@ -63,7 +59,7 @@ export async function initGit(destination: string): Promise<void> {
       const gitFolder = path.join(destination, ".git");
       console.log(red(`Cleaning up ${gitFolder} folder`));
       try {
-        fs.removeSync(gitFolder);
+        fs.rmdirSync(gitFolder);
       } catch {}
     }
     console.log(red(`Errors while initializing Git repo: ${error}`));

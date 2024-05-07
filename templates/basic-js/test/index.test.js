@@ -1,16 +1,26 @@
-const nock = require("nock");
+import nock from "nock";
 // Requiring our app implementation
-const myProbotApp = require("..");
-const { Probot, ProbotOctokit } = require("probot");
+import myProbotApp from "../index.js";
+import { Probot, ProbotOctokit } from "probot";
 // Requiring our fixtures
-const payload = require("./fixtures/issues.opened");
+//import payload from "./fixtures/issues.opened.json" with { type: "json" };
 const issueCreatedBody = { body: "Thanks for opening this issue!" };
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+import { describe, beforeEach, afterEach, test } from "node:test";
+import assert from "node:assert";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const privateKey = fs.readFileSync(
   path.join(__dirname, "fixtures/mock-cert.pem"),
-  "utf-8"
+  "utf-8",
+);
+
+const payload = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "fixtures/issues.opened.json"), "utf-8"),
 );
 
 describe("My Probot app", () => {
@@ -44,7 +54,7 @@ describe("My Probot app", () => {
 
       // Test that a comment is posted
       .post("/repos/hiimbex/testing-things/issues/1/comments", (body) => {
-        expect(body).toMatchObject(issueCreatedBody);
+        assert.deepEqual(body, issueCreatedBody);
         return true;
       })
       .reply(200);
@@ -52,7 +62,7 @@ describe("My Probot app", () => {
     // Receive a webhook event
     await probot.receive({ name: "issues", payload });
 
-    expect(mock.pendingMocks()).toStrictEqual([]);
+    assert.deepStrictEqual(mock.pendingMocks(), []);
   });
 
   afterEach(() => {

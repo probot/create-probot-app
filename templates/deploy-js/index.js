@@ -5,7 +5,7 @@
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Probot} app
  */
-module.exports = (app) => {
+export default (app) => {
   // Your code here
   app.log.info("Yay, the app was loaded!");
   app.on(
@@ -31,7 +31,7 @@ module.exports = (app) => {
           description: "My Probot App's first deploy!", // Short description of the deployment
           transient_environment: false, // Specifies if the given environment is specific to the deployment and will no longer exist at some point in the future.
           production_environment: true, // Specifies if the given environment is one that end-users directly interact with.
-        })
+        }),
       );
 
       const deploymentId = res.data.id;
@@ -43,9 +43,9 @@ module.exports = (app) => {
           description: "My Probot App set a deployment status!", // A short description of the status.
           environment_url: "https://example.com", // Sets the URL for accessing your environment.
           auto_inactive: true, // Adds a new inactive status to all prior non-transient, non-production environment deployments with the same repository and environment name as the created status's deployment. An inactive status is only added to deployments that had a success state.
-        })
+        }),
       );
-    }
+    },
   );
 
   // For more information on building apps:
