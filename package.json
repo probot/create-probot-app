@@ -52,7 +52,7 @@
     "@types/rimraf": "^4.0.5",
     "@types/validate-npm-package-name": "^4.0.0",
     "prettier": "^3.2.4",
-    "rimraf": "^5.0.5",
+    "rimraf": "^6.0.0",
     "semantic-release": "^24.0.0",
     "typescript": "^5.3.3"
   },
