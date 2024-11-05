@@ -1,0 +1,7 @@
+services:
+
+  create-probot-app:
+    image: marcellodesales/create-probot-app
+    build:
+      context: .
+     
