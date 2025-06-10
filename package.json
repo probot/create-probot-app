@@ -43,7 +43,6 @@
     "validate-npm-package-name": "^5.0.0"
   },
   "devDependencies": {
-    "@types/cross-spawn": "^6.0.2",
     "@types/inquirer": "^9.0.3",
     "@types/jsesc": "^3.0.1",
     "@types/lodash.camelcase": "^4.3.7",
@@ -53,7 +52,6 @@
     "@types/validate-npm-package-name": "^4.0.0",
     "prettier": "^3.2.4",
     "rimraf": "^5.0.5",
-    "semantic-release": "^24.0.0",
     "typescript": "^5.3.3"
   },
   "type": "module",
