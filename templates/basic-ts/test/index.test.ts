@@ -5,6 +5,8 @@ import nock from "nock";
 // Requiring our app implementation
 import myProbotApp from "../src/index.js";
 import { Probot, ProbotOctokit } from "probot";
+// Requiring the OctokitOptions for ProbotOctokit.defaults()
+import {OctokitOptions} from "probot/lib/types";
 // Requiring our fixtures
 //import payload from "./fixtures/issues.opened.json" with { "type": "json"};
 import fs from "fs";
@@ -34,10 +36,13 @@ describe("My Probot app", () => {
       appId: 123,
       privateKey,
       // disable request throttling and retries for testing
-      Octokit: ProbotOctokit.defaults({
-        retry: { enabled: false },
-        throttle: { enabled: false },
-      }),
+      Octokit: ProbotOctokit.defaults((instanceOptions:OctokitOptions):OctokitOptions => {//Initializing via closure
+            return {
+                ...instanceOptions,
+                retry: { enabled: false },
+                throttle: { enabled: false },
+            }
+      })
     });
     // Load our app into probot
     probot.load(myProbotApp);
