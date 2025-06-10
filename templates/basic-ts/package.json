@@ -17,14 +17,17 @@
     "test": "vitest"
   },
   "dependencies": {
-    "probot": "^13.0.1"
+    "probot": "^13.4.5"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "nock": "^14.0.0-beta.5",
+    "nock": "^14.0.5",
     "smee-client": "^2.0.0",
     "vitest": "^2.0.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.8.3"
+  },
+  "overrides": {
+    "@types/pg": "8.15.1"
   },
   "engines": {
     "node": ">= 18"
