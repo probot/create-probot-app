@@ -1,11 +1,12 @@
-const nock = require("nock");
+import nock from "nock";
 // Requiring our app implementation
-const myProbotApp = require("..");
-const { Probot, ProbotOctokit } = require("probot");
+import myProbotApp from "../index.js";
+import { Probot, ProbotOctokit } from "probot";
 // Requiring our fixtures
-const installationCreatedPayload = require("./fixtures/installation.created");
-const fs = require("fs");
-const path = require("path");
+import installationCreatedPayload from "./fixtures/installation.created.json" with { type: "json" };
+import fs from "node:fs";
+import path from "node:path";
+import { describe, beforeEach, afterEach, test, expect } from "vitest";
 
 // Mocking out our use of random numbers
 const mockMath = Object.create(global.Math);
@@ -37,7 +38,7 @@ describe("My Probot app", () => {
 
   test("creates a pull request on installation", async () => {
     const mock = nock("https://api.github.com")
-      .post("/app/installations/2/access_tokens")
+      .post("/app/installations/5/access_tokens")
       .reply(200, {
         token: "test",
         permissions: {
@@ -46,17 +47,17 @@ describe("My Probot app", () => {
         },
       })
 
-      .get("/repos/hiimbex/testing-things/git/ref/heads%2Fmaster")
+      .get("/repos/octocat/testing-things/git/ref/heads%2Fmaster")
       .reply(200, { object: { sha: "abc123" } })
 
-      .post("/repos/hiimbex/testing-things/git/refs", {
+      .post("/repos/octocat/testing-things/git/refs", {
         ref: "refs/heads/new-branch-9999",
         sha: "abc123",
       })
       .reply(200)
 
       .put(
-        "/repos/hiimbex/testing-things/contents/path%2Fto%2Fyour%2Ffile.md",
+        "/repos/octocat/testing-things/contents/path%2Fto%2Fyour%2Ffile.md",
         {
           branch: "new-branch-9999",
           message: "adds config file",
@@ -65,7 +66,7 @@ describe("My Probot app", () => {
       )
       .reply(200)
 
-      .post("/repos/hiimbex/testing-things/pulls", {
+      .post("/repos/octocat/testing-things/pulls", {
         title: "Adding my file!",
         head: "new-branch-9999",
         base: "master",
