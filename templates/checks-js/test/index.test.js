@@ -5,9 +5,9 @@ import { Probot, ProbotOctokit } from "probot";
 // Requiring our fixtures
 //import checkSuitePayload from "./fixtures/check_suite.requested" with { type: "json" };
 //import checkRunSuccess from "./fixtures/check_run.created" with { type: "json" };
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { describe, beforeEach, afterEach, test } from "node:test";
 import assert from "node:assert";

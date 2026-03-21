@@ -1,9 +1,9 @@
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as fs from "node:fs";
-import { generate } from "egad";
 import { Config } from "./user-interaction.js";
 import { yellow, green } from "./write-help.js";
+import { generateFromTemplates } from "./handlebars.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -79,9 +79,14 @@ export async function makeScaffolding(config: Config): Promise<Config> {
       path.join(tempDestPath, ".gitignore"),
     );
 
-  const result = await generate(tempDestPath, config.destination, config, {
-    overwrite: config.overwrite,
-  });
+  const result = await generateFromTemplates(
+    tempDestPath,
+    config.destination,
+    config,
+    {
+      overwrite: config.overwrite,
+    },
+  );
 
   fs.rmSync(tempDestPath, {
     recursive: true,

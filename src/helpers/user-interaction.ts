@@ -2,7 +2,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { guessEmail, guessGitHubUsername, guessAuthor } from "conjecture";
+import { guessEmail, guessGitHubUsername, guessAuthor } from "./conjecture.js";
 import camelCase from "lodash.camelcase";
 import * as commander from "commander";
 import inquirer, { Answers, Question, QuestionCollection } from "inquirer";
