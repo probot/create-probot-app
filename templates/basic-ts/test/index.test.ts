@@ -1,18 +1,11 @@
-// You can import your modules
-// import index from '../src/index'
-
 import nock from "nock";
 // Requiring our app implementation
 import myProbotApp from "../src/index.js";
 import { Probot, ProbotOctokit } from "probot";
-// Requiring our fixtures
-//import payload from "./fixtures/issues.opened.json" with { "type": "json"};
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { describe, beforeEach, afterEach, test, expect } from "vitest";
-
-const issueCreatedBody = { body: "Thanks for opening this issue!" };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -21,9 +14,12 @@ const privateKey = fs.readFileSync(
   "utf-8",
 );
 
+// Requiring our fixtures
 const payload = JSON.parse(
   fs.readFileSync(path.join(__dirname, "fixtures/issues.opened.json"), "utf-8"),
 );
+
+const issueCreatedBody = { body: "Thanks for opening this issue!" };
 
 describe("My Probot app", () => {
   let probot: any;
@@ -34,10 +30,11 @@ describe("My Probot app", () => {
       appId: 123,
       privateKey,
       // disable request throttling and retries for testing
-      Octokit: ProbotOctokit.defaults({
+      Octokit: ProbotOctokit.defaults((instanceOptions: {}) => ({
+        ...instanceOptions,
         retry: { enabled: false },
         throttle: { enabled: false },
-      }),
+      })),
     });
     // Load our app into probot
     probot.load(myProbotApp);

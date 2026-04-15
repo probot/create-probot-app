@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { guessEmail, guessGitHubUsername, guessAuthor } from "conjecture";
 import camelCase from "lodash.camelcase";
 import * as commander from "commander";
-import inquirer, { Answers, Question, QuestionCollection } from "inquirer";
+import inquirer, { Answers, Question } from "inquirer";
 import jsesc from "jsesc";
 import kebabCase from "lodash.kebabcase";
 import stringifyAuthor from "stringify-author";
@@ -17,15 +17,6 @@ import { getTemplates, ensureValidDestination } from "./filesystem.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const templateDelimiter = " => ";
-
-type QuestionI =
-  | (
-      | {
-          default?(answers: Answers): string | boolean;
-        }
-      | Question
-    )
-  | QuestionCollection;
 
 interface CliConfig {
   destination: string;
@@ -67,10 +58,10 @@ function sanitizeBy(object: Config, keys: string[]): void {
   });
 }
 
-function getQuestions(config: CliConfig): QuestionI[] {
+function getQuestions(config: CliConfig): Question[] {
   const templates = getTemplates();
 
-  const questions: QuestionI[] = [
+  const questions: Question[] = [
     {
       type: "input",
       name: "appName",
@@ -79,7 +70,7 @@ function getQuestions(config: CliConfig): QuestionI[] {
       },
       message: "App name:",
       when: !config.appName,
-      validate(appName): true | string {
+      validate(appName: string): true | string {
         const result = validatePackageName(appName);
         if (result.errors && result.errors.length > 0) {
           return result.errors.join(",");
@@ -134,7 +125,7 @@ function getQuestions(config: CliConfig): QuestionI[] {
       when: config.gitInit && !config.repo,
     },
     {
-      type: "list",
+      type: "select",
       name: "template",
       choices: templates.map(
         (template) =>

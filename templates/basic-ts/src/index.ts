@@ -5,7 +5,7 @@ export default (app: Probot) => {
     const issueComment = context.issue({
       body: "Thanks for opening this issue!",
     });
-    await context.octokit.issues.createComment(issueComment);
+    await context.octokit.rest.issues.createComment(issueComment);
   });
   // For more information on building apps:
   // https://probot.github.io/docs/
