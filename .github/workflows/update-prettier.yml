@@ -1,17 +1,19 @@
 name: Update Prettier
-"on":
+
+on:
   push:
     branches:
       - dependabot/npm_and_yarn/prettier-*
+
 jobs:
   update_prettier:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           cache: npm
-          node-version: 16
+          node-version: 24
       - run: npm ci
       - run: npm run lint:fix
       - uses: gr2m/create-or-update-pull-request-action@v1.x

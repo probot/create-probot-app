@@ -21,6 +21,5 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/"],
-  "compileOnSave": false
+  "include": ["src"]
 }

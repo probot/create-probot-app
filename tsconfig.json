@@ -11,5 +11,5 @@
     "rootDir": "src",
     "outDir": "bin"
   },
-  "include": ["src/**/*"]
+  "include": ["src"]
 }
