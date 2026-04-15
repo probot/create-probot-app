@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
+    "ioredis": "^5.10.1",
     "nock": "^14.0.5",
     "smee-client": "^2.0.0",
     "vitest": "^3.2.4",
