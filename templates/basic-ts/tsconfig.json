@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "incremental": true,
-    "target": "esnext",
-    "module": "nodenext",
+    "target": "es2022",
+    "module": "node18",
     "declaration": true,
     "sourceMap": true,
     "rootDir": "./src",
@@ -17,7 +17,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
 
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node16",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   },

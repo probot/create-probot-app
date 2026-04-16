@@ -23,7 +23,7 @@
     "smee-client": "^2.0.0"
   },
   "engines": {
-    "node": ">= 22"
+    "node": "^20.18.1 || >= 22"
   },
   "type": "module"
 }

@@ -31,7 +31,7 @@
     "@types/pg": "8.15.1"
   },
   "engines": {
-    "node": ">= 22"
+    "node": "^20.18.1 || >= 22"
   },
   "type": "module"
 }

@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "allowJs": false,
-    "module": "nodenext",
-    "target": "esnext",
-    "moduleResolution": "nodenext",
+    "module": "node18",
+    "target": "es2022",
+    "moduleResolution": "node16",
     "strict": true,
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,

@@ -6,20 +6,14 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { describe, beforeEach, afterEach, test, expect } from "vitest";
+// Requiring our fixtures
+import installationCreatedPayload from "./fixtures/installation.created.json" with { type: "json" };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const privateKey = fs.readFileSync(
   path.join(__dirname, "fixtures/mock-cert.pem"),
   "utf-8",
-);
-
-// Requiring our fixtures
-const installationCreatedPayload = JSON.parse(
-  fs.readFileSync(
-    path.join(__dirname, "fixtures/installation.created.json"),
-    "utf-8",
-  ),
 );
 
 // Mocking out our use of random numbers
