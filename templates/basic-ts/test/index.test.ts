@@ -7,7 +7,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { describe, beforeEach, afterEach, test, expect } from "vitest";
 // Requiring our fixtures
-import payload from "./fixtures/issues.opened.json" with { "type": "json"};
+import payload from "./fixtures/issues.opened.json" with { type: "json" };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
