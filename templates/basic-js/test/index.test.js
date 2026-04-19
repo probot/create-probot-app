@@ -2,12 +2,12 @@ import nock from "nock";
 // Requiring our app implementation
 import myProbotApp from "../index.js";
 import { Probot, ProbotOctokit } from "probot";
-// Requiring our fixtures
-//import payload from "./fixtures/issues.opened.json" with { type: "json" };
 const issueCreatedBody = { body: "Thanks for opening this issue!" };
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+// Requiring our fixtures
+import payload from "./fixtures/issues.opened.json" with { type: "json" };
 
 import { describe, beforeEach, afterEach, test } from "node:test";
 import assert from "node:assert";
@@ -17,10 +17,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const privateKey = fs.readFileSync(
   path.join(__dirname, "fixtures/mock-cert.pem"),
   "utf-8",
-);
-
-const payload = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "fixtures/issues.opened.json"), "utf-8"),
 );
 
 describe("My Probot app", () => {

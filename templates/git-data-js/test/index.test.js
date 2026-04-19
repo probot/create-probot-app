@@ -2,9 +2,9 @@ import nock from "nock";
 // Requiring our app implementation
 import myProbotApp from "../index.js";
 import { Probot, ProbotOctokit } from "probot";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, beforeEach, afterEach, test, expect } from "vitest";
 // Requiring our fixtures
 import installationCreatedPayload from "./fixtures/installation.created.json" with { type: "json" };
