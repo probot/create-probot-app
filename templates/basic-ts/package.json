@@ -28,7 +28,7 @@
     "typescript": "^6.0.3"
   },
   "overrides": {
-    "@types/pg": "8.15.1"
+    "@types/pg": "8.20.0"
   },
   "engines": {
     "node": "^20.18.1 || >= 22"
