@@ -2,9 +2,10 @@
   "compilerOptions": {
     "incremental": true,
     "target": "es2022",
-    "module": "Node16",
+    "module": "node18",
     "declaration": true,
     "sourceMap": true,
+    "rootDir": "./src",
     "outDir": "./lib",
 
     /* Strict Type-Checking Options */
@@ -16,10 +17,9 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
 
-    "moduleResolution": "Node16",
+    "moduleResolution": "node16",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/"],
-  "compileOnSave": false
+  "include": ["src"]
 }

@@ -17,20 +17,21 @@
     "test": "vitest"
   },
   "dependencies": {
-    "probot": "^13.4.5"
+    "probot": "^14.3.2"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
+    "@types/node": "^24.0.0",
+    "ioredis": "^5.10.1",
     "nock": "^14.0.5",
-    "smee-client": "^2.0.0",
-    "vitest": "^2.0.0",
-    "typescript": "^5.8.3"
+    "smee-client": "^5.0.0",
+    "vitest": "^3.2.4",
+    "typescript": "^6.0.3"
   },
   "overrides": {
     "@types/pg": "8.15.1"
   },
   "engines": {
-    "node": ">= 18"
+    "node": "^20.18.1 || >= 22"
   },
   "type": "module"
 }

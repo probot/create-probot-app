@@ -1,7 +1,7 @@
-import * as fs from "node:fs";
-import * as path from "node:path";
+import fs from "node:fs";
+import path from "node:path";
 import { execa } from "execa";
-import simplegit from "simple-git";
+import { simpleGit } from "simple-git";
 
 import { green, yellow, red } from "./write-help.js";
 
@@ -45,7 +45,7 @@ export async function initGit(destination: string): Promise<void> {
     return;
   }
 
-  const git = simplegit(destination);
+  const git = simpleGit(destination);
 
   try {
     await git

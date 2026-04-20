@@ -15,15 +15,15 @@ export default (app) => {
     const { head_branch: headBranch, head_sha: headSha } =
       context.payload.check_suite;
     // Probot API note: context.repo() => {username: 'hiimbex', repo: 'testing-things'}
-    return context.octokit.checks.create(
+    return context.octokit.rest.checks.create(
       context.repo({
         name: "My app!",
         head_branch: headBranch,
         head_sha: headSha,
         status: "completed",
-        started_at: startTime,
+        started_at: startTime.toISOString(),
         conclusion: "success",
-        completed_at: new Date(),
+        completed_at: new Date().toISOString(),
         output: {
           title: "Probot check!",
           summary: "The check has passed!",

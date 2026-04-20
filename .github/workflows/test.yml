@@ -1,5 +1,6 @@
 name: Test
-"on":
+
+on:
   push:
     branches:
       - master
@@ -7,18 +8,20 @@ name: Test
     types:
       - opened
       - synchronize
+
 jobs:
   test_matrix:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node:
-          - 18
           - 20
-          - 21
+          - 22
+          - 24
+          - 25
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
           cache: npm
@@ -29,10 +32,10 @@ jobs:
     needs: test_matrix
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: lts/*
           cache: npm
       - run: npm install
       - run: npm run lint

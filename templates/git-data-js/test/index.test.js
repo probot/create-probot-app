@@ -1,21 +1,25 @@
-const nock = require("nock");
+import nock from "nock";
 // Requiring our app implementation
-const myProbotApp = require("..");
-const { Probot, ProbotOctokit } = require("probot");
+import myProbotApp from "../index.js";
+import { Probot, ProbotOctokit } from "probot";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { describe, beforeEach, afterEach, test, expect } from "vitest";
 // Requiring our fixtures
-const installationCreatedPayload = require("./fixtures/installation.created");
-const fs = require("fs");
-const path = require("path");
+import installationCreatedPayload from "./fixtures/installation.created.json" with { type: "json" };
 
-// Mocking out our use of random numbers
-const mockMath = Object.create(global.Math);
-mockMath.random = () => 1;
-global.Math = mockMath;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const privateKey = fs.readFileSync(
   path.join(__dirname, "fixtures/mock-cert.pem"),
   "utf-8",
 );
+
+// Mocking out our use of random numbers
+const mockMath = Object.create(global.Math);
+mockMath.random = () => 1;
+global.Math = mockMath;
 
 describe("My Probot app", () => {
   let probot;
@@ -26,10 +30,11 @@ describe("My Probot app", () => {
       appId: 123,
       privateKey,
       // disable request throttling and retries for testing
-      Octokit: ProbotOctokit.defaults({
+      Octokit: ProbotOctokit.defaults((instanceOptions) => ({
+        ...instanceOptions,
         retry: { enabled: false },
         throttle: { enabled: false },
-      }),
+      })),
     });
     // Load our app into probot
     probot.load(myProbotApp);

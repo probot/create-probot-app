@@ -1,6 +1,6 @@
-import * as path from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
-import * as fs from "node:fs";
+import fs from "node:fs";
 import { generate } from "egad";
 import { Config } from "./user-interaction.js";
 import { yellow, green } from "./write-help.js";

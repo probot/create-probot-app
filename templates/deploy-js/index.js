@@ -18,7 +18,7 @@ export default (app) => {
       app.log.info(context.payload);
 
       // Probot API note: context.repo() => { username: 'hiimbex', repo: 'testing-things' }
-      const res = await context.octokit.repos.createDeployment(
+      const res = await context.octokit.rest.repos.createDeployment(
         context.repo({
           ref: context.payload.pull_request.head.ref, // The ref to deploy. This can be a branch, tag, or SHA.
           task: "deploy", // Specifies a task to execute (e.g., deploy or deploy:migrations).
@@ -35,7 +35,7 @@ export default (app) => {
       );
 
       const deploymentId = res.data.id;
-      await context.octokit.repos.createDeploymentStatus(
+      await context.octokit.rest.repos.createDeploymentStatus(
         context.repo({
           deployment_id: deploymentId,
           state: "success", // The state of the status. Can be one of error, failure, inactive, pending, or success

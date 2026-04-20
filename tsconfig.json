@@ -1,18 +1,15 @@
 {
   "compilerOptions": {
     "allowJs": false,
-    "module": "ESNext",
+    "module": "node18",
     "target": "es2022",
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "strict": true,
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": false,
-    "outDir": "bin",
-    "baseUrl": ".",
-    "paths": {
-      "*": ["node_modules/*", "src/types/*"]
-    }
+    "rootDir": "src",
+    "outDir": "bin"
   },
-  "include": ["src/**/*"]
+  "include": ["src"]
 }

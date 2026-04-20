@@ -10,7 +10,7 @@ export default (app) => {
     const issueComment = context.issue({
       body: "Thanks for opening this issue!",
     });
-    return context.octokit.issues.createComment(issueComment);
+    return context.octokit.rest.issues.createComment(issueComment);
   });
 
   // For more information on building apps:

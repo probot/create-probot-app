@@ -2,22 +2,16 @@ import nock from "nock";
 // Requiring our app implementation
 import myProbotApp from "../index.js";
 import { Probot, ProbotOctokit } from "probot";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 // Requiring our fixtures
-//import payload from "./fixtures/pull_request.opened" with { type: "json" };
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import payload from "./fixtures/pull_request.opened.json" with { type: "json" };
+
 import { describe, beforeEach, afterEach, test } from "node:test";
 import assert from "node:assert";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const payload = JSON.parse(
-  fs.readFileSync(
-    path.join(__dirname, "fixtures/pull_request.opened.json"),
-    "utf-8",
-  ),
-);
 
 const deployment = {
   ref: "hiimbex-patch-1",
@@ -55,10 +49,11 @@ describe("My Probot app", () => {
       appId: 123,
       privateKey,
       // disable request throttling and retries for testing
-      Octokit: ProbotOctokit.defaults({
+      Octokit: ProbotOctokit.defaults((instanceOptions) => ({
+        ...instanceOptions,
         retry: { enabled: false },
         throttle: { enabled: false },
-      }),
+      })),
     });
     // Load our app into probot
     probot.load(myProbotApp);
