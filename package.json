@@ -30,7 +30,7 @@
   "license": "ISC",
   "dependencies": {
     "chalk": "^5.2.0",
-    "commander": "^12.0.0",
+    "commander": "^14.0.0",
     "conjecture": "^0.1.2",
     "egad": "^0.2.0",
     "execa": "^8.0.1",
