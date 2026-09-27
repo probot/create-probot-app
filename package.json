@@ -29,7 +29,7 @@
   "author": "Brandon Keepers",
   "license": "ISC",
   "dependencies": {
-    "chalk": "^5.2.0",
+    "chalk": "^6.0.0",
     "commander": "^12.0.0",
     "conjecture": "^0.1.2",
     "egad": "^0.2.0",
